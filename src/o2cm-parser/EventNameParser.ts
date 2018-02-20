@@ -20,7 +20,7 @@ export class EventNameParser {
     list.push({key: SkillTypes.Silver, value: 'Intermediate'});
     list.push({key: SkillTypes.Gold, value: 'Advanced'});
     list.push({key: SkillTypes.PreChamp, value: 'Pre-Champ'});
-    list.push({key: SkillTypes.Championship, value: 'Champ'});
+    list.push({key: SkillTypes.Champ, value: 'Championship'});
 
     for (let i = 0; i < list.length; i++) {
       if (name.indexOf(list[i].value) !== -1) {

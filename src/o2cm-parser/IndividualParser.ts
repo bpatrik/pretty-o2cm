@@ -11,8 +11,8 @@ export interface IHTTP {
 }
 
 export interface IDancedEvents {
-  division: DivisionTypes,
-  skill: SkillTypes
+  division: DivisionTypes;
+  skill: SkillTypes;
 }
 
 export class CompetitionCore {
@@ -44,13 +44,15 @@ export class IndividualParser {
     const $ = cheerio.load(page);
     const competitions: CompetitionCore[] = [];
     const arr = $('.t1n').toArray();
+    console.log(arr.map(v => $('b', v)));
     for (let i = 0; i < arr.length; i++) {
       if ($('b', arr[i]).length > 0) {
-        let eventName = $('b', arr[i]).get(0).firstChild.data;
-        let cmp = new CompetitionCore(eventName);
-        let matched = eventName.match(/^[0-9]+(-[0-9]+)+/);
+        const eventName = $('b', arr[i]).get(0).firstChild.data;
+        console.log(eventName);
+        const cmp = new CompetitionCore(eventName);
+        const matched = eventName.match(/^[0-9]+(-[0-9]+)+/);
         if (matched !== null) {
-          let nums = matched[0].split(('-'));
+          const nums = matched[0].split(('-'));
           cmp.date = new Date((parseInt(nums[2]) < 60 ? parseInt(nums[2]) + 2000 : parseInt(nums[2])),
             parseInt(nums[0]) - 1,
             parseInt(nums[1]));
@@ -60,26 +62,27 @@ export class IndividualParser {
         continue;
       }
       if ($('a', arr[i]).length > 0 && competitions.length > 0) {
-        let event = EventNameParser.parse($('a', arr[i]).get(0).firstChild.data);
-        let href = $('a', arr[i]).get(0).attribs['href'];
+        const event = EventNameParser.parse($('a', arr[i]).get(0).firstChild.data);
+        const href = $('a', arr[i]).get(0).attribs['href'];
         let eventLink = href.substring(href.indexOf('event=') + 6);
         eventLink = eventLink.substring(0, eventLink.indexOf('&'));
-        let cmp = competitions[competitions.length - 1];
+        const cmp = competitions[competitions.length - 1];
         cmp.addEvent(event);
         cmp.linkCode = eventLink;
       }
     }
+    console.log(competitions);
     return competitions;
   }
 
   public static async parse(firstName: string, lastName: string, http: IHTTP): Promise<Individual> {
     const page = await http.post('http://results.o2cm.com/individual.asp?szLast=' + lastName + '&szFirst=' + firstName, '');
-    let compCores = this.parseCompetitions(page);
-    let comps: Competition[] = [];
+    const compCores = this.parseCompetitions(page);
+    const comps: Competition[] = [];
 
-    let dancer = DancerRepository.Instance.createOrGet(firstName + ' ' + lastName);
+    const dancer = DancerRepository.Instance.createOrGet(firstName + ' ' + lastName);
     for (let i = 0; i < compCores.length; i++) {
-      let cmp = new Competition(compCores[i]);
+      const cmp = new Competition(compCores[i]);
       let des: DanceEvent[] = [];
       for (let j = 0; j < compCores[i].dancedEvents.length; j++) {
         try {

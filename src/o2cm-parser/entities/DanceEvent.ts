@@ -6,7 +6,7 @@ export enum DivisionTypes {
 }
 
 export enum SkillTypes {
-  Newcomer, Bronze, Silver, Gold, Syllabus, Novice, PreChamp, Championship, Open,
+  Newcomer, Bronze, Silver, Gold, Syllabus, Novice, PreChamp, Champ, Open,
 }
 
 export enum AgeTypes {
@@ -18,7 +18,8 @@ export enum StyleTypes {
 }
 
 export enum DanceTypes {
-  Tango, VWalz, Foxtrot, Walz, QuickStep, Jive, ChaCha, Rumba, Swing
+  Tango, VWalz, Foxtrot, Walz, QuickStep, Jive,
+  ChaCha, Rumba, Swing, PasoDoble, Bolero, Samba, Mambo
 }
 
 export module DanceTypes {
@@ -31,13 +32,18 @@ export module DanceTypes {
     J: DanceTypes.Jive,
     C: DanceTypes.ChaCha,
     R: DanceTypes.Rumba,
+    B: DanceTypes.Bolero,
+    P: DanceTypes.PasoDoble,
     S: DanceTypes.Swing,
+   // S: DanceTypes.Samba TODO:fix it
   };
 
 
   export function getStyleForOne(dance: DanceTypes) {
     if (dance === DanceTypes.Jive || dance === DanceTypes.ChaCha ||
-      dance === DanceTypes.Rumba || dance === DanceTypes.Swing) {
+      dance === DanceTypes.Rumba || dance === DanceTypes.Swing
+      || dance === DanceTypes.PasoDoble || dance === DanceTypes.Bolero
+      || dance === DanceTypes.Samba || dance === DanceTypes.Mambo) {
       return (StyleTypes.Latin | StyleTypes.Rhythm);
     }
     if (dance === DanceTypes.Foxtrot || dance === DanceTypes.Walz ||

@@ -39,7 +39,7 @@ export class EventParser {
         return base + '129';
       case SkillTypes.PreChamp:
         return base + '131';
-      case SkillTypes.Championship:
+      case SkillTypes.Champ:
         return base + '135';
       default:
         throw new Error('unsupported skill: ' + skill);
@@ -47,14 +47,15 @@ export class EventParser {
   }
 
   private static generateBody(event: string, division: DivisionTypes, skill: SkillTypes) {
-    return 'selDiv=' + this.divisionToSelect(division) + '&selAge=&selSkl=' + this.skillToSelect(skill) + '&selSty=&selEnt=&submit=OK&event=' + event;
+    return 'selDiv=' + this.divisionToSelect(division) +
+      '&selAge=&selSkl=' + this.skillToSelect(skill) +
+      '&selSty=&selEnt=&submit=OK&event=' + event;
   }
 
   private static parseEvents(page: string): DanceEvent[] {
     const $ = cheerio.load(page);
     const arr = $('tr', $('tbody').get(1)).toArray();
-    let danceEvents = [];
-    let roundCount = 0;
+    const danceEvents = [];
     for (let i = 0; i < arr.length; i++) {
       if ($('.h5b', arr[i]).length > 0) {
         danceEvents.push(EventNameParser.parse($('.h5b', arr[i]).get(0).firstChild.firstChild.data));
