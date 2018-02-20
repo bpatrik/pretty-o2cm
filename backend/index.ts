@@ -7,7 +7,7 @@ import * as request from 'request';
 
 
 const app = _express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 /**
  * Parse parameters in POST
