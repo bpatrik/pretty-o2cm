@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {DataService} from "../services/data.service";
+import {Component} from '@angular/core';
+import {DataService} from '../services/data.service';
 
 
 @Component({
-  selector: 'summary',
+  selector: 'app-summary-component',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss'],
 })

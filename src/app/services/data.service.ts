@@ -11,6 +11,8 @@ import {IDanceSummary, IEventSummary, IPointSummary, IStyleSummary, ISummary} fr
 import {Competition} from '../../o2cm-parser/entities/Competition';
 import {Individual} from '../../o2cm-parser/entities/Individual';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Params} from '@angular/router/src/shared';
 
 export interface IDanceList {
   skill: SkillTypes;
@@ -39,12 +41,37 @@ export class DataService {
   public competitions: BehaviorSubject<ICompetitionList[]>;
   public dancerName: BehaviorSubject<DancerName>;
 
-  constructor(private http: HttpClient, private slimLoadingBarService: SlimLoadingBarService) {
+
+  constructor(private http: HttpClient,
+              private router: Router,
+              private route: ActivatedRoute,
+              private slimLoadingBarService: SlimLoadingBarService) {
     this.summary = new BehaviorSubject<ISummary>({});
     this.competitions = new BehaviorSubject<ICompetitionList[]>([]);
-    this.dancerName = new BehaviorSubject<DancerName>({firstName: '', lastName: ''});
+
+    this.dancerName = new BehaviorSubject<DancerName>({
+      firstName: '',
+      lastName: ''
+    });
+
+    route.queryParams.subscribe((value: Params) => {
+      if (value['firstName'] && value['lastName'] &&
+        value['firstName'] !== this.dancerName.getValue().firstName &&
+        value['lastName'] !== this.dancerName.getValue().lastName) {
+        this.dancerName.next({firstName: value['firstName'], lastName: value['lastName']});
+      }
+    });
+    this.dancerName.subscribe((value) => {
+      if (value.firstName === '' || value.lastName === '') {
+        return;
+      }
+      this.router.navigate([], {
+        queryParams: {firstName: value.firstName, lastName: value.lastName}
+      });
+      this._loadDancer(value.firstName, value.lastName);
+    });
     // this.loadData();
-    this.loadDummy();
+    // this.loadDummy();
 
   }
 
@@ -118,14 +145,17 @@ export class DataService {
     ]);
   }
 
-  async loadDancer(fistName: string, lastName: string) {
+  public loadDancer(fistName: string, lastName: string) {
+    this.dancerName.next({firstName: fistName, lastName: lastName});
+  }
+
+  private async _loadDancer(fistName: string, lastName: string) {
     this.slimLoadingBarService.visible = true;
     this.slimLoadingBarService.start(() => {
       this.slimLoadingBarService.visible = false;
     });
     this.competitions.next([]);
     this.summary.next({});
-    this.dancerName.next({firstName: fistName, lastName: lastName});
     try {
       const person = await IndividualParser.parse(fistName,
         lastName,
