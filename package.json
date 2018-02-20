@@ -1,6 +1,6 @@
 {
   "name": "pretty-o2cm",
-  "version": "0.0.0",
+  "version": "0.0.1-beta",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^5.2.0",
     "@angular/common": "^5.2.0",
@@ -21,7 +21,11 @@
     "@angular/platform-browser": "^5.2.0",
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
+    "angular-gauge": "^3.1.0",
+    "bootstrap": "^4.0.0-beta.3",
     "core-js": "^2.4.1",
+    "express": "^4.16.2",
+    "ng2-slim-loading-bar": "^4.0.0",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
   },
@@ -29,9 +33,14 @@
     "@angular/cli": "~1.7.0",
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
+    "@types/cheerio": "^0.22.7",
+    "@types/express": "^4.11.1",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
-    "@types/node": "~6.0.60",
+    "@types/node": "^6.0.101",
+    "@types/request": "^2.47.0",
+    "@types/text-encoding": "0.0.32",
+    "cheerio": "^1.0.0-rc.2",
     "codelyzer": "^4.0.1",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -40,9 +49,12 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ngx-bootstrap": "^2.0.2",
     "protractor": "~5.1.2",
+    "request": "^2.83.0",
+    "text-encoding": "^0.6.4",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
-    "typescript": "~2.5.3"
+    "typescript": "^2.7.1"
   }
 }

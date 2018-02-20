@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header  text-center">
+    {{StyleTypes[styleSummary.style]}}
+
+  </div>
+  <div class="card-body">
+    <div class="entry-container" *ngFor="let dance of styleSummary.dances">
+      <style-panel-entry [eventSummary]="latestEvent(dance.entries)"
+                         [danceType]="dance.dance"
+                         (click)="dance.showDetails =! dance.showDetails"
+                         class="main-entry">
+
+      </style-panel-entry>
+      <div class="sub-entry" *ngIf="dance.showDetails">
+        <ng-container *ngFor="let entry of restEvents(dance.entries)">
+          <style-panel-entry [eventSummary]="entry"
+                             [danceType]="dance.dance">
+
+          </style-panel-entry>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

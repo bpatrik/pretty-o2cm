@@ -1,0 +1,9 @@
+<app-frame>
+  <div class="col-md-10 justify-content-center">
+  <div class="competition-event-container" *ngFor="let comp of dataService.competitions.value">
+    <competition-event-list
+      [showPercentage]="showPercentage"
+      (pointPresentation)="onPointPresentatoinChange()" [competition]="comp"></competition-event-list>
+  </div>
+  </div>
+</app-frame>

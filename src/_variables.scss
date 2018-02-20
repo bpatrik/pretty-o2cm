@@ -1,0 +1,31 @@
+$skill-list: newcomer bronze silver gold novice prechamp championship;
+
+$colors: (
+  newcomer: #3C3C3C,
+  bronze: #8C7853,
+  silver: #E6E8FA,
+  gold: #CFB53B,
+  novice: #d5d4d2,
+  prechamp:#00a0ff,
+  championship:#00a0ff
+);
+
+$colors-light: (
+  newcomer: lighten(#3C3C3C, 40%),
+  bronze: lighten(#8C7853, 40%),
+  silver: lighten(#E6E8FA, 40%),
+  gold: lighten(#CFB53B, 40%),
+  novice: lighten(#d5d4d2, 40%),
+  prechamp:lighten(#00a0ff, 40%),
+  championship:lighten(#00a0ff, 40%)
+);
+
+$text-colors: (
+  newcomer: white,
+  bronze: #212529,
+  silver: #212529,
+  gold: #212529,
+  novice: #212529,
+  prechamp: #212529,
+  championship: #212529
+)

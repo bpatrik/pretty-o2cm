@@ -1,0 +1,48 @@
+@import "../node_modules/bootstrap/scss/functions", '../node_modules/bootstrap/scss/bootstrap';
+@import 'variables';
+
+
+@each $skill in $skill-list {
+  $color: #{map-get($colors,$skill)};
+  $color-light: #{map-get($colors-light,$skill)};
+
+  .border-#{$skill} {
+    border: solid 1px $color;
+  }
+  .border-right-#{$skill} {
+    border-right: solid 1px $color;
+  }
+  .bg-#{$skill} {
+    background-color: $color;
+    color: #{map-get($text-colors,$skill)};
+  }
+  .bg-light-#{$skill} {
+    background-color: $color-light;
+  }
+
+}
+
+
+
+mwl-gauge{
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+}
+
+@each $skill in $skill-list {
+  $color: #{map-get($colors,$skill)};
+
+  mwl-gaugexx.#{$skill} > .gauge > .dial {
+    stroke: $color;
+    stroke-width: 20;
+  }
+  mwl-gauge.#{$skill} > .gauge > .value {
+    stroke: $color;
+    stroke-width: 20;
+  }
+  mwl-gauge.#{$skill} > .gauge > .value-text {
+    fill: $color;
+    font-size: 0.7em;
+  }
+}

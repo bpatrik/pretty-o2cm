@@ -1,0 +1,58 @@
+<div class="row border-{{color()}} bg-light-{{color()}}">
+  <ng-template #pointsPop>
+    <div>
+      <ng-container *ngIf="Rules.MaxPoints[eventSummary.skill]">
+        Max points: {{Rules.MaxPoints[eventSummary.skill]}}.<br/>
+      </ng-container>
+      <ng-container *ngIf="eventSummary.points.details.length > 0">
+        Points from: <br/>
+        <ng-container *ngFor="let detail of eventSummary.points.details">
+          {{SkillTypes[detail.skill]}}:{{detail.points}}<br/>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-template>
+  <div class="col-md-2 text-center bg-{{color()}}" [tooltip]="pointsPop" container="body">
+    {{eventSummary.points.overall}}
+    <ng-container *ngIf="Rules.MaxPoints[(eventSummary.skill)]">
+      /{{Rules.MaxPoints[(eventSummary.skill)]}}
+    </ng-container>
+  </div>
+  <div class="col-md-3" title="skill level">
+    {{SkillTypes[eventSummary.skill]}}
+  </div>
+  <div class="col-md-3" title="dance">
+    {{DanceTypes[danceType]}}
+  </div>
+  <ng-container *ngIf="Rules.Timeout[eventSummary.skill]">
+    <ng-template #timeoutPop>
+      <div>
+        <ng-container *ngIf="Rules.Timeout[eventSummary.skill]">
+          Event timeout it {{Rules.Timeout[eventSummary.skill]/1000/60/60/24}} days.<br/>
+        </ng-container>
+        First competed at: <span style="white-space: nowrap">{{eventSummary.startTime | date:'mediumDate'}}</span><br/>
+        Last competed at: <span style="white-space: nowrap">{{eventSummary.lastCompetition | date:'mediumDate'}}</span>
+      </div>
+    </ng-template>
+    <div class="col-md-4" [tooltip]="timeoutPop" container="body">
+      <span class="oi oi-timer"></span>
+      <ng-container *ngIf="daysLeft(eventSummary) >= 0">
+        {{daysLeft(eventSummary)}} days left
+      </ng-container>
+      <ng-container *ngIf="daysLeft(eventSummary) < 0">
+        time out
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <div class="progress">
+    <div class="progress-bar bg-light-{{color()}}"
+         role="progressbar"
+         [style.width.%]="progress()"
+         aria-valuenow="progress(eventSummary)"
+         aria-valuemin="0" aria-valuemax="100">
+    </div>
+    <span class="bg-{{color()}}"> </span>
+  </div>
+</div>
+

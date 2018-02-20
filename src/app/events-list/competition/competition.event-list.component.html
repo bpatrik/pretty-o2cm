@@ -1,0 +1,13 @@
+<div class="card">
+  <div class="card-header">
+    {{competition.competition.name}}
+
+  </div>
+  <div class="card-body">
+    <div class="competition-event-container"   *ngFor="let event of competition.dances">
+      <competition-event
+        [showPercentage]="showPercentage"
+        (pointPresentation)="pointPresentation.emit()" [dance]="event"></competition-event>
+    </div>
+  </div>
+</div>
