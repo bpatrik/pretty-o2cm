@@ -1,4 +1,4 @@
-import {SkillTypes} from "../../o2cm-parser/entities/DanceEvent";
+import {SkillTypes} from '../../o2cm-parser/entities/DanceEvent';
 
 
 export const Rules = {
@@ -9,6 +9,7 @@ export const Rules = {
 Rules.MaxPoints[SkillTypes.Bronze] = 7;
 Rules.MaxPoints[SkillTypes.Silver] = 7;
 Rules.MaxPoints[SkillTypes.Gold] = 7;
+Rules.MaxPoints[SkillTypes.Syllabus] = 7;
 Rules.MaxPoints[SkillTypes.Novice] = 7;
 Rules.MaxPoints[SkillTypes.PreChamp] = 7;
 

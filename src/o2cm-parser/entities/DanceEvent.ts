@@ -1,12 +1,12 @@
-import {Competition} from "./Competition";
+import {Competition} from './Competition';
 
 
 export enum DivisionTypes {
-  Amateur
+  Amateur, Combine
 }
 
 export enum SkillTypes {
-  Newcomer, Bronze, Silver, Gold, Syllabus, Novice, PreChamp, Championship
+  Newcomer, Bronze, Silver, Gold, Syllabus, Novice, PreChamp, Championship, Open,
 }
 
 export enum AgeTypes {
@@ -36,12 +36,12 @@ export module DanceTypes {
 
 
   export function getStyleForOne(dance: DanceTypes) {
-    if (dance == DanceTypes.Jive || dance == DanceTypes.ChaCha ||
-      dance == DanceTypes.Rumba || dance == DanceTypes.Swing) {
+    if (dance === DanceTypes.Jive || dance === DanceTypes.ChaCha ||
+      dance === DanceTypes.Rumba || dance === DanceTypes.Swing) {
       return (StyleTypes.Latin | StyleTypes.Rhythm);
     }
-    if (dance == DanceTypes.Foxtrot || dance == DanceTypes.Walz ||
-      dance == DanceTypes.QuickStep || dance == DanceTypes.Tango || dance == DanceTypes.VWalz) {
+    if (dance === DanceTypes.Foxtrot || dance === DanceTypes.Walz ||
+      dance === DanceTypes.QuickStep || dance === DanceTypes.Tango || dance === DanceTypes.VWalz) {
       return (StyleTypes.Smooth | StyleTypes.Standard);
     }
     return null;
@@ -55,7 +55,7 @@ export module DanceTypes {
     for (let i = 0; i < dances.length; i++) {
       if (style == null) {
         style = DanceTypes.getStyleForOne(dances[i]);
-      } else if (style != DanceTypes.getStyleForOne(dances[i])) {
+      } else if (style !== DanceTypes.getStyleForOne(dances[i])) {
         return null;
       }
     }
@@ -88,14 +88,14 @@ export class Placement {
 
   setEvent(event: DanceEvent) {
     if (this.event) {
-      throw "event already set";
+      throw 'event already set';
     }
     this.event = event;
     this.event.addPlacement(this);
   }
 
   hasDancer(dancer: Dancer) {
-    return this.dancers[0] == dancer || this.dancers[1] == dancer;
+    return this.dancers[0] === dancer || this.dancers[1] === dancer;
   }
 }
 
@@ -169,13 +169,13 @@ export class DanceEvent {
       return 0;
     }
     let point = 0;
-    if (placement.placement == 1) {
+    if (placement.placement === 1) {
       point = 3;
     }
-    if (placement.placement == 2) {
+    if (placement.placement === 2) {
       point = 2;
     }
-    if (placement.placement == 3) {
+    if (placement.placement === 3) {
       point = 1;
     }
     if (this.hasQuarterFinal()) {
