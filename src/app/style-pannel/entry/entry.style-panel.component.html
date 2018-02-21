@@ -1,34 +1,34 @@
 <div class="row border-{{color()}} bg-light-{{color()}}">
   <ng-template #pointsPop>
     <div>
-      <ng-container *ngIf="Rules.MaxPoints[eventSummary.skill]">
-        Max points: {{Rules.MaxPoints[eventSummary.skill]}}.<br/>
+      <ng-container *ngIf="Rules.MaxPoints[eventSummary.pointSkill]">
+        Max points: {{Rules.MaxPoints[eventSummary.pointSkill]}}.<br/>
       </ng-container>
       <ng-container *ngIf="eventSummary.points.details.length > 0">
         Points from: <br/>
         <ng-container *ngFor="let detail of eventSummary.points.details">
-          {{SkillTypes[detail.skill]}}:{{detail.points}}<br/>
+          {{PointSkillTypes[detail.pointSkill]}}:{{detail.points}}<br/>
         </ng-container>
       </ng-container>
     </div>
   </ng-template>
   <div class="col-md-2 text-center bg-{{color()}}" [tooltip]="pointsPop" container="body">
     {{eventSummary.points.overall}}
-    <ng-container *ngIf="Rules.MaxPoints[(eventSummary.skill)]">
-      /{{Rules.MaxPoints[(eventSummary.skill)]}}
+    <ng-container *ngIf="Rules.MaxPoints[(eventSummary.pointSkill)]">
+      /{{Rules.MaxPoints[(eventSummary.pointSkill)]}}
     </ng-container>
   </div>
   <div class="col-md-3" title="skill level">
-    {{SkillTypes[eventSummary.skill]}}
+    {{PointSkillTypes[eventSummary.pointSkill]}}
   </div>
   <div class="col-md-3" title="dance">
     {{DanceTypes[danceType]}}
   </div>
-  <ng-container *ngIf="Rules.Timeout[eventSummary.skill]">
+  <ng-container *ngIf="Rules.Timeout[eventSummary.pointSkill]">
     <ng-template #timeoutPop>
       <div>
-        <ng-container *ngIf="Rules.Timeout[eventSummary.skill]">
-          Event timeout it {{Rules.Timeout[eventSummary.skill]/1000/60/60/24}} days.<br/>
+        <ng-container *ngIf="Rules.Timeout[eventSummary.pointSkill]">
+          Event timeout it {{Rules.Timeout[eventSummary.pointSkill]/1000/60/60/24}} days.<br/>
         </ng-container>
         First competed at: <span style="white-space: nowrap">{{eventSummary.startTime | date:'mediumDate'}}</span><br/>
         Last competed at: <span style="white-space: nowrap">{{eventSummary.lastCompetition | date:'mediumDate'}}</span>

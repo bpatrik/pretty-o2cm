@@ -11,14 +11,14 @@
         <li class="nav-item" [routerLinkActive]="['active']">
           <a class="nav-link" href="#"
              [routerLink]="['/summary']"
-             [queryParams]="  {firstName:dataService.dancerName.value.firstName,
-        lastName:dataService.dancerName.value.lastName}">Summary</a>
+             [queryParams]="  {firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}">Summary</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['active']">
           <a class="nav-link" href="#"
              [routerLink]="['/list']"
-             [queryParams]="  {firstName:dataService.dancerName.value.firstName,
-        lastName:dataService.dancerName.value.lastName}">List</a>
+             [queryParams]="  {firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}">List</a>
         </li>
       </ul>
       <form class="form-inline mt-2 mt-md-0">
@@ -26,10 +26,10 @@
                type="text"
                placeholder="First name"
                aria-label="First name"
-               [value]="dataService.dancerName.value.firstName"
+               [value]="dataService.data.value.dancerName.firstName"
                (input)="firstName = $event.target.value">
         <input class="form-control mr-sm-2" type="text" placeholder="Last name" aria-label="Last name"
-               [value]="dataService.dancerName.value.lastName"
+               [value]="dataService.data.value.dancerName.lastName"
                (input)="lastName = $event.target.value">
         <button class="btn btn-outline-primary my-2 my-sm-0" type="button" (click)="load()">Show</button>
       </form>

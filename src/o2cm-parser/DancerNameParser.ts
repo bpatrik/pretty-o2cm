@@ -1,4 +1,4 @@
-import {Placement} from './entities/DanceEvent';
+import {Placement} from './entities/Placement';
 import {DancerRepository} from './DancerRepository';
 
 export class PlacementParser {

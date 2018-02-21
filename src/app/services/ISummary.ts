@@ -1,15 +1,15 @@
-import {DanceTypes, SkillTypes, StyleTypes} from "../../o2cm-parser/entities/DanceEvent";
+import {DanceTypes, PointSkillTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
 
 export interface IPointSummary {
   overall: number;
-  details: { skill: SkillTypes, points: number }[];
+  details: { pointSkill: PointSkillTypes, points: number }[];
 }
 
 export interface IEventSummary {
-  skill: SkillTypes;
+  pointSkill: PointSkillTypes;
   points: IPointSummary;
-  startTime: Date;
-  lastCompetition: Date;
+  startTime: number;
+  lastCompetition: number;
 }
 
 

@@ -1,7 +1,7 @@
-import {Component, ViewEncapsulation} from "@angular/core";
-import {RouterLink} from "@angular/router";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {DataService} from "../services/data.service";
+import {Component, ViewEncapsulation} from '@angular/core';
+import {RouterLink} from '@angular/router';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {DataService} from '../services/data.service';
 
 @Component({
   selector: 'app-frame',
@@ -11,12 +11,12 @@ import {DataService} from "../services/data.service";
   encapsulation: ViewEncapsulation.Emulated
 })
 export class FrameComponent {
-  firstName: string = "";
-  lastName: string = "";
+  firstName = '';
+  lastName = '';
 
   constructor(public dataService: DataService) {
-    this.firstName = this.dataService.dancerName.getValue().firstName;
-    this.lastName = this.dataService.dancerName.getValue().lastName;
+    this.firstName = this.dataService.data.getValue().dancerName.firstName;
+    this.lastName = this.dataService.data.getValue().dancerName.lastName;
   }
 
   load() {

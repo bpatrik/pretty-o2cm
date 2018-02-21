@@ -1,8 +1,8 @@
-import {Component, Input} from "@angular/core";
-import {DataService} from "../services/data.service";
-import {DanceTypes, SkillTypes, StyleTypes} from "../../o2cm-parser/entities/DanceEvent";
-import {Rules} from "../services/Rules";
-import {IDanceSummary, IEventSummary, IStyleSummary} from "../services/ISummary";
+import {Component, Input} from '@angular/core';
+import {DataService} from '../services/data.service';
+import {DanceTypes, PointSkillTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
+import {Rules} from '../services/Rules';
+import {IDanceSummary, IEventSummary, IStyleSummary} from '../services/ISummary';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class StylePanelComponent {
   @Input() styleSummary: IStyleSummary;
   StyleTypes = StyleTypes;
   DanceTypes = DanceTypes;
-  SkillTypes = SkillTypes;
+  PointSkillTypes = PointSkillTypes;
   Rules = Rules;
 
   constructor() {
@@ -25,21 +25,21 @@ export class StylePanelComponent {
 
   latestEvent(events: IEventSummary[]): IEventSummary {
     events.sort((a, b) => {
-      return b.lastCompetition.getTime() - a.lastCompetition.getTime();
+      return b.lastCompetition - a.lastCompetition;
     });
     return events[0];
   }
 
-  restEvents(events){
+  restEvents(events) {
     events.sort((a, b) => {
-      return b.lastCompetition.getTime() - a.lastCompetition.getTime();
+      return b.lastCompetition - a.lastCompetition;
     });
     return events.slice(1);
   }
 
 
-  color(dance:IDanceSummary){
-    return SkillTypes[this.latestEvent(dance.entries).skill].toLowerCase();
+  color(dance: IDanceSummary) {
+    return PointSkillTypes[this.latestEvent(dance.entries).pointSkill].toLowerCase();
   }
 
 

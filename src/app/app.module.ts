@@ -3,17 +3,18 @@ import {NgModule} from '@angular/core';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {GaugeModule} from 'angular-gauge';
 import {AppComponent} from './app.component';
-import {StylePanelComponent} from "./style-pannel/style-panel.component";
-import {DataService} from "./services/data.service";
-import {StylePanelEntryComponent} from "./style-pannel/entry/entry.style-panel.component";
+import {StylePanelComponent} from './style-pannel/style-panel.component';
+import {DataService} from './services/data.service';
+import {StylePanelEntryComponent} from './style-pannel/entry/entry.style-panel.component';
 import {HttpClientModule} from '@angular/common/http';
-import {SummaryComponent} from "./summary/summary.component";
-import {CompetitionEventListComponent} from "./events-list/competition/competition.event-list.component";
-import {EventListComponent} from "./events-list/event-list.component";
-import {CompetitionEventComponent} from "./events-list/competition/event/event.competition.list.component";
-import {appRoutes} from "./app.routing";
-import {FrameComponent} from "./frame/frame.component";
-import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
+import {SummaryComponent} from './summary/summary.component';
+import {CompetitionEventListComponent} from './events-list/competition/competition.event-list.component';
+import {EventListComponent} from './events-list/event-list.component';
+import {CompetitionEventComponent} from './events-list/competition/event/event.competition.list.component';
+import {appRoutes} from './app.routing';
+import {FrameComponent} from './frame/frame.component';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {CacheService} from './services/cache.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
     GaugeModule.forRoot(),
     SlimLoadingBarModule.forRoot()
   ],
-  providers: [DataService],
+  providers: [DataService, CacheService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

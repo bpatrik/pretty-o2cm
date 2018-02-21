@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {DataService} from "../services/data.service";
+import {Component} from '@angular/core';
+import {DataService} from '../services/data.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class EventListComponent {
   showPercentage = false;
 
   onPointPresentatoinChange() {
-    console.log("change",this.showPercentage);
+    console.log('change', this.showPercentage);
     this.showPercentage = !this.showPercentage;
   }
 }

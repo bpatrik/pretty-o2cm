@@ -1,6 +1,6 @@
-import {DanceEvent, Dancer} from "./DanceEvent";
-import {Competition} from "./Competition";
-import {DancerRepository} from "../DancerRepository";
+import {DanceEvent, Dancer} from './DanceEvent';
+import {Competition} from './Competition';
+import {DancerRepository} from '../DancerRepository';
 
 
 export class Individual {
@@ -13,7 +13,7 @@ export class Individual {
   constructor(firstName: string, lastName: string, competitions: Competition[]) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.dancer = DancerRepository.Instance.createOrGet(firstName + " " + lastName)
+    this.dancer = DancerRepository.Instance.createOrGet(firstName + ' ' + lastName);
     this.competitions = competitions;
   }
 
@@ -22,19 +22,19 @@ export class Individual {
   }
 
   get Skills(): { [key: string]: DanceEvent[] } {
-    let skills: { [key: string]: DanceEvent[] } = {};
+    const skills: { [key: string]: DanceEvent[] } = {};
     let events: DanceEvent[] = [];
     this.competitions.forEach(c => events = events.concat(c.dancedEvents));
     for (let i = 0; i < events.length; i++) {
-      skills[events[i].skill] = skills[events[i].skill] || [];
-      skills[events[i].skill].push(events[i]);
+      skills[events[i].pointSkill] = skills[events[i].pointSkill] || [];
+      skills[events[i].pointSkill].push(events[i]);
     }
     return skills;
 
   }
 
   get Styles(): { [key: string]: DanceEvent[] } {
-    let skills: { [key: string]: DanceEvent[] } = {};
+    const skills: { [key: string]: DanceEvent[] } = {};
     let events: DanceEvent[] = [];
     this.competitions.forEach(c => events = events.concat(c.dancedEvents));
     for (let i = 0; i < events.length; i++) {

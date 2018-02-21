@@ -1,9 +1,10 @@
 import {HTTPLoader} from './HTTPLoader';
 import * as cheerio from 'cheerio';
-import {DanceEvent, DivisionTypes, SkillTypes} from './entities/DanceEvent';
+import {DanceEvent} from './entities/DanceEvent';
 import {EventNameParser} from './EventNameParser';
 import {PlacementParser} from './DancerNameParser';
 import {IHTTP} from './IndividualParser';
+import {DivisionTypes, EventSkillTypes} from './entities/Types';
 
 
 export class EventParser {
@@ -20,33 +21,39 @@ export class EventParser {
     }
   }
 
-  private static skillToSelect(skill: SkillTypes) {
+  private static skillToSelect(skill: EventSkillTypes) {
     const base = 'AND+%28uidheat%260xFF00%29%3E%3E8+%3D';
     switch (skill) {
-      case SkillTypes.Newcomer:
+      case EventSkillTypes.Newcomer:
         return base + '32';
-      case SkillTypes.Bronze:
+      case EventSkillTypes.Bronze:
         return base + '40';
-      case SkillTypes.Silver:
+      case EventSkillTypes.Silver:
         return base + '48';
-      case SkillTypes.Gold:
+      case EventSkillTypes.Gold:
         return base + '56';
-      case SkillTypes.Syllabus:
-        return base + '63';
-      case SkillTypes.Open:
-        return base + '133';
-      case SkillTypes.Novice:
+      case EventSkillTypes.Novice:
         return base + '129';
-      case SkillTypes.PreChamp:
+      case EventSkillTypes.PreChamp:
         return base + '131';
-      case SkillTypes.Champ:
+      case EventSkillTypes.Champ:
         return base + '135';
+      case EventSkillTypes.Syllabus:
+        return base + '63';
+      case EventSkillTypes.Open:
+        return base + '133';
+      case EventSkillTypes.Beginner:
+        return base + '44';
+      case EventSkillTypes.Intermediate:
+        return base + '52';
+      case EventSkillTypes.Advanced:
+        return base + '60';
       default:
         throw new Error('unsupported skill: ' + skill);
     }
   }
 
-  private static generateBody(event: string, division: DivisionTypes, skill: SkillTypes) {
+  private static generateBody(event: string, division: DivisionTypes, skill: EventSkillTypes) {
     return 'selDiv=' + this.divisionToSelect(division) +
       '&selAge=&selSkl=' + this.skillToSelect(skill) +
       '&selSty=&selEnt=&submit=OK&event=' + event;
@@ -81,7 +88,7 @@ export class EventParser {
     return danceEvents;
   }
 
-  public static async parse(event: string, division: DivisionTypes, skill: SkillTypes, http: IHTTP): Promise<DanceEvent[]> {
+  public static async parse(event: string, division: DivisionTypes, skill: EventSkillTypes, http: IHTTP): Promise<DanceEvent[]> {
     const page = await http.post('http://results.o2cm.com/event3.asp', this.generateBody(event, division, skill));
     return this.parseEvents(page);
   }

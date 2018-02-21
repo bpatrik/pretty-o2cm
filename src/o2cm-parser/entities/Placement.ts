@@ -1,0 +1,50 @@
+import {DanceEvent, Dancer, IDanceEvent} from './DanceEvent';
+
+export interface IPlacement {
+  dancers: Dancer[];
+  placement: number;
+  leaderNumber: number;
+  isFinal: boolean;
+  event: DanceEvent;
+}
+
+export class Placement implements IPlacement {
+  dancers: Dancer[] = [];
+  placement: number;
+  leaderNumber: number;
+  isFinal: boolean;
+  event: DanceEvent;
+
+
+  constructor(placement: number, leaderNumber: number) {
+    this.placement = placement;
+    this.leaderNumber = leaderNumber;
+  }
+
+  addDancer(dancer: Dancer) {
+    this.dancers.push(dancer);
+  }
+
+  setEvent(event: DanceEvent) {
+    if (this.event) {
+      throw new Error('event already set');
+    }
+    this.event = event;
+    this.event.addPlacement(this);
+  }
+
+  hasDancer(dancer: Dancer) {
+    return this.dancers[0] === dancer || this.dancers[1] === dancer;
+  }
+
+
+  toJSONable(): IPlacement {
+    return {
+      dancers: this.dancers,
+      placement: this.placement,
+      leaderNumber: this.leaderNumber,
+      isFinal: this.isFinal,
+      event: null
+    };
+  }
+}

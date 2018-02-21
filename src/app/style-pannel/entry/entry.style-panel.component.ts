@@ -1,8 +1,8 @@
-import {Component, Input} from "@angular/core";
-import {DataService} from "../../services/data.service";
-import {DanceTypes, SkillTypes, StyleTypes} from "../../../o2cm-parser/entities/DanceEvent";
-import {Rules} from "../../services/Rules";
-import {IEventSummary} from "../../services/ISummary";
+import {Component, Input} from '@angular/core';
+import {DataService} from '../../services/data.service';
+import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../o2cm-parser/entities/Types';
+import {Rules} from '../../services/Rules';
+import {IEventSummary} from '../../services/ISummary';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class StylePanelEntryComponent {
   @Input() danceType: DanceTypes;
   StyleTypes = StyleTypes;
   DanceTypes = DanceTypes;
-  SkillTypes = SkillTypes;
+  PointSkillTypes = PointSkillTypes;
   Rules = Rules;
 
   constructor() {
@@ -26,21 +26,21 @@ export class StylePanelEntryComponent {
 
   latestEvent(events: IEventSummary[]): IEventSummary {
     events.sort((a, b) => {
-      return b.lastCompetition.getTime() - a.lastCompetition.getTime();
+      return b.lastCompetition - a.lastCompetition;
     });
     return events[0];
   }
 
   restEvents(events) {
     events.sort((a, b) => {
-      return b.lastCompetition.getTime() - a.lastCompetition.getTime();
+      return b.lastCompetition - a.lastCompetition;
     });
     return events.slice(1);
   }
 
   daysLeft(event: IEventSummary) {
-    let length = Rules.Timeout[event.skill];
-    let left = (event.startTime.getTime() + length) - Date.now();
+    const length = Rules.Timeout[event.pointSkill];
+    const left = (event.startTime + length) - Date.now();
     if (left <= 0) {
       return -1;
     }
@@ -50,19 +50,19 @@ export class StylePanelEntryComponent {
   progress() {
     let timeP = 0;
     let pointP = 0;
-    if (Rules.Timeout[this.eventSummary.skill]) {
-      let length = Rules.Timeout[this.eventSummary.skill];
-      let left = (this.eventSummary.startTime.getTime() + length) - Date.now();
+    if (Rules.Timeout[this.eventSummary.pointSkill]) {
+      const length = Rules.Timeout[this.eventSummary.pointSkill];
+      const left = (this.eventSummary.startTime + length) - Date.now();
       timeP = (length - left) / length;
     }
-    if (Rules.MaxPoints[this.eventSummary.skill]) {
-      pointP = this.eventSummary.points.overall / Rules.MaxPoints[this.eventSummary.skill];
+    if (Rules.MaxPoints[this.eventSummary.pointSkill]) {
+      pointP = this.eventSummary.points.overall / Rules.MaxPoints[this.eventSummary.pointSkill];
     }
     return Math.round(Math.max(timeP, pointP) * 100);
   }
 
   color() {
-    return SkillTypes[this.eventSummary.skill].toLowerCase();
+    return PointSkillTypes[this.eventSummary.pointSkill].toLowerCase();
   }
 
 

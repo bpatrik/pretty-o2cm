@@ -1,9 +1,16 @@
-import {DanceEvent} from "./DanceEvent";
-import {CompetitionCore} from "../IndividualParser";
+import {DanceEvent, IDanceEvent} from './DanceEvent';
+import {CompetitionCore} from '../IndividualParser';
 
-export class Competition {
+export interface ICompetition {
   name: string;
-  date: Date;
+  date: number;
+  linkCode: string;
+  dancedEvents: IDanceEvent[];
+}
+
+export class Competition implements ICompetition {
+  name: string;
+  date: number;
   linkCode: string;
   dancedEvents: DanceEvent[];
 
@@ -16,7 +23,7 @@ export class Competition {
 
   set DanceEvents(dancedEvents: DanceEvent[]) {
     if (this.dancedEvents) {
-      throw "Dance events already set";
+      throw new Error('Dance events already set');
     }
     this.dancedEvents = dancedEvents;
     this.dancedEvents.forEach((d) => {
@@ -24,5 +31,12 @@ export class Competition {
     });
   }
 
-
+  toJSONable(): ICompetition {
+    return {
+      name: this.name,
+      date: this.date,
+      linkCode: this.linkCode,
+      dancedEvents: this.dancedEvents.map(e => e.toJSONable())
+    };
+  }
 }

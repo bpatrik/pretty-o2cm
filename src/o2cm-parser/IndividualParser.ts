@@ -1,10 +1,11 @@
 import * as cheerio from 'cheerio';
-import {DanceEvent, DivisionTypes, SkillTypes} from './entities/DanceEvent';
+import {DanceEvent} from './entities/DanceEvent';
 import {EventNameParser} from './EventNameParser';
 import {EventParser} from './EventParser';
 import {Individual} from './entities/Individual';
 import {DancerRepository} from './DancerRepository';
 import {Competition} from './entities/Competition';
+import {DivisionTypes, EventSkillTypes} from './entities/Types';
 
 export interface IHTTP {
   post(url, body): Promise<string>;
@@ -12,12 +13,12 @@ export interface IHTTP {
 
 export interface IDancedEvents {
   division: DivisionTypes;
-  skill: SkillTypes;
+  eventSkill: EventSkillTypes;
 }
 
 export class CompetitionCore {
   name: string;
-  date: Date;
+  date: number;
   linkCode: string;
   dancedEvents: IDancedEvents[] = [];
 
@@ -28,7 +29,7 @@ export class CompetitionCore {
 
   addEvent(event: IDancedEvents) {
     for (let i = 0; i < this.dancedEvents.length; i++) {
-      if (this.dancedEvents[i].division == event.division && this.dancedEvents[i].skill == event.skill) {
+      if (this.dancedEvents[i].division === event.division && this.dancedEvents[i].eventSkill === event.eventSkill) {
         return;
       }
     }
@@ -53,9 +54,9 @@ export class IndividualParser {
         const matched = eventName.match(/^[0-9]+(-[0-9]+)+/);
         if (matched !== null) {
           const nums = matched[0].split(('-'));
-          cmp.date = new Date((parseInt(nums[2]) < 60 ? parseInt(nums[2]) + 2000 : parseInt(nums[2])),
-            parseInt(nums[0]) - 1,
-            parseInt(nums[1]));
+          cmp.date = (new Date((parseInt(nums[2], 10) < 60 ? parseInt(nums[2], 10) + 2000 : parseInt(nums[2], 10)),
+            parseInt(nums[0], 10) - 1,
+            parseInt(nums[1], 10))).getTime();
         }
 
         competitions.push(cmp);
@@ -88,7 +89,7 @@ export class IndividualParser {
         try {
           des = des.concat(await EventParser.parse(compCores[i].linkCode,
             compCores[i].dancedEvents[j].division,
-            compCores[i].dancedEvents[j].skill,
+            compCores[i].dancedEvents[j].eventSkill,
             http));
         } catch (err) {
           console.error('Error during parsing: ' + compCores[i].name, 'division: ' + compCores[i].dancedEvents[j].division);

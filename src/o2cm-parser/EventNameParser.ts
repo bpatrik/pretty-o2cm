@@ -1,5 +1,6 @@
-import {AgeTypes, DanceEvent, DanceTypes, DivisionTypes, SkillTypes, StyleTypes} from './entities/DanceEvent';
+import {AgeTypes,  DanceTypes, DivisionTypes, EventSkillTypes, StyleTypes} from './entities/Types';
 import {Utils} from '../Utils';
+import {DanceEvent} from './entities/DanceEvent';
 
 export class EventNameParser {
 
@@ -14,13 +15,10 @@ export class EventNameParser {
     return null;
   }
 
-  private static parseSkill(name: string): SkillTypes {
-    const list = Utils.enumToArray(SkillTypes);
-    list.push({key: SkillTypes.Bronze, value: 'Beginner'});
-    list.push({key: SkillTypes.Silver, value: 'Intermediate'});
-    list.push({key: SkillTypes.Gold, value: 'Advanced'});
-    list.push({key: SkillTypes.PreChamp, value: 'Pre-Champ'});
-    list.push({key: SkillTypes.Champ, value: 'Championship'});
+  private static parseSkill(name: string): EventSkillTypes {
+    const list = Utils.enumToArray(EventSkillTypes);
+    list.push({key: EventSkillTypes.PreChamp, value: 'Pre-Champ'});
+    list.push({key: EventSkillTypes.Champ, value: 'Championship'});
 
     for (let i = 0; i < list.length; i++) {
       if (name.indexOf(list[i].value) !== -1) {
@@ -51,17 +49,21 @@ export class EventNameParser {
       }
     }
     if (name.indexOf('Am.') !== -1) {
+      // noinspection TsLint
       if ((DanceTypes.getStyle(dances) & StyleTypes.Rhythm) !== 0) {
         return StyleTypes.Rhythm;
       }
+      // noinspection TsLint
       if ((DanceTypes.getStyle(dances) & StyleTypes.Smooth) !== 0) {
         return StyleTypes.Smooth;
       }
     }
     if (name.indexOf('Intl.') !== -1) {
+      // noinspection TsLint
       if ((DanceTypes.getStyle(dances) & StyleTypes.Latin) !== 0) {
         return StyleTypes.Latin;
       }
+      // noinspection TsLint
       if ((DanceTypes.getStyle(dances) & StyleTypes.Standard) !== 0) {
         return StyleTypes.Standard;
       }

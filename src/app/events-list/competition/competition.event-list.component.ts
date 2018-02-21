@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {ICompetitionList} from "../../services/data.service";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ICompetitionList} from '../../services/data.service';
 
 
 @Component({
@@ -7,7 +7,7 @@ import {ICompetitionList} from "../../services/data.service";
   templateUrl: './competition.event-list.component.html',
   styleUrls: ['./competition.event-list.component.scss'],
 })
-export class CompetitionEventListComponent{
+export class CompetitionEventListComponent {
 
   @Output() pointPresentation = new EventEmitter();
   @Input() showPercentage: boolean;

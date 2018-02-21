@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {IDanceList} from "../../../services/data.service";
-import {Rules} from "../../../services/Rules";
-import {DanceTypes, SkillTypes, StyleTypes} from "../../../../o2cm-parser/entities/DanceEvent";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {IDanceList} from '../../../services/data.service';
+import {Rules} from '../../../services/Rules';
+import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
 
 
 @Component({
@@ -13,7 +13,7 @@ export class CompetitionEventComponent {
 
   StyleTypes = StyleTypes;
   DanceTypes = DanceTypes;
-  SkillTypes = SkillTypes;
+  PointSkillTypes = PointSkillTypes;
   Rules = Rules;
 
 
@@ -22,11 +22,11 @@ export class CompetitionEventComponent {
   @Output() pointPresentation = new EventEmitter();
 
   color() {
-    return SkillTypes[this.dance.skill].toLowerCase();
+    return PointSkillTypes[this.dance.pointSkill].toLowerCase();
   }
 
-  percent(){
-    return Math.round((this.dance.coupleCount - this.dance.placement) / this.dance.coupleCount *100);
+  percent() {
+    return Math.round((this.dance.coupleCount - this.dance.placement) / this.dance.coupleCount * 100);
   }
 }
 

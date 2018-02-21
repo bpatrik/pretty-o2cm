@@ -1,122 +1,38 @@
 import {Competition} from './Competition';
+import {IPlacement, Placement} from './Placement';
+import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from './Types';
 
 
-export enum DivisionTypes {
-  Amateur, Combine
+export interface IDanceEvent {
+  placements: IPlacement[];
+  competition: Competition;
+  pointSkill: PointSkillTypes;
+  raw: string;
+  division: DivisionTypes;
+  age: AgeTypes;
+  eventSkill: EventSkillTypes;
+  style: StyleTypes;
+  dances: DanceTypes[];
 }
-
-export enum SkillTypes {
-  Newcomer, Bronze, Silver, Gold, Syllabus, Novice, PreChamp, Champ, Open,
-}
-
-export enum AgeTypes {
-  Adult
-}
-
-export enum StyleTypes {
-  Standard = 1, Smooth = 2, Latin = 4, Rhythm = 8
-}
-
-export enum DanceTypes {
-  Tango, VWalz, Foxtrot, Walz, QuickStep, Jive,
-  ChaCha, Rumba, Swing, PasoDoble, Bolero, Samba, Mambo
-}
-
-export module DanceTypes {
-  export const LetterType = {
-    T: DanceTypes.Tango,
-    V: DanceTypes.VWalz,
-    F: DanceTypes.Foxtrot,
-    W: DanceTypes.Walz,
-    Q: DanceTypes.QuickStep,
-    J: DanceTypes.Jive,
-    C: DanceTypes.ChaCha,
-    R: DanceTypes.Rumba,
-    B: DanceTypes.Bolero,
-    P: DanceTypes.PasoDoble,
-    S: DanceTypes.Swing,
-   // S: DanceTypes.Samba TODO:fix it
-  };
-
-
-  export function getStyleForOne(dance: DanceTypes) {
-    if (dance === DanceTypes.Jive || dance === DanceTypes.ChaCha ||
-      dance === DanceTypes.Rumba || dance === DanceTypes.Swing
-      || dance === DanceTypes.PasoDoble || dance === DanceTypes.Bolero
-      || dance === DanceTypes.Samba || dance === DanceTypes.Mambo) {
-      return (StyleTypes.Latin | StyleTypes.Rhythm);
-    }
-    if (dance === DanceTypes.Foxtrot || dance === DanceTypes.Walz ||
-      dance === DanceTypes.QuickStep || dance === DanceTypes.Tango || dance === DanceTypes.VWalz) {
-      return (StyleTypes.Smooth | StyleTypes.Standard);
-    }
-    return null;
-  }
-
-  export function getStyle(dances: DanceTypes[]) {
-    if (!dances) {
-      return null;
-    }
-    let style: StyleTypes = null;
-    for (let i = 0; i < dances.length; i++) {
-      if (style == null) {
-        style = DanceTypes.getStyleForOne(dances[i]);
-      } else if (style !== DanceTypes.getStyleForOne(dances[i])) {
-        return null;
-      }
-    }
-    return style;
-  }
-}
-
 
 export class Dancer {
   constructor(public name: string) {
   }
 }
 
-export class Placement {
-  dancers: Dancer[] = [];
-  placement: number;
-  leaderNumber: number;
-  isFinal: boolean;
-  event: DanceEvent;
 
-
-  constructor(placement: number, leaderNumber: number) {
-    this.placement = placement;
-    this.leaderNumber = leaderNumber;
-  }
-
-  addDancer(dancer: Dancer) {
-    this.dancers.push(dancer);
-  }
-
-  setEvent(event: DanceEvent) {
-    if (this.event) {
-      throw 'event already set';
-    }
-    this.event = event;
-    this.event.addPlacement(this);
-  }
-
-  hasDancer(dancer: Dancer) {
-    return this.dancers[0] === dancer || this.dancers[1] === dancer;
-  }
-}
-
-
-export class DanceEvent {
+export class DanceEvent implements IDanceEvent {
   placements: Placement[] = [];
   competition: Competition;
+  public pointSkill: PointSkillTypes;
 
   constructor(public raw: string,
               public division: DivisionTypes,
               public age: AgeTypes,
-              public skill: SkillTypes,
+              public eventSkill: EventSkillTypes,
               public style: StyleTypes,
               public dances: DanceTypes[]) {
-
+    this.pointSkill = EventSkillTypes.toPointSkillType(this.eventSkill);
   }
 
 
@@ -125,7 +41,7 @@ export class DanceEvent {
       raw: this.raw,
       division: DivisionTypes[this.division],
       age: AgeTypes[this.age],
-      skill: SkillTypes[this.skill],
+      skill: EventSkillTypes[this.eventSkill],
       style: StyleTypes[this.style],
       dances: this.dances.map(v => DanceTypes[v])
     };
@@ -165,13 +81,13 @@ export class DanceEvent {
   }
 
   hasQuarterFinal(): boolean {
-    //TODO: fix it. its just guessing
+    // TODO: fix it. its just guessing
     return this.placements.length > 30;
   }
 
-  calcPoint(dancer: Dancer, skill: SkillTypes = this.skill) {
-    let placement = this.getPlacement(dancer);
-    if (!placement.isFinal || skill > this.skill) {
+  calcPoint(dancer: Dancer, skill: PointSkillTypes = this.pointSkill) {
+    const placement = this.getPlacement(dancer);
+    if (!placement.isFinal || skill > this.pointSkill) {
       return 0;
     }
     let point = 0;
@@ -189,14 +105,28 @@ export class DanceEvent {
         point = 1;
       }
     }
-    if (skill == this.skill - 1) {
+    if (skill === this.pointSkill - 1) {
       point *= 2;
     }
-    if (skill < this.skill - 1) {
+    if (skill < this.pointSkill - 1) {
       point = 7;
     }
 
 
     return point;
+  }
+
+  toJSONable(): IDanceEvent {
+    return {
+      age: this.age,
+      competition: null,
+      dances: this.dances,
+      division: this.division,
+      eventSkill: this.eventSkill,
+      placements: this.placements.map(p => p.toJSONable()),
+      pointSkill: this.pointSkill,
+      raw: this.raw,
+      style: this.style
+    };
   }
 }
