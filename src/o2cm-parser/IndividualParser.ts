@@ -78,7 +78,8 @@ export class IndividualParser {
   }
 
 
-  public static async parse(firstName: string, lastName: string, http: IHTTP, progress: (loading: ILoading) => void): Promise<Individual> {
+  public static async parse(firstName: string, lastName: string, http: IHTTP, progress: (loading: ILoading) => void = () => {
+  }): Promise<Individual> {
     const url = 'http://results.o2cm.com/individual.asp?szLast=' + lastName + '&szFirst=' + firstName;
     progress({
       url: url,
