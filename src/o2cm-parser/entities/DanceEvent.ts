@@ -1,6 +1,7 @@
 import {Competition} from './Competition';
 import {IPlacement, Placement} from './Placement';
 import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from './Types';
+import {DancerName} from '../../app/services/data.service';
 
 
 export interface IDanceEvent {
@@ -15,8 +16,14 @@ export interface IDanceEvent {
   dances: DanceTypes[];
 }
 
-export class Dancer {
+export class Dancer implements DancerName {
+  public firstName: string;
+  public lastName: string;
+
   constructor(public name: string) {
+    const tmp = name.split(' ');
+    this.firstName = tmp[0] || name;
+    this.lastName = tmp[1] || '';
   }
 }
 
@@ -76,6 +83,18 @@ export class DanceEvent implements IDanceEvent {
     for (let i = 0; i < this.placements.length; i++) {
       if (this.placements[i].hasDancer(dancer)) {
         return this.placements[i];
+      }
+    }
+  }
+
+  getPartner(dancer: Dancer): Dancer {
+    for (let i = 0; i < this.placements.length; i++) {
+      if (this.placements[i].hasDancer(dancer)) {
+        if (this.placements[i].dancers[0] === dancer) {
+          return this.placements[i].dancers[1] || new Dancer('TBA');
+        } else {
+          return this.placements[i].dancers[0] || new Dancer('TBA');
+        }
       }
     }
   }

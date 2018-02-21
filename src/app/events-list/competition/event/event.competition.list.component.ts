@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {IDanceList} from '../../../services/data.service';
+import {DancerName, IDanceList} from '../../../services/data.service';
 import {Rules} from '../../../services/Rules';
 import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
 
@@ -28,5 +28,10 @@ export class CompetitionEventComponent {
   percent() {
     return Math.round((this.dance.coupleCount - this.dance.placement) / this.dance.coupleCount * 100);
   }
+
+  url() {
+    return window.location.origin + window.location.pathname + '?firstName=' + this.dance.partner.firstName + '&lastName=' + this.dance.partner.lastName;
+  }
+
 }
 

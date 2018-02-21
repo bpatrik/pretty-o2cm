@@ -9,8 +9,9 @@
   .border-#{$skill} {
     border: solid 1px $color;
   }
-  .border-right-#{$skill} {
+  .border-side-#{$skill} {
     border-right: solid 1px $color;
+    border-left: solid 1px $color;
   }
   .bg-#{$skill} {
     background-color: $color;

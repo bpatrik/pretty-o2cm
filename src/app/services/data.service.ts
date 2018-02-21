@@ -12,7 +12,7 @@ import {Individual} from '../../o2cm-parser/entities/Individual';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Params} from '@angular/router/src/shared';
-import {DanceEvent} from '../../o2cm-parser/entities/DanceEvent';
+import {DanceEvent, Dancer} from '../../o2cm-parser/entities/DanceEvent';
 import {CacheService} from './cache.service';
 
 export interface IDanceList {
@@ -23,6 +23,7 @@ export interface IDanceList {
   coupleCount: number;
   isFinal: boolean;
   point: number;
+  partner: DancerName;
 }
 
 export interface ICompetitionList {
@@ -146,7 +147,8 @@ export class DataService {
               placement: 2,
               coupleCount: 20,
               isFinal: true,
-              point: 2
+              point: 2,
+              partner: {firstName: 'Test', lastName: 'John'}
             },
             {
               pointSkill: PointSkillTypes.Bronze,
@@ -155,7 +157,8 @@ export class DataService {
               placement: 12,
               coupleCount: 20,
               isFinal: false,
-              point: 2
+              point: 2,
+              partner: {firstName: 'Test', lastName: 'John'}
             }
           ]
         }
@@ -224,7 +227,8 @@ export class DataService {
               style: d.style,
               pointSkill: d.pointSkill,
               placement: d.getPlacement(person.dancer).placement,
-              dances: d.dances
+              dances: d.dances,
+              partner: d.getPartner(person.dancer)
             };
           })
       });
@@ -260,14 +264,16 @@ export class DataService {
             details: []
           };
           for (const ds in tmp[danceType]) {
-            const p = tmp[danceType][ds].reduce((prev, c) => prev + c.calcPoint(person.dancer, <any>parseInt(danceSkill, 10)), 0);
+            const p = tmp[danceType][ds].reduce((prev, c) =>
+              prev + c.calcPoint(person.dancer, <any>parseInt(danceSkill, 10)), 0);
             points.overall += p;
             if (p > 0) {
               points.details.push({pointSkill: parseInt(ds, 10), points: p});
             }
           }
 
-          const sorted = tmp[danceType][danceSkill].sort((a, b) => a.Competition.date - b.Competition.date);
+          const sorted = tmp[danceType][danceSkill].sort((a, b) =>
+            a.Competition.date - b.Competition.date);
 
           entries.push({
             pointSkill: <any>danceSkill,

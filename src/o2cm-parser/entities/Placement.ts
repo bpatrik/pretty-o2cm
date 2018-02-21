@@ -23,6 +23,9 @@ export class Placement implements IPlacement {
 
   addDancer(dancer: Dancer) {
     this.dancers.push(dancer);
+    if (this.dancers.length > 2) {
+      throw  new Error('too many dancers');
+    }
   }
 
   setEvent(event: DanceEvent) {
