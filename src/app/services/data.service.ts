@@ -10,13 +10,14 @@ import {IDanceSummary, IEventSummary, IPointSummary, IStyleSummary, ISummary} fr
 import {Competition, ICompetition} from '../../o2cm-parser/entities/Competition';
 import {Individual} from '../../o2cm-parser/entities/Individual';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Data, Router} from '@angular/router';
 import {Params} from '@angular/router/src/shared';
 import {DanceEvent, Dancer} from '../../o2cm-parser/entities/DanceEvent';
 import {CacheService} from './cache.service';
 
 export interface IDanceList {
   pointSkill: PointSkillTypes;
+  eventSkill: EventSkillTypes;
   dances: DanceTypes[];
   style: StyleTypes;
   placement: number;
@@ -40,6 +41,7 @@ export interface IData {
   dancerName: DancerName;
   summary: ISummary;
   competitions: ICompetitionList[];
+  version: string;
 }
 
 
@@ -52,6 +54,8 @@ export interface ILoading {
 
 @Injectable()
 export class DataService {
+
+  private static VERSION = '1';
 
   public data: BehaviorSubject<IData>;
   public loading: BehaviorSubject<ILoading>;
@@ -68,7 +72,8 @@ export class DataService {
         firstName: '',
         lastName: ''
       }, summary: {},
-      competitions: []
+      competitions: [],
+      version: DataService.VERSION
     });
     this.loading = new BehaviorSubject<ILoading>(null);
 
@@ -101,6 +106,7 @@ export class DataService {
     ];
 
     this.data.next({
+      version: DataService.VERSION,
       dancerName: {firstName: 'Patrik', lastName: 'Braun'},
       summary: {
         Latin: {
@@ -142,6 +148,7 @@ export class DataService {
           dances: [
             {
               pointSkill: PointSkillTypes.Bronze,
+              eventSkill: EventSkillTypes.Bronze,
               dances: [DanceTypes.Walz],
               style: StyleTypes.Smooth,
               placement: 2,
@@ -152,6 +159,7 @@ export class DataService {
             },
             {
               pointSkill: PointSkillTypes.Bronze,
+              eventSkill: EventSkillTypes.Bronze,
               dances: [DanceTypes.Tango],
               style: StyleTypes.Smooth,
               placement: 12,
@@ -177,7 +185,7 @@ export class DataService {
   private async _loadDancer(name: DancerName) {
 
     const cache = this.cacheService.get(name);
-    if (cache) {
+    if (cache && cache.version === DataService.VERSION) {
       return this.data.next(cache);
     }
     this.slimLoadingBarService.visible = true;
@@ -185,8 +193,10 @@ export class DataService {
       this.slimLoadingBarService.visible = false;
     });
     this.data.next({
-      dancerName: name, summary: {},
-      competitions: []
+      dancerName: name,
+      summary: {},
+      competitions: [],
+      version: DataService.VERSION
     });
     try {
       const person = await IndividualParser.parse(name.firstName, name.lastName,
@@ -202,8 +212,10 @@ export class DataService {
       const summary = this.getSummary(person);
       const comps = this.getCompetitions(person);
       this.data.next({
-        dancerName: name, summary: summary,
-        competitions: comps
+        dancerName: name,
+        summary: summary,
+        competitions: comps,
+        version: DataService.VERSION
       });
       this.cacheService.put(this.data.getValue());
       this.slimLoadingBarService.complete();
@@ -226,6 +238,7 @@ export class DataService {
               coupleCount: d.CoupleCount,
               style: d.style,
               pointSkill: d.pointSkill,
+              eventSkill: d.eventSkill,
               placement: d.getPlacement(person.dancer).placement,
               dances: d.dances,
               partner: d.getPartner(person.dancer)
