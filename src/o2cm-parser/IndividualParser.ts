@@ -45,12 +45,10 @@ export class IndividualParser {
   public static parseCompetitions(page: string): CompetitionCore[] {
     const $ = cheerio.load(page);
     const competitions: CompetitionCore[] = [];
-    const arr = $('.t1n').toArray();
-    console.log(arr.map(v => $('b', v)));
+    const arr = $('td.t1n').toArray();
     for (let i = 0; i < arr.length; i++) {
       if ($('b', arr[i]).length > 0) {
         const eventName = $('b', arr[i]).get(0).firstChild.data;
-        console.log(eventName);
         const cmp = new CompetitionCore(eventName);
         const matched = eventName.match(/^[0-9]+(-[0-9]+)+/);
         if (matched !== null) {
@@ -73,7 +71,6 @@ export class IndividualParser {
         cmp.linkCode = eventLink;
       }
     }
-    console.log(competitions);
     return competitions;
   }
 
