@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DancerName, IDanceList} from '../../../services/data.service';
 import {Rules} from '../../../services/Rules';
-import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
+import {DanceTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
 
 
 @Component({
@@ -14,6 +14,7 @@ export class CompetitionEventComponent {
   StyleTypes = StyleTypes;
   DanceTypes = DanceTypes;
   PointSkillTypes = PointSkillTypes;
+  EventSkillTypes = EventSkillTypes;
   Rules = Rules;
 
 
