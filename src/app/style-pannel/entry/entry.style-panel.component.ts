@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../o2cm-parser/entities/Types';
 import {Rules} from '../../services/Rules';
@@ -13,8 +13,10 @@ import {IEventSummary} from '../../services/ISummary';
 export class StylePanelEntryComponent {
 
 
+  @Output() showSubEntries = new EventEmitter();
   @Input() eventSummary: IEventSummary;
   @Input() danceType: DanceTypes;
+  @Input() mainEntry: boolean;
   StyleTypes = StyleTypes;
   DanceTypes = DanceTypes;
   PointSkillTypes = PointSkillTypes;

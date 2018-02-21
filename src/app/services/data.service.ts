@@ -14,6 +14,7 @@ import {ActivatedRoute, Data, Router} from '@angular/router';
 import {Params} from '@angular/router/src/shared';
 import {DanceEvent, Dancer} from '../../o2cm-parser/entities/DanceEvent';
 import {CacheService} from './cache.service';
+import {Rules} from './Rules';
 
 export interface IDanceList {
   pointSkill: PointSkillTypes;
@@ -277,8 +278,14 @@ export class DataService {
             details: []
           };
           for (const ds in tmp[danceType]) {
-            const p = tmp[danceType][ds].reduce((prev, c) =>
-              prev + c.calcPoint(person.dancer, <any>parseInt(danceSkill, 10)), 0);
+            const p = tmp[danceType][ds].reduce((prev, c) => {
+              for (let i = 0; i < Rules.NoPointExceptions.length; i++) {
+                if (c.Competition.name.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
+                  return prev;
+                }
+              }
+              return prev + c.calcPoint(person.dancer, <any>parseInt(danceSkill, 10));
+            }, 0);
             points.overall += p;
             if (p > 0) {
               points.details.push({pointSkill: parseInt(ds, 10), points: p});

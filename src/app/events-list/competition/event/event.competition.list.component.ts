@@ -18,6 +18,7 @@ export class CompetitionEventComponent {
   Rules = Rules;
 
 
+  @Input() noPointReason: string;
   @Input() dance: IDanceList;
   @Input() showPercentage: boolean;
   @Output() pointPresentation = new EventEmitter();
@@ -33,6 +34,8 @@ export class CompetitionEventComponent {
   url() {
     return window.location.origin + window.location.pathname + '?firstName=' + this.dance.partner.firstName + '&lastName=' + this.dance.partner.lastName;
   }
+
+
 
 }
 

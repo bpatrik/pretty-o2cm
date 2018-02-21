@@ -12,16 +12,16 @@
       </ng-container>
     </div>
   </ng-template>
-  <div class="col-md-2 text-center bg-{{color()}}" [tooltip]="pointsPop" container="body">
+  <div class="col-md-2 text-center" [tooltip]="pointsPop" container="body">
     {{eventSummary.points.overall}}
     <ng-container *ngIf="Rules.MaxPoints[(eventSummary.pointSkill)]">
-      /{{Rules.MaxPoints[(eventSummary.pointSkill)]}}
+      / {{Rules.MaxPoints[(eventSummary.pointSkill)]}}
     </ng-container>
   </div>
-  <div class="col-md-3" title="skill level">
+  <div class="col-md-3 bg-{{color()}} text-center" title="skill level">
     {{PointSkillTypes[eventSummary.pointSkill]}}
   </div>
-  <div class="col-md-3" title="dance">
+  <div class="col-md-3 text-center" title="dance">
     {{DanceTypes[danceType]}}
   </div>
   <ng-container *ngIf="Rules.Timeout[eventSummary.pointSkill]">
@@ -34,7 +34,7 @@
         Last competed at: <span style="white-space: nowrap">{{eventSummary.lastCompetition | date:'mediumDate'}}</span>
       </div>
     </ng-template>
-    <div class="col-md-4" [tooltip]="timeoutPop" container="body">
+    <div class="col-md-3" [tooltip]="timeoutPop" container="body" style="white-space: nowrap">
       <span class="oi oi-timer"></span>
       <ng-container *ngIf="daysLeft(eventSummary) >= 0">
         {{daysLeft(eventSummary)}} days left
@@ -44,15 +44,23 @@
       </ng-container>
     </div>
   </ng-container>
+  <ng-container *ngIf="!Rules.Timeout[eventSummary.pointSkill]">
+    <div class="col-md-3">
+
+    </div>
+  </ng-container>
+
+  <div class="col-md-1 text-right" title="detailes" *ngIf="mainEntry">
+    <button class="btn btn-default btn-sm  bg-{{color()}}" (click)="showSubEntries.emit()"><span class="oi oi-chevron-right" ></span></button>
+  </div>
 
   <div class="progress">
-    <div class="progress-bar bg-light-{{color()}}"
+    <div class="progress-bar bg-{{color()}}"
          role="progressbar"
          [style.width.%]="progress()"
          aria-valuenow="progress(eventSummary)"
          aria-valuemin="0" aria-valuemax="100">
     </div>
-    <span class="bg-{{color()}}"> </span>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-$skill-list: newcomer bronze silver gold syllabus open novice prechamp championship;
+$skill-list: newcomer bronze silver gold syllabus open novice prechamp champ;
 
 $colors: (
   newcomer: #3C3C3C,
@@ -9,7 +9,7 @@ $colors: (
   open:#4ab75c,
   novice: #d5d4d2,
   prechamp:#00a0ff,
-  championship:#00a0ff
+  champ:#00a0ff
 );
 
 $colors-light: (
@@ -21,7 +21,7 @@ $colors-light: (
   open: lighten(#4ab75c, 40%),
   novice: lighten(#d5d4d2, 40%),
   prechamp:lighten(#00a0ff, 40%),
-  championship:lighten(#00a0ff, 40%)
+  champ:lighten(#00a0ff, 40%)
 );
 
 $text-colors: (
@@ -33,5 +33,5 @@ $text-colors: (
   open: #212529,
   novice: #212529,
   prechamp: #212529,
-  championship: #212529
+  champ: #212529
 )

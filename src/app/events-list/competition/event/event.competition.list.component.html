@@ -1,5 +1,10 @@
 <div [ngClass]="{'finalist' : dance.isFinal}"
      class="row border-{{color()}}">
+
+  <ng-template #placementPop>
+    Placement: <strong>{{dance.placement}}</strong> out of <strong>{{dance.coupleCount}}</strong> couples. <br/>
+    This is better then <strong>{{percent()}}%</strong> of the couples.
+  </ng-template>
   <div class="col-md-2 text-center clickable"
        (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
     <mwl-gauge
@@ -35,16 +40,19 @@
       {{DanceTypes[d]}}
     </ng-container>
   </div>
-  <ng-template #placementPop>
-    Placement: <strong>{{dance.placement}}</strong> out of <strong>{{dance.coupleCount}}</strong> couples. <br/>
-    This is in the top <strong>{{percent()}}%</strong>
-  </ng-template>
 
   <div class="col-md-1" style="white-space: nowrap">
-    <a  class="partner"  [href]="url()"> <span class="oi oi-person"></span> {{dance.partner.firstName}}</a>
+    <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{dance.partner.firstName}}</a>
   </div>
   <div class="col-md-1 text-right" style="white-space: nowrap">
-    <span class="badge bg-{{color()}}" title="points"
-          *ngIf="dance.point>0">+{{dance.point}}</span>
+    <ng-container *ngIf="dance.point>0">
+      <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{dance.point}}</span>
+
+      <ng-template #noPoint>
+        This competition doesn't give points because: <br/>
+        <strong>{{noPointReason}}</strong>
+      </ng-template>
+      <span class="oi oi-warning " *ngIf="noPointReason" [tooltip]="noPoint" container="body"></span>
+    </ng-container>
   </div>
 </div>

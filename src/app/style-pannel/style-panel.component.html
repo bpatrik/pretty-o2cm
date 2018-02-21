@@ -7,13 +7,15 @@
     <div class="entry-container" *ngFor="let dance of styleSummary.dances">
       <style-panel-entry [eventSummary]="latestEvent(dance.entries)"
                          [danceType]="dance.dance"
-                         (click)="dance.showDetails =! dance.showDetails"
+                         (showSubEntries)="dance.showDetails =!dance.showDetails"
+                         [mainEntry]="restEvents(dance.entries).length>0"
                          class="main-entry">
 
       </style-panel-entry>
       <div class="sub-entry" *ngIf="dance.showDetails">
         <ng-container *ngFor="let entry of restEvents(dance.entries)">
           <style-panel-entry [eventSummary]="entry"
+                             [mainEntry]="false"
                              [danceType]="dance.dance">
 
           </style-panel-entry>
