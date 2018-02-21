@@ -88,6 +88,10 @@ export class EventParser {
     return danceEvents;
   }
 
+  public static getUrl(event: string) {
+    return 'http://results.o2cm.com/event3.asp?event=' + event;
+  }
+
   public static async parse(event: string, division: DivisionTypes, skill: EventSkillTypes, http: IHTTP): Promise<DanceEvent[]> {
     const page = await http.post('http://results.o2cm.com/event3.asp', this.generateBody(event, division, skill));
     return this.parseEvents(page);

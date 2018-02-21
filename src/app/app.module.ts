@@ -15,6 +15,8 @@ import {appRoutes} from './app.routing';
 import {FrameComponent} from './frame/frame.component';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CacheService} from './services/cache.service';
+import {LoadingFrameComponent} from './frame/loading/loading.frame.component';
+import {ProgressbarModule} from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import {CacheService} from './services/cache.service';
     EventListComponent,
     CompetitionEventListComponent,
     CompetitionEventComponent,
-    FrameComponent
+    FrameComponent,
+    LoadingFrameComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import {CacheService} from './services/cache.service';
     appRoutes,
     TooltipModule.forRoot(),
     GaugeModule.forRoot(),
-    SlimLoadingBarModule.forRoot()
+    SlimLoadingBarModule.forRoot(),
+    ProgressbarModule.forRoot()
   ],
   providers: [DataService, CacheService],
   bootstrap: [AppComponent]

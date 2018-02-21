@@ -41,10 +41,19 @@ export interface IData {
   competitions: ICompetitionList[];
 }
 
+
+export interface ILoading {
+  current: number;
+  maximum?: number;
+  url: string;
+  details?: string;
+}
+
 @Injectable()
 export class DataService {
 
   public data: BehaviorSubject<IData>;
+  public loading: BehaviorSubject<ILoading>;
 
 
   constructor(private http: HttpClient,
@@ -60,6 +69,7 @@ export class DataService {
       }, summary: {},
       competitions: []
     });
+    this.loading = new BehaviorSubject<ILoading>(null);
 
     route.queryParams.subscribe((value: Params) => {
       if (value['firstName'] && value['lastName'] &&
@@ -183,6 +193,8 @@ export class DataService {
               responseType: 'text'
             }).toPromise();
           }
+        }, (loading) => {
+          this.loading.next(loading);
         });
       const summary = this.getSummary(person);
       const comps = this.getCompetitions(person);
@@ -192,6 +204,7 @@ export class DataService {
       });
       this.cacheService.put(this.data.getValue());
       this.slimLoadingBarService.complete();
+      this.loading.next(null);
     } catch (err) {
       console.error(err);
     }

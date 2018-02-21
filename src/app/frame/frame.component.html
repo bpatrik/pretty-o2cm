@@ -41,7 +41,12 @@
 
   <div class="container">
     <div class="row justify-content-center">
-      <ng-content></ng-content>
+      <ng-container *ngIf="dataService.loading.value === null">
+        <ng-content></ng-content>
+      </ng-container>
+      <ng-container *ngIf="dataService.loading.value !== null">
+        <app-loading-fame-component [loading]="dataService.loading.value"></app-loading-fame-component>
+      </ng-container>
     </div>
   </div>
 

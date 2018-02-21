@@ -14,3 +14,6 @@ ng2-slim-loading-bar {
 main {
   min-height: calc(100vh - 100px);
 }
+app-loading-fame-component{
+  height: calc(100vh - 100px);
+}

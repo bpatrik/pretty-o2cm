@@ -1,0 +1,22 @@
+<div class="loading-container">
+  <div class="card border-primary mb-3" style="max-width: 18rem;">
+    <div class="card-header text-lg-left bg-primary text-white">Loading</div>
+    <div class="card-body">
+      <ng-container *ngIf="loading.maximum == null">
+        <p class="card-text">Loading dancer's <a [href]="loading.url" target="_blank">summary</a> page.</p>
+
+        <progressbar max="100" [value]="100" type="primary" [striped]="true" [animate]="true">
+        </progressbar>
+
+      </ng-container>
+      <ng-container *ngIf="loading.maximum">
+        <p class="card-text">Loading <a [href]="loading.url" target="_blank">{{loading.details}}</a>.</p>
+        <div class="progress">
+          <progressbar [value]="percent()">
+            {{loading.current}}/{{loading.maximum}}
+          </progressbar>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
