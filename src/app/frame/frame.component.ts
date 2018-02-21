@@ -13,7 +13,11 @@ import {DataService} from '../services/data.service';
 export class FrameComponent {
   firstName = '';
   lastName = '';
+  isCollapsed: boolean = true;
 
+  toggleCollapse(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
   constructor(public dataService: DataService) {
     this.firstName = this.dataService.data.getValue().dancerName.firstName;
     this.lastName = this.dataService.data.getValue().dancerName.lastName;

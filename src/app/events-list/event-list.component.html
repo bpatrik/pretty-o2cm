@@ -1,9 +1,41 @@
 <app-frame>
   <div class="col-md-10 justify-content-center">
-  <div class="competition-event-container" *ngFor="let comp of dataService.data.value.competitions">
-    <competition-event-list
-      [showPercentage]="showPercentage"
-      (pointPresentation)="onPointPresentatoinChange()" [competition]="comp"></competition-event-list>
-  </div>
+    <div class="card ">
+      <div class="card-header text-white bg-primary">
+        Filters
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <select class="form-control" id="skillFilter" [(ngModel)]="skillFilter" (change)="updateFiltered()">
+              <option *ngFor="let v of PointSkillTypesArray" [value]="v.key">{{v.value}}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control" id="styleFilter" [(ngModel)]="styleFilter" (change)="updateFiltered()">
+              <option *ngFor="let v of StyleTypesArray" [value]="v.key">{{v.value}}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control" id="danceFilter" [(ngModel)]="danceFilter" (change)="updateFiltered()">
+              <option *ngFor="let v of DanceTypesArray" [value]="v.key">{{v.value}}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control" id="isFinalsFilter" [(ngModel)]="isFinalsFilter" (change)="updateFiltered()">
+              <option value="-1">Finals filter</option>
+              <option value="0">In finals</option>
+              <option value="1">Not in finals</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="competition-event-container" *ngFor="let comp of filteredComps">
+      <competition-event-list
+        [showPercentage]="showPercentage"
+        (pointPresentation)="onPointPresentatoinChange()" [competition]="comp"></competition-event-list>
+    </div>
   </div>
 </app-frame>

@@ -5,7 +5,7 @@
     Placement: <strong>{{dance.placement}}</strong> out of <strong>{{dance.coupleCount}}</strong> couples. <br/>
     This is better then <strong>{{percent()}}%</strong> of the couples.
   </ng-template>
-  <div class="col-md-2 text-center clickable"
+  <div class="col col-sm-4 col-md-2 text-center clickable"
        (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
     <mwl-gauge
       class="mwl-gauge-{{color()}} {{color()}}"
@@ -27,24 +27,24 @@
 
   <div
     [ngClass]="[dance.isFinal? 'bg-'+color():'border-side-'+color()]"
-    class="col-md-2 text-center">
+    class="col col-sm-4 col-md-2 text-center">
     {{EventSkillTypes[dance.eventSkill]}}
   </div>
-  <div class="col-md-2 text-center">
+  <div class="col col-sm-4 col-md-2 text-center">
     {{StyleTypes[dance.style]}}
   </div>
 
-  <div class="col text-center" style="white-space: nowrap">
+  <div class="col col-sm-12 col-md-4 text-center" style="white-space: nowrap">
     <ng-container *ngFor="let d of dance.dances; let i=index">
       <ng-container *ngIf="i>0">/</ng-container>
       {{DanceTypes[d]}}
     </ng-container>
   </div>
 
-  <div class="col-md-1" style="white-space: nowrap">
+  <div class="col col-sm-6 col-md-1" style="white-space: nowrap">
     <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{dance.partner.firstName}}</a>
   </div>
-  <div class="col-md-1 text-right" style="white-space: nowrap">
+  <div class="col col-sm-6 col-md-1 text-right" style="white-space: nowrap">
     <ng-container *ngIf="dance.point>0">
       <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{dance.point}}</span>
 

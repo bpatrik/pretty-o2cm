@@ -17,6 +17,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CacheService} from './services/cache.service';
 import {LoadingFrameComponent} from './frame/loading/loading.frame.component';
 import {ProgressbarModule} from 'ngx-bootstrap';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,12 +33,13 @@ import {ProgressbarModule} from 'ngx-bootstrap';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     appRoutes,
     TooltipModule.forRoot(),
     GaugeModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
-    ProgressbarModule.forRoot()
+    ProgressbarModule.forRoot(),
   ],
   providers: [DataService, CacheService],
   bootstrap: [AppComponent]

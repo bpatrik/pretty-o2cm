@@ -12,17 +12,22 @@
       </ng-container>
     </div>
   </ng-template>
-  <div class="col-md-2 text-center" [tooltip]="pointsPop" container="body">
-    {{eventSummary.points.overall}}
-    <ng-container *ngIf="Rules.MaxPoints[(eventSummary.pointSkill)]">
-      / {{Rules.MaxPoints[(eventSummary.pointSkill)]}}
-    </ng-container>
+  <div class="col col-sm-6 col-md-2 text-center" [tooltip]="pointsPop" container="body">
+    <a [routerLink]="['/list']" [queryParams]="{danceFilter:danceType, isFinalsFilter:0,firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}">{{eventSummary.points.overall}}
+      <ng-container *ngIf="Rules.MaxPoints[(eventSummary.pointSkill)]">
+        / {{Rules.MaxPoints[(eventSummary.pointSkill)]}}
+      </ng-container>
+    </a>
   </div>
-  <div class="col-md-3 bg-{{color()}} text-center" title="skill level">
-    {{PointSkillTypes[eventSummary.pointSkill]}}
+  <div class="col col-sm-6 col-md-3 bg-{{color()}} text-center text-white" title="skill level">
+    <a [routerLink]="['/list']" [queryParams]="{skillFilter:eventSummary.pointSkill,firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}">{{PointSkillTypes[eventSummary.pointSkill]}}</a>
+
   </div>
-  <div class="col-md-3 text-center" title="dance">
-    {{DanceTypes[danceType]}}
+  <div class="col col-sm-4 col-md-3 text-center" title="dance">
+    <a [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}">{{DanceTypes[danceType]}}</a>
   </div>
   <ng-container *ngIf="Rules.Timeout[eventSummary.pointSkill]">
     <ng-template #timeoutPop>
@@ -34,7 +39,7 @@
         Last competed at: <span style="white-space: nowrap">{{eventSummary.lastCompetition | date:'mediumDate'}}</span>
       </div>
     </ng-template>
-    <div class="col-md-3" [tooltip]="timeoutPop" container="body" style="white-space: nowrap">
+    <div class="col col-sm-4 col-md-3" [tooltip]="timeoutPop" container="body" style="white-space: nowrap">
       <span class="oi oi-timer"></span>
       <ng-container *ngIf="daysLeft(eventSummary) >= 0">
         {{daysLeft(eventSummary)}} days left
@@ -45,13 +50,14 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!Rules.Timeout[eventSummary.pointSkill]">
-    <div class="col-md-3">
+    <div class="col col-sm-4 col-md-3">
 
     </div>
   </ng-container>
 
-  <div class="col-md-1 text-right" title="detailes" *ngIf="mainEntry">
-    <button class="btn btn-default btn-sm  bg-{{color()}}" (click)="showSubEntries.emit()"><span class="oi oi-chevron-right" ></span></button>
+  <div class="col col-sm-4 col-md-1 text-right" title="detailes" *ngIf="mainEntry">
+    <button class="btn btn-default btn-sm  bg-{{color()}}" (click)="showSubEntries.emit()"><span
+      class="oi oi-chevron-right"></span></button>
   </div>
 
   <div class="progress">

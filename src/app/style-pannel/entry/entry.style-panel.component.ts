@@ -22,7 +22,7 @@ export class StylePanelEntryComponent {
   PointSkillTypes = PointSkillTypes;
   Rules = Rules;
 
-  constructor() {
+  constructor(public dataService: DataService) {
   }
 
 
