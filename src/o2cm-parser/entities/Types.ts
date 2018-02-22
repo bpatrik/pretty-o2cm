@@ -68,6 +68,7 @@ export module DanceTypes {
     B: DanceTypes.Bolero,
     P: DanceTypes.PasoDoble,
     S: DanceTypes.Swing,
+    M: DanceTypes.Mambo,
     // S: DanceTypes.Samba TODO:fix it
   };
 

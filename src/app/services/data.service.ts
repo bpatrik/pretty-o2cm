@@ -173,6 +173,7 @@ export class DataService {
         cache.competitions.map(c => c.competition));
       const partialData = this.dataParser.parseDancer(person);
       this.data.next(this.dataParser.mergeDate(cache, partialData));
+      this.cacheService.put(this.data.getValue());
       this.loading.next(null);
       this.slimLoadingBarService.complete();
       return;
@@ -188,8 +189,7 @@ export class DataService {
         this.proxyHTTP,
         (loading: ILoading) => {
           this.loading.next(loading);
-        },
-        [{name: '02-11-18 - Terrier DanceSport Competition 2018', date: 1518325200000, linkCode: 'bub18'}]);
+        });
 
       this.data.next(this.dataParser.parseDancer(person));
       this.cacheService.put(this.data.getValue());

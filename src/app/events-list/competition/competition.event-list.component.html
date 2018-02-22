@@ -1,10 +1,10 @@
 <div class="card">
   <div class="card-header">
-    {{competition.competition.name}}
+    <a href="http://results.o2cm.com/event3.asp?event={{competition.competition.linkCode}}">{{competition.competition.name}}</a>
 
   </div>
   <div class="card-body">
-    <div class="competition-event-container"   *ngFor="let event of competition.dances">
+    <div class="competition-event-container" *ngFor="let event of competition.dances">
       <competition-event
         [showPercentage]="showPercentage"
         (pointPresentation)="pointPresentation.emit()"

@@ -58,15 +58,16 @@ export class EventNameParser {
         return StyleTypes.Smooth;
       }
     }
-    if (name.indexOf('Intl.') !== -1) {
-      // noinspection TsLint
-      if ((DanceTypes.getStyle(dances) & StyleTypes.Latin) !== 0) {
-        return StyleTypes.Latin;
-      }
-      // noinspection TsLint
-      if ((DanceTypes.getStyle(dances) & StyleTypes.Standard) !== 0) {
-        return StyleTypes.Standard;
-      }
+
+    // if not Am., then international
+
+    // noinspection TsLint
+    if ((DanceTypes.getStyle(dances) & StyleTypes.Latin) !== 0) {
+      return StyleTypes.Latin;
+    }
+    // noinspection TsLint
+    if ((DanceTypes.getStyle(dances) & StyleTypes.Standard) !== 0) {
+      return StyleTypes.Standard;
     }
 
     return null;
@@ -87,9 +88,9 @@ export class EventNameParser {
   }
 
   private static guessDances(name: string): DanceTypes[] {
-    if (name.indexOf('(') !== -1 && name.indexOf(')') !== -1) {
+    if (name.lastIndexOf('(') !== -1 && name.lastIndexOf(')') !== -1) {
       const list = [];
-      const letters = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
+      const letters = name.substring(name.lastIndexOf('(') + 1, name.lastIndexOf(')'));
       for (let i = 0; i < letters.length; i++) {
         list.push(DanceTypes.LetterType[letters.charAt(i)]);
       }

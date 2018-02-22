@@ -12,7 +12,7 @@
       </ng-container>
     </div>
   </ng-template>
-  <div class="col col-sm-6 col-md-2 text-center" [tooltip]="pointsPop" container="body">
+  <div class="col-4 col-sm-6 col-md-2 text-center" [tooltip]="pointsPop" container="body"  style="white-space: nowrap">
     <a class="dark-link" [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,
        styleFilter:styleType,
        isFinalsFilter:0,
@@ -23,12 +23,12 @@
       </ng-container>
     </a>
   </div>
-  <div class="col col-sm-6 col-md-3 bg-{{color()}} text-center text-white" title="skill level">
+  <div class="col-4 col-sm-6 col-md-3 bg-{{color()}} text-center text-white" title="skill level">
     <a class="bg-{{color()}}" [routerLink]="['/list']" [queryParams]="{skillFilter:eventSummary.pointSkill,firstName:dataService.data.value.dancerName.firstName,
         lastName:dataService.data.value.dancerName.lastName}">{{PointSkillTypes[eventSummary.pointSkill]}}</a>
 
   </div>
-  <div class="col col-sm-4 col-md-3 text-center" title="dance">
+  <div class="col-4 col-sm-4 col-md-3 text-center" title="dance">
     <a class="dark-link" [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,firstName:dataService.data.value.dancerName.firstName,
         lastName:dataService.data.value.dancerName.lastName}">{{DanceTypes[danceType]}}</a>
   </div>
@@ -42,7 +42,7 @@
         Last competed at: <span style="white-space: nowrap">{{eventSummary.lastCompetition | date:'mediumDate'}}</span>
       </div>
     </ng-template>
-    <div class="col col-sm-4 col-md-3" [tooltip]="timeoutPop" container="body" style="white-space: nowrap">
+    <div class="col-6  col-sm-4 col-md-3" [tooltip]="timeoutPop" container="body" style="white-space: nowrap">
       <span class="oi oi-timer"></span>
       <ng-container *ngIf="daysLeft(eventSummary) >= 0">
         {{daysLeft(eventSummary)}} days left
@@ -53,12 +53,12 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!Rules.Timeout[eventSummary.pointSkill]">
-    <div class="col col-sm-4 col-md-3">
+    <div class=" col-6  col-sm-4 col-md-3">
 
     </div>
   </ng-container>
 
-  <div class="col col-sm-4 col-md-1 text-right" title="detailes" *ngIf="mainEntry">
+  <div class="col-6  col-sm-4 col-md-1 text-right" title="detailes" *ngIf="mainEntry">
     <button class="btn btn-default btn-sm  bg-{{color()}}" (click)="showSubEntries.emit()"><span
       class="oi oi-chevron-right"></span></button>
   </div>
