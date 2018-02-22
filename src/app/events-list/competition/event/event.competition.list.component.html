@@ -1,51 +1,53 @@
 <div [ngClass]="{'finalist' : dance.isFinal}"
      class="row border-{{color()}}">
+  <div class="col col-sm-12 col-lg-5">
+    <div class="row">
+      <ng-template #placementPop>
+        Placement: <strong>{{dance.placement}}</strong> out of <strong>{{dance.coupleCount}}</strong> couples. <br/>
+        This is better then <strong>{{percent()}}%</strong> of the couples.
+      </ng-template>
+      <div class="col col-sm-4 col-md-4 text-center clickable"
+           (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
+        <mwl-gauge
+          class="mwl-gauge-{{color()}} {{color()}}"
+          [max]="100"
+          [dialStartAngle]="-90"
+          [dialEndAngle]="-90.001"
 
-  <ng-template #placementPop>
-    Placement: <strong>{{dance.placement}}</strong> out of <strong>{{dance.coupleCount}}</strong> couples. <br/>
-    This is better then <strong>{{percent()}}%</strong> of the couples.
-  </ng-template>
-  <div class="col col-sm-4 col-md-2 text-center clickable"
-       (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
-    <mwl-gauge
-      class="mwl-gauge-{{color()}} {{color()}}"
-      [max]="100"
-      [dialStartAngle]="-90"
-      [dialEndAngle]="-90.001"
+          [showValue]="false"
+          [value]="percent()"
+          [animated]="false">
+        </mwl-gauge>
+        <ng-container *ngIf="showPercentage">
+          {{percent()}}%
+        </ng-container>
+        <ng-container *ngIf="!showPercentage">
+          <strong>{{dance.placement}}</strong>/{{dance.coupleCount}}
+        </ng-container>
+      </div>
 
-      [showValue]="false"
-      [value]="percent()"
-      [animated]="false">
-    </mwl-gauge>
-    <ng-container *ngIf="showPercentage">
-      {{percent()}}%
-    </ng-container>
-    <ng-container *ngIf="!showPercentage">
-      <strong>{{dance.placement}}</strong>/{{dance.coupleCount}}
-    </ng-container>
+      <div
+        [ngClass]="[dance.isFinal? 'bg-'+color():'border-side-'+color()]"
+        class="col col-sm-4 col-md-4 text-center">
+        {{EventSkillTypes[dance.eventSkill]}}
+      </div>
+      <div class="col col-sm-4 col-md-4 text-center">
+        {{StyleTypes[dance.style]}}
+      </div>
+    </div>
   </div>
-
-  <div
-    [ngClass]="[dance.isFinal? 'bg-'+color():'border-side-'+color()]"
-    class="col col-sm-4 col-md-2 text-center">
-    {{EventSkillTypes[dance.eventSkill]}}
-  </div>
-  <div class="col col-sm-4 col-md-2 text-center">
-    {{StyleTypes[dance.style]}}
-  </div>
-
-  <div class="col col-sm-12 col-md-4 text-center" style="white-space: nowrap">
+  <div class="col col-sm-12 col-lg-5 text-center" style="white-space: nowrap">
     <ng-container *ngFor="let d of dance.dances; let i=index">
       <ng-container *ngIf="i>0">/</ng-container>
       {{DanceTypes[d]}}
     </ng-container>
   </div>
 
-  <div class="col col-sm-6 col-md-1" style="white-space: nowrap">
+  <div class="col  col-lg-1 text-center " style="white-space: nowrap">
     <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{dance.partner.firstName}}</a>
   </div>
-  <div class="col col-sm-6 col-md-1 text-right" style="white-space: nowrap">
-    <ng-container *ngIf="dance.point>0">
+  <ng-container *ngIf="dance.point>0">
+  <div class="col  col-lg-1 text-right" style="white-space: nowrap">
       <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{dance.point}}</span>
 
       <ng-template #noPoint>
@@ -53,6 +55,6 @@
         <strong>{{noPointReason}}</strong>
       </ng-template>
       <span class="oi oi-warning " *ngIf="noPointReason" [tooltip]="noPoint" container="body"></span>
-    </ng-container>
   </div>
+  </ng-container>
 </div>

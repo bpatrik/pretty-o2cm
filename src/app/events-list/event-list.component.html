@@ -7,22 +7,26 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-3">
-            <select class="form-control" id="skillFilter" [(ngModel)]="skillFilter" (change)="updateFiltered()">
+            <select [ngClass]="{'bg-primary text-white' : skillFilter!==-1}"
+                    class="form-control" id="skillFilter" [(ngModel)]="skillFilter" (change)="updateFiltered()">
               <option *ngFor="let v of PointSkillTypesArray" [value]="v.key">{{v.value}}</option>
             </select>
           </div>
           <div class="col-md-3">
-            <select class="form-control" id="styleFilter" [(ngModel)]="styleFilter" (change)="updateFiltered()">
+            <select  [ngClass]="{'bg-primary text-white' : styleFilter!==-1}"
+                    class="form-control" id="styleFilter" [(ngModel)]="styleFilter" (change)="updateFiltered()">
               <option *ngFor="let v of StyleTypesArray" [value]="v.key">{{v.value}}</option>
             </select>
           </div>
           <div class="col-md-3">
-            <select class="form-control" id="danceFilter" [(ngModel)]="danceFilter" (change)="updateFiltered()">
+            <select [ngClass]="{'bg-primary text-white' : danceFilter!==-1}"
+                    class="form-control" id="danceFilter" [(ngModel)]="danceFilter" (change)="updateFiltered()">
               <option *ngFor="let v of DanceTypesArray" [value]="v.key">{{v.value}}</option>
             </select>
           </div>
           <div class="col-md-3">
-            <select class="form-control" id="isFinalsFilter" [(ngModel)]="isFinalsFilter" (change)="updateFiltered()">
+            <select [ngClass]="{'bg-primary text-white' : isFinalsFilter!==-1}"
+              class="form-control" id="isFinalsFilter" [(ngModel)]="isFinalsFilter" (change)="updateFiltered()">
               <option value="-1">Finals filter</option>
               <option value="0">In finals</option>
               <option value="1">Not in finals</option>
