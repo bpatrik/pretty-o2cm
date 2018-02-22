@@ -42,9 +42,7 @@ export class StylePanelComponent {
     return PointSkillTypes[this.latestEvent(dance.entries).pointSkill].toLowerCase();
   }
 
-  showSubEntry(){
 
-  }
 
 
 }

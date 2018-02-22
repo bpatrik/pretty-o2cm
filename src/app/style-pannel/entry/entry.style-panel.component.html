@@ -13,8 +13,11 @@
     </div>
   </ng-template>
   <div class="col col-sm-6 col-md-2 text-center" [tooltip]="pointsPop" container="body">
-    <a [routerLink]="['/list']" [queryParams]="{danceFilter:danceType, isFinalsFilter:0,firstName:dataService.data.value.dancerName.firstName,
-        lastName:dataService.data.value.dancerName.lastName}">{{eventSummary.points.overall}}
+    <a [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,
+       styleFilter:styleType,
+       isFinalsFilter:0,
+       firstName:dataService.data.value.dancerName.firstName,
+       lastName:dataService.data.value.dancerName.lastName}">{{eventSummary.points.overall}}
       <ng-container *ngIf="Rules.MaxPoints[(eventSummary.pointSkill)]">
         / {{Rules.MaxPoints[(eventSummary.pointSkill)]}}
       </ng-container>

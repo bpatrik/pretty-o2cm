@@ -16,6 +16,7 @@ export class StylePanelEntryComponent {
   @Output() showSubEntries = new EventEmitter();
   @Input() eventSummary: IEventSummary;
   @Input() danceType: DanceTypes;
+  @Input() styleType: StyleTypes;
   @Input() mainEntry: boolean;
   StyleTypes = StyleTypes;
   DanceTypes = DanceTypes;

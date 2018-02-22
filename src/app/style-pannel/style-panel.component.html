@@ -9,6 +9,7 @@
                          [danceType]="dance.dance"
                          (showSubEntries)="dance.showDetails =!dance.showDetails"
                          [mainEntry]="restEvents(dance.entries).length>0"
+                         [styleType]="styleSummary.style"
                          class="main-entry">
 
       </style-panel-entry>
@@ -16,7 +17,8 @@
         <ng-container *ngFor="let entry of restEvents(dance.entries)">
           <style-panel-entry [eventSummary]="entry"
                              [mainEntry]="false"
-                             [danceType]="dance.dance">
+                             [danceType]="dance.dance"
+                             [styleType]="styleSummary.style">
 
           </style-panel-entry>
         </ng-container>
