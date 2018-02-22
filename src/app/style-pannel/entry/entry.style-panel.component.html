@@ -62,8 +62,13 @@
     <button class="btn btn-default btn-sm  bg-{{color()}}" (click)="showSubEntries.emit()"><span
       class="oi oi-chevron-right"></span></button>
   </div>
-
-  <div class="progress">
+  <ng-template #progressPop>
+    <div>
+      Progress: {{progress()}}% <br/>
+      Based on points and/or timeout.
+    </div>
+  </ng-template>
+  <div class="progress" [tooltip]="progressPop" container="body">
     <div class="progress-bar bg-{{color()}}"
          role="progressbar"
          [style.width.%]="progress()"
