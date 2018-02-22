@@ -1,4 +1,4 @@
-import {AgeTypes,  DanceTypes, DivisionTypes, EventSkillTypes, StyleTypes} from './entities/Types';
+import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, StyleTypes} from './entities/Types';
 import {Utils} from '../Utils';
 import {DanceEvent} from './entities/DanceEvent';
 
@@ -72,7 +72,21 @@ export class EventNameParser {
     return null;
   }
 
-  private static parseDances(name: string): DanceTypes[] {
+  private static adjustDances(dances: DanceTypes[], style: StyleTypes): DanceTypes[] {
+    if (!dances) {
+      return dances;
+    }
+    // TODO: make it more  abstract
+    for (let i = 0; i < dances.length; i++) {
+      if (dances[i] === DanceTypes.Swing && style === StyleTypes.Latin) {
+        dances[i] = DanceTypes.Samba;
+      }
+    }
+
+    return dances;
+  }
+
+  private static guessDances(name: string): DanceTypes[] {
     if (name.indexOf('(') !== -1 && name.indexOf(')') !== -1) {
       const list = [];
       const letters = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
@@ -89,8 +103,9 @@ export class EventNameParser {
     const division = this.parseDivision(name) || DivisionTypes.Amateur;
     const age = this.parseAge(name);
     const skill = this.parseSkill(name);
-    const dances = this.parseDances(name);
+    let dances = this.guessDances(name);
     const style = this.parseStyle(name, dances);
+    dances = this.adjustDances(dances, style);
     return new DanceEvent(name, division, age, skill, style, dances);
   }
 }

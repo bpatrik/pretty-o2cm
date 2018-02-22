@@ -25,11 +25,18 @@
       <form class="form-inline mt-2 mt-md-0">
         <input class="form-control mr-sm-2"
                type="text"
+               name="firstName"
+               id="firstName"
                placeholder="First name"
                aria-label="First name"
                [value]="dataService.data.value.dancerName.firstName"
                (input)="firstName = $event.target.value">
-        <input class="form-control mr-sm-2" type="text" placeholder="Last name" aria-label="Last name"
+        <input class="form-control mr-sm-2"
+               type="text"
+               name="lastName"
+               id="lastName"
+               placeholder="Last name"
+               aria-label="Last name"
                [value]="dataService.data.value.dancerName.lastName"
                (input)="lastName = $event.target.value">
         <button class="btn btn-outline-primary my-2 my-sm-0" type="button" (click)="load()">Show</button>
