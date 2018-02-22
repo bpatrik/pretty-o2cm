@@ -1,12 +1,15 @@
 <ng2-slim-loading-bar [color]="'#007bff'" [height]="'3px'"></ng2-slim-loading-bar>
-<header>
+<header [ngClass]="{'collapsed-menu': isCollapsed}">
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark box-shadow">
     <a class="navbar-brand" href="#">Pretty O2CM</a>
+
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
             [attr.aria-expanded]="!isCollapsed" (click)="toggleCollapse()" [ngClass]="{'collapsed': isCollapsed}">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div [ngClass]="{'show': !isCollapsed}" class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" [routerLinkActive]="['active']">
@@ -22,26 +25,27 @@
         lastName:dataService.data.value.dancerName.lastName}">List</a>
         </li>
       </ul>
-      <form class="form-inline mt-2 mt-md-0">
-        <input class="form-control mr-sm-2"
-               type="text"
-               name="firstName"
-               id="firstName"
-               placeholder="First name"
-               aria-label="First name"
-               [value]="dataService.data.value.dancerName.firstName"
-               (input)="firstName = $event.target.value">
-        <input class="form-control mr-sm-2"
-               type="text"
-               name="lastName"
-               id="lastName"
-               placeholder="Last name"
-               aria-label="Last name"
-               [value]="dataService.data.value.dancerName.lastName"
-               (input)="lastName = $event.target.value">
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="button" (click)="load()">Show</button>
-      </form>
     </div>
+
+    <form [ngClass]="{'small-form': isCollapsed}" class="form-inline mt-2 mt-md-0">
+      <input class="form-control mr-sm-2 col-4"
+             type="text"
+             name="firstName"
+             id="firstName"
+             placeholder="First name"
+             aria-label="First name"
+             [value]="dataService.data.value.dancerName.firstName"
+             (input)="firstName = $event.target.value">
+      <input class="form-control mr-sm-2 col-4"
+             type="text"
+             name="lastName"
+             id="lastName"
+             placeholder="Last name"
+             aria-label="Last name"
+             [value]="dataService.data.value.dancerName.lastName"
+             (input)="lastName = $event.target.value">
+      <button class="btn btn-outline-primary my-2 my-sm-0 col" type="button" (click)="load()">Show</button>
+    </form>
   </nav>
 </header>
 
@@ -61,9 +65,14 @@
 </main>
 
 <footer class="text-muted">
-  <div class="container">
-    <p class="float-right">
-      Author: Patrik J. Braun
-    </p>
+  <div class="container text-sm-center">
+    <small>*This <a href="https://github.com/bpatrik/pretty-o2cm"><img src="/assets/github-logo.png" height="13px">
+      project</a> parses o2cm.com webpage and presents the data in a better format.
+      Don't really fully on this page for calculating you competition points.
+    </small>
+    <div class="float-right">
+      <small><a href="https://github.com/bpatrik/pretty-o2cm">Author: Patrik J. Braun </a>
+      </small>
+    </div>
   </div>
 </footer>
