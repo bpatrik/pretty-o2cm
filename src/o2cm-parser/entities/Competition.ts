@@ -1,7 +1,8 @@
 import {DanceEvent, IDanceEvent} from './DanceEvent';
-import {CompetitionCore} from '../IndividualParser';
+import {CompetitionCore, IComparableCompetition} from '../IndividualParser';
 
-export interface ICompetition {
+
+export interface ICompetition extends IComparableCompetition {
   name: string;
   date: number;
   linkCode: string;

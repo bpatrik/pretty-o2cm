@@ -18,6 +18,7 @@ import {CacheService} from './services/cache.service';
 import {LoadingFrameComponent} from './frame/loading/loading.frame.component';
 import {ProgressbarModule} from 'ngx-bootstrap';
 import {FormsModule} from '@angular/forms';
+import {DataParserService} from './services/data-loader.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import {FormsModule} from '@angular/forms';
     SlimLoadingBarModule.forRoot(),
     ProgressbarModule.forRoot(),
   ],
-  providers: [DataService, CacheService],
+  providers: [DataService, CacheService, DataParserService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

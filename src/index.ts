@@ -6,8 +6,8 @@ import {HTTPLoader} from './o2cm-parser/HTTPLoader';
 
 const run = async () => {
   try {
-    const person = await IndividualParser.parse('Patrik', 'Braun', HTTPLoader);
     const dancer = DancerRepository.Instance.createOrGet('Patrik Braun');
+    const person = await IndividualParser.parse(dancer, HTTPLoader);
 
     const skills = person.Skills;
     for (const skillStr in PointSkillTypes) {

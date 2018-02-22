@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ILoading} from '../../services/data.service';
+import {ILoading} from '../../services/IData';
 
 
 @Component({

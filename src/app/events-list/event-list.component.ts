@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {DataService, ICompetitionList} from '../services/data.service';
+import {DataService} from '../services/data.service';
 import {DanceTypes, PointSkillTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
 import {Utils} from '../../Utils';
 import {ICompetition} from '../../o2cm-parser/entities/Competition';
 import {ActivatedRoute} from '@angular/router';
 import {Params} from '@angular/router/src/shared';
+import {ICompetitionList} from '../services/IData';
 
 
 @Component({

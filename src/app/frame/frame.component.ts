@@ -13,7 +13,7 @@ import {DataService} from '../services/data.service';
 export class FrameComponent {
   firstName = '';
   lastName = '';
-  isCollapsed: boolean = true;
+  isCollapsed = true;
 
   toggleCollapse(): void {
     this.isCollapsed = !this.isCollapsed;

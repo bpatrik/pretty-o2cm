@@ -30,19 +30,16 @@ export class StylePanelComponent {
     return events[0];
   }
 
-  restEvents(events) {
-    events.sort((a, b) => {
+  restEvents(events: IEventSummary[]) {
+    return events.filter(e => e.lastCompetition !== null).sort((a, b) => {
       return b.lastCompetition - a.lastCompetition;
-    });
-    return events.slice(1);
+    }).slice(1);
   }
 
 
   color(dance: IDanceSummary) {
     return PointSkillTypes[this.latestEvent(dance.entries).pointSkill].toLowerCase();
   }
-
-
 
 
 }

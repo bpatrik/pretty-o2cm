@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ICompetitionList} from '../../services/data.service';
+import {ICompetitionList} from '../../services/IData';
 import {Rules} from '../../services/Rules';
-import {ICompetition} from '../../../o2cm-parser/entities/Competition';
 
 
 @Component({

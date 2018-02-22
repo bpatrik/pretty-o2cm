@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DancerName, IDanceList} from '../../../services/data.service';
+import {DancerName, IDanceList} from '../../../services/IData';
 import {Rules} from '../../../services/Rules';
 import {DanceTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
 

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DancerName, IData} from './data.service';
+import {DancerName, IData} from './IData';
 
 @Injectable()
 export class CacheService {
@@ -8,7 +8,6 @@ export class CacheService {
   public get(dancerName: DancerName): IData {
     const key = CacheService.KEY_PREFIX + dancerName.firstName + '' + dancerName.lastName;
     return JSON.parse(localStorage.getItem(key));
-
   }
 
   public put(data: IData) {

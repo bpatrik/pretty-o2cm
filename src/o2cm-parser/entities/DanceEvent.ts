@@ -1,7 +1,7 @@
 import {Competition} from './Competition';
 import {IPlacement, Placement} from './Placement';
 import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from './Types';
-import {DancerName} from '../../app/services/data.service';
+import {DancerName} from '../../app/services/IData';
 
 
 export interface IDanceEvent {

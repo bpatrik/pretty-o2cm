@@ -6,10 +6,10 @@ import {Individual} from './entities/Individual';
 import {DancerRepository} from './DancerRepository';
 import {Competition} from './entities/Competition';
 import {DivisionTypes, EventSkillTypes} from './entities/Types';
-import {ILoading} from '../app/services/data.service';
+import {DancerName, ILoading} from '../app/services/IData';
 
 export interface IHTTP {
-  post(url, body): Promise<string>;
+  post(url: string, body: string): Promise<string>;
 }
 
 export interface IDancedEvents {
@@ -17,7 +17,13 @@ export interface IDancedEvents {
   eventSkill: EventSkillTypes;
 }
 
-export class CompetitionCore {
+export interface IComparableCompetition {
+  name: string;
+  date: number;
+  linkCode: string;
+}
+
+export class CompetitionCore implements IComparableCompetition {
   name: string;
   date: number;
   linkCode: string;
@@ -35,6 +41,15 @@ export class CompetitionCore {
       }
     }
     this.dancedEvents.push(event);
+  }
+
+  equalsIn(filters: IComparableCompetition[]): boolean {
+    for (let i = 0; i < filters.length; i++) {
+      if (this.name === filters[i].name && this.date === filters[i].date && this.linkCode === filters[i].linkCode) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -74,19 +89,13 @@ export class IndividualParser {
     return competitions;
   }
 
-
-  public static async parse(firstName: string, lastName: string, http: IHTTP, progress: (loading: ILoading) => void = () => {
-  }): Promise<Individual> {
-    const url = 'http://results.o2cm.com/individual.asp?szLast=' + lastName + '&szFirst=' + firstName;
-    progress({
-      url: url,
-      current: 0
-    });
-    const page = await http.post(url, '');
-    const compCores = this.parseCompetitions(page);
+  private static async loadEventDetails(name: DancerName,
+                                        compCores: CompetitionCore[],
+                                        http: IHTTP,
+                                        progress: (loading: ILoading) => void) {
     const comps: Competition[] = [];
 
-    const dancer = DancerRepository.Instance.createOrGet(firstName + ' ' + lastName);
+    const dancer = DancerRepository.Instance.createOrGet(name.firstName + ' ' + name.lastName);
     for (let i = 0; i < compCores.length; i++) {
       const cmp = new Competition(compCores[i]);
       progress({
@@ -110,7 +119,20 @@ export class IndividualParser {
       cmp.DanceEvents = des.filter(e => e.hasDancer(dancer));
       comps.push(cmp);
     }
+    return comps;
+  }
 
-    return new Individual(firstName, lastName, comps);
+  public static async parse(name: DancerName, http: IHTTP, progress: (loading: ILoading) => void = () => {
+  }, parsedComps: IComparableCompetition[] = []): Promise<Individual> {
+    const url = 'http://results.o2cm.com/individual.asp?szLast=' + name.lastName + '&szFirst=' + name.firstName;
+    progress({
+      url: url,
+      current: 0
+    });
+    const page = await http.post(url, '');
+    const compCores: CompetitionCore[] = this.parseCompetitions(page).filter(c => !c.equalsIn(parsedComps));
+
+
+    return new Individual(name.firstName, name.lastName, await this.loadEventDetails(name, compCores, http, progress));
   }
 }
