@@ -82,7 +82,7 @@ export class EventListComponent {
         }),
         competition: cl.competition
       };
-    });
+    }).filter((cl) => cl.dances.length > 0);
   }
 }
 

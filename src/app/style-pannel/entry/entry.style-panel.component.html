@@ -13,7 +13,7 @@
     </div>
   </ng-template>
   <div class="col col-sm-6 col-md-2 text-center" [tooltip]="pointsPop" container="body">
-    <a [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,
+    <a class="dark-link" [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,
        styleFilter:styleType,
        isFinalsFilter:0,
        firstName:dataService.data.value.dancerName.firstName,
@@ -24,12 +24,12 @@
     </a>
   </div>
   <div class="col col-sm-6 col-md-3 bg-{{color()}} text-center text-white" title="skill level">
-    <a [routerLink]="['/list']" [queryParams]="{skillFilter:eventSummary.pointSkill,firstName:dataService.data.value.dancerName.firstName,
+    <a class="bg-{{color()}}" [routerLink]="['/list']" [queryParams]="{skillFilter:eventSummary.pointSkill,firstName:dataService.data.value.dancerName.firstName,
         lastName:dataService.data.value.dancerName.lastName}">{{PointSkillTypes[eventSummary.pointSkill]}}</a>
 
   </div>
   <div class="col col-sm-4 col-md-3 text-center" title="dance">
-    <a [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,firstName:dataService.data.value.dancerName.firstName,
+    <a class="dark-link" [routerLink]="['/list']" [queryParams]="{danceFilter:danceType,firstName:dataService.data.value.dancerName.firstName,
         lastName:dataService.data.value.dancerName.lastName}">{{DanceTypes[danceType]}}</a>
   </div>
   <ng-container *ngIf="Rules.Timeout[eventSummary.pointSkill]">
