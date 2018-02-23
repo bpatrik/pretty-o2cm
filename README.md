@@ -7,6 +7,11 @@ The app is not bug free, never rely only on the data presented by the app.
 ## Live demo:
 https://pretty-o2cm.herokuapp.com
 
+## Usage
+```shell
+npm install
+npm start
+```
 
 ## Known bugs:
 - Some event are not parsed
