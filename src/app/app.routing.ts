@@ -1,7 +1,7 @@
 import {ModuleWithProviders} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SummaryComponent} from './summary/summary.component';
-import {EventListComponent} from './events-list/event-list.component';
+import {EventListComponent} from './list/event-list.component';
 
 const ROUTES: Routes = [
   {

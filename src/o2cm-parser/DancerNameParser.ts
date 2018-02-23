@@ -11,7 +11,7 @@ export class PlacementParser {
     let number: number = null;
     let names: string[] = [];
     if (rawName.indexOf(')') !== -1) {
-      placement = parseInt(rawName.substring(0, rawName.indexOf(')')));
+      placement = parseInt(rawName.substring(0, rawName.indexOf(')')), 10);
       rawName = rawName.substring(rawName.indexOf(')') + 1);
     }
 
@@ -19,14 +19,14 @@ export class PlacementParser {
     if (clone.indexOf(' ')) {
       clone = clone.substring(0, clone.indexOf(' '));
       if (!isNaN(<any>clone[0]) && !isNaN(<any>clone[clone.length - 1])) {
-        number = parseInt(clone);
+        number = parseInt(clone, 10);
         rawName = rawName.substring(rawName.trim().indexOf(' ') + 1);
       }
     }
     names = rawName.split('&');
 
 
-    let plcmnt = new Placement(placement, number);
+    const plcmnt = new Placement(placement, number);
     for (let i = 0; i < names.length; i++) {
       plcmnt.addDancer(DancerRepository.Instance.createOrGet(names[i].trim()));
     }

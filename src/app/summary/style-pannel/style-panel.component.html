@@ -5,22 +5,22 @@
   </div>
   <div class="card-body">
     <div class="entry-container" *ngFor="let dance of styleSummary.dances">
-      <style-panel-entry [eventSummary]="latestEvent(dance.entries)"
+      <app-style-panel-entry-component [eventSummary]="latestEvent(dance.entries)"
                          [danceType]="dance.dance"
                          (showSubEntries)="dance.showDetails =!dance.showDetails"
                          [mainEntry]="restEvents(dance.entries).length>0"
                          [styleType]="styleSummary.style"
                          class="main-entry">
 
-      </style-panel-entry>
+      </app-style-panel-entry-component>
       <div class="sub-entry" *ngIf="dance.showDetails">
         <ng-container *ngFor="let entry of restEvents(dance.entries)">
-          <style-panel-entry [eventSummary]="entry"
+          <app-style-panel-entry-component [eventSummary]="entry"
                              [mainEntry]="false"
                              [danceType]="dance.dance"
                              [styleType]="styleSummary.style">
 
-          </style-panel-entry>
+          </app-style-panel-entry-component>
         </ng-container>
       </div>
     </div>

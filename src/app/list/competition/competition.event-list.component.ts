@@ -4,7 +4,7 @@ import {Rules} from '../../services/Rules';
 
 
 @Component({
-  selector: 'competition-event-list',
+  selector: 'app-competition-event-list',
   templateUrl: './competition.event-list.component.html',
   styleUrls: ['./competition.event-list.component.scss'],
 })

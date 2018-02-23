@@ -51,22 +51,22 @@ export enum StyleTypes {
 }
 
 export enum DanceTypes {
-  Tango, VWalz, Foxtrot, Walz, QuickStep, Jive,
-  ChaCha, Rumba, Swing, PasoDoble, Bolero, Samba, Mambo
+  Tango, VWaltz, Foxtrot, Waltz, QuickStep, Jive,
+  ChaCha, Rumba, Swing, Pasodoble, Bolero, Samba, Mambo
 }
 
 export module DanceTypes {
   export const LetterType = {
     T: DanceTypes.Tango,
-    V: DanceTypes.VWalz,
+    V: DanceTypes.VWaltz,
     F: DanceTypes.Foxtrot,
-    W: DanceTypes.Walz,
+    W: DanceTypes.Waltz,
     Q: DanceTypes.QuickStep,
     J: DanceTypes.Jive,
     C: DanceTypes.ChaCha,
     R: DanceTypes.Rumba,
     B: DanceTypes.Bolero,
-    P: DanceTypes.PasoDoble,
+    P: DanceTypes.Pasodoble,
     S: DanceTypes.Swing,
     M: DanceTypes.Mambo,
     // S: DanceTypes.Samba TODO:fix it
@@ -76,13 +76,13 @@ export module DanceTypes {
   export function getStyleForOne(dance: DanceTypes) {
     if (dance === DanceTypes.Jive || dance === DanceTypes.ChaCha ||
       dance === DanceTypes.Rumba || dance === DanceTypes.Swing
-      || dance === DanceTypes.PasoDoble || dance === DanceTypes.Bolero
+      || dance === DanceTypes.Pasodoble || dance === DanceTypes.Bolero
       || dance === DanceTypes.Samba || dance === DanceTypes.Mambo) {
       // noinspection TsLint
       return (StyleTypes.Latin | StyleTypes.Rhythm);
     }
-    if (dance === DanceTypes.Foxtrot || dance === DanceTypes.Walz ||
-      dance === DanceTypes.QuickStep || dance === DanceTypes.Tango || dance === DanceTypes.VWalz) {
+    if (dance === DanceTypes.Foxtrot || dance === DanceTypes.Waltz ||
+      dance === DanceTypes.QuickStep || dance === DanceTypes.Tango || dance === DanceTypes.VWaltz) {
       // noinspection TsLint
       return (StyleTypes.Smooth | StyleTypes.Standard);
     }

@@ -59,7 +59,7 @@ export class EventNameParser {
       }
     }
 
-    // if not Am., then international
+    // if not Am., then international by default
 
     // noinspection TsLint
     if ((DanceTypes.getStyle(dances) & StyleTypes.Latin) !== 0) {

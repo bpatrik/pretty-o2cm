@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DancerName, IDanceList} from '../../../services/IData';
+import {IDanceList} from '../../../services/IData';
 import {Rules} from '../../../services/Rules';
 import {DanceTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
 
 
 @Component({
-  selector: 'competition-event',
+  selector: 'app-competition-event',
   templateUrl: './event.competition.list.component.html',
   styleUrls: ['./event.competition.list.component.scss'],
 })
@@ -32,9 +32,13 @@ export class CompetitionEventComponent {
   }
 
   url() {
-    return window.location.origin + window.location.pathname + '?firstName=' + this.dance.partner.firstName + '&lastName=' + this.dance.partner.lastName;
+    return window.location.origin +
+      window.location.pathname +
+      '?firstName=' +
+      this.dance.partner.firstName +
+      '&lastName=' +
+      this.dance.partner.lastName;
   }
-
 
 
 }

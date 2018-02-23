@@ -1,4 +1,4 @@
-import {HTTPLoader} from './HTTPLoader';
+import {HTTPLoader} from '../cmd-main/HTTPLoader';
 import * as cheerio from 'cheerio';
 import {DanceEvent} from './entities/DanceEvent';
 import {EventNameParser} from './EventNameParser';

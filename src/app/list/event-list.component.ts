@@ -9,7 +9,7 @@ import {ICompetitionList} from '../services/IData';
 
 
 @Component({
-  selector: 'event-list',
+  selector: 'app-event-list',
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss'],
 })

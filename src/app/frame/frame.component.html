@@ -27,13 +27,14 @@
       </ul>
     </div>
 
-    <form [ngClass]="{'small-form': isCollapsed}" class="form-inline mt-2 mt-md-0">
+    <form [ngClass]="{'small-form': isCollapsed}" class="form-inline mt-2 mt-md-0" (ngSubmit)="load()">
       <input class="form-control mr-sm-2 col-4"
              type="text"
              name="firstName"
              id="firstName"
              placeholder="First name"
              aria-label="First name"
+             required
              [value]="dataService.data.value.dancerName.firstName"
              (input)="firstName = $event.target.value">
       <input class="form-control mr-sm-2 col-4"
@@ -42,9 +43,10 @@
              id="lastName"
              placeholder="Last name"
              aria-label="Last name"
+             required
              [value]="dataService.data.value.dancerName.lastName"
              (input)="lastName = $event.target.value">
-      <button class="btn btn-outline-primary my-2 my-sm-0 col" type="button" (click)="load()">Show</button>
+      <button class="btn btn-outline-primary my-2 my-sm-0 col" type="submit">Show</button>
     </form>
   </nav>
 </header>
@@ -54,7 +56,14 @@
   <div class="container">
     <div class="row justify-content-center">
       <ng-container *ngIf="dataService.loading.value === null">
-        <ng-content></ng-content>
+        <ng-container
+          *ngIf="!(dataService.data.value.dancerName.lastName === '' && dataService.data.value.dancerName.firstName === '')">
+          <ng-content></ng-content>
+        </ng-container>
+        <ng-container
+          *ngIf="dataService.data.value.dancerName.lastName === '' && dataService.data.value.dancerName.firstName === ''">
+          Type the name of a dancer to show it's results.
+        </ng-container>
       </ng-container>
       <ng-container *ngIf="dataService.loading.value !== null">
         <app-loading-fame-component [loading]="dataService.loading.value"></app-loading-fame-component>

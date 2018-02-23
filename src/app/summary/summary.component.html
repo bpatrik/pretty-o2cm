@@ -1,15 +1,15 @@
 <app-frame>
   <div class="col-md-6" *ngIf="dataService.data.value.summary.Rhythm">
-    <style-panel [styleSummary]="dataService.data.value.summary.Rhythm"></style-panel>
+    <app-style-panel-component [styleSummary]="dataService.data.value.summary.Rhythm"></app-style-panel-component>
   </div>
   <div class="col-md-6" *ngIf="dataService.data.value.summary.Latin">
-    <style-panel [styleSummary]="dataService.data.value.summary.Latin"></style-panel>
+    <app-style-panel-component [styleSummary]="dataService.data.value.summary.Latin"></app-style-panel-component>
   </div>
   <div class="col-md-6" *ngIf="dataService.data.value.summary.Smooth">
-    <style-panel [styleSummary]="dataService.data.value.summary.Smooth"></style-panel>
+    <app-style-panel-component [styleSummary]="dataService.data.value.summary.Smooth"></app-style-panel-component>
   </div>
   <div class="col-md-6" *ngIf="dataService.data.value.summary.Standard">
-    <style-panel [styleSummary]="dataService.data.value.summary.Standard"></style-panel>
+    <app-style-panel-component [styleSummary]="dataService.data.value.summary.Standard"></app-style-panel-component>
   </div>
 
 </app-frame>

@@ -5,11 +5,11 @@
   </div>
   <div class="card-body">
     <div class="competition-event-container" *ngFor="let event of competition.dances">
-      <competition-event
+      <app-competition-event
         [showPercentage]="showPercentage"
         (pointPresentation)="pointPresentation.emit()"
         [noPointReason]="noPointReason()"
-        [dance]="event"></competition-event>
+        [dance]="event"></app-competition-event>
     </div>
   </div>
 </div>

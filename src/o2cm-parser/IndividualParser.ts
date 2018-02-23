@@ -56,12 +56,18 @@ export class CompetitionCore implements IComparableCompetition {
 
 export class IndividualParser {
 
-
+  /**
+   * It parses the summary page of a dancer. Lists the competitions with its linkCode and all the division+skill pairs for that comp.
+   * @param {string} page
+   * @returns {CompetitionCore[]}
+   */
   public static parseCompetitions(page: string): CompetitionCore[] {
     const $ = cheerio.load(page);
     const competitions: CompetitionCore[] = [];
     const arr = $('td.t1n').toArray();
     for (let i = 0; i < arr.length; i++) {
+
+      // its a competition
       if ($('b', arr[i]).length > 0) {
         const eventName = $('b', arr[i]).get(0).firstChild.data;
         const cmp = new CompetitionCore(eventName);
@@ -76,6 +82,8 @@ export class IndividualParser {
         competitions.push(cmp);
         continue;
       }
+
+      // its an event. we collect only the event/comp link codes. We collect only unique division+skill pairs
       if ($('a', arr[i]).length > 0 && competitions.length > 0) {
         const event = EventNameParser.parse($('a', arr[i]).get(0).firstChild.data);
         const href = $('a', arr[i]).get(0).attribs['href'];
@@ -89,6 +97,14 @@ export class IndividualParser {
     return competitions;
   }
 
+  /**
+   * Loads the vent details by parsing the detailed competition page using the event linkCode and division+skill pairs
+   * @param {DancerName} name
+   * @param {CompetitionCore[]} compCores
+   * @param {IHTTP} http
+   * @param {(loading: ILoading) => void} progress
+   * @returns {Promise<Competition[]>}
+   */
   private static async loadEventDetails(name: DancerName,
                                         compCores: CompetitionCore[],
                                         http: IHTTP,
@@ -131,9 +147,6 @@ export class IndividualParser {
     });
     const page = await http.post(url, '');
     const compCores: CompetitionCore[] = this.parseCompetitions(page).filter(c => !c.equalsIn(parsedComps));
-
-
-    console.log('compCores', compCores);
 
     return new Individual(name.firstName, name.lastName, await this.loadEventDetails(name, compCores, http, progress));
   }

@@ -1,14 +1,12 @@
-import {IndividualParser} from './o2cm-parser/IndividualParser';
-import {DivisionTypes, EventSkillTypes, PointSkillTypes} from './o2cm-parser/entities/Types';
-import {DancerRepository} from './o2cm-parser/DancerRepository';
-import {HTTPLoader} from './o2cm-parser/HTTPLoader';
-import {EventParser} from './o2cm-parser/EventParser';
+import {IndividualParser} from '../o2cm-parser/IndividualParser';
+import {DancerRepository} from '../o2cm-parser/DancerRepository';
+import {HTTPLoader} from './HTTPLoader';
 
 
 const run = async () => {
   try {
     const dancer = DancerRepository.Instance.createOrGet('Charlotte Ryan');
-    let p = await IndividualParser.parse(dancer, HTTPLoader, () => {
+    const p = await IndividualParser.parse(dancer, HTTPLoader, () => {
     }, [{
       name: '10-08-17 - Harvard Beginners 2017',
       date: 1507435200000,

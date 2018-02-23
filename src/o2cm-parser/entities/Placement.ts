@@ -1,4 +1,4 @@
-import {DanceEvent, Dancer, IDanceEvent} from './DanceEvent';
+import {DanceEvent, Dancer} from './DanceEvent';
 
 export interface IPlacement {
   dancers: Dancer[];

@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DataService} from '../../services/data.service';
-import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../o2cm-parser/entities/Types';
-import {Rules} from '../../services/Rules';
-import {IEventSummary} from '../../services/ISummary';
+import {DataService} from '../../../services/data.service';
+import {DanceTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
+import {Rules} from '../../../services/Rules';
+import {IEventSummary} from '../../../services/ISummary';
 
 
 @Component({
-  selector: 'style-panel-entry',
+  selector: 'app-style-panel-entry-component',
   templateUrl: './entry.style-panel.component.html',
   styleUrls: ['./entry.style-panel.component.scss'],
 })

@@ -76,7 +76,7 @@ export class DataService {
     const comp = new Competition(new CompetitionCore('BU comp'));
     comp.date = Date.now();
     comp.dancedEvents = [
-      new DanceEvent('A dance', DivisionTypes.Amateur, AgeTypes.Adult, EventSkillTypes.Bronze, StyleTypes.Smooth, [DanceTypes.Walz])
+      new DanceEvent('A dance', DivisionTypes.Amateur, AgeTypes.Adult, EventSkillTypes.Bronze, StyleTypes.Smooth, [DanceTypes.Waltz])
     ];
 
     this.data.next({
@@ -123,7 +123,7 @@ export class DataService {
             {
               pointSkill: PointSkillTypes.Bronze,
               eventSkill: EventSkillTypes.Bronze,
-              dances: [DanceTypes.Walz],
+              dances: [DanceTypes.Waltz],
               style: StyleTypes.Smooth,
               placement: 2,
               coupleCount: 20,

@@ -18,12 +18,16 @@ export class FrameComponent {
   toggleCollapse(): void {
     this.isCollapsed = !this.isCollapsed;
   }
+
   constructor(public dataService: DataService) {
     this.firstName = this.dataService.data.getValue().dancerName.firstName;
     this.lastName = this.dataService.data.getValue().dancerName.lastName;
   }
 
   load() {
+    if (this.firstName.trim() === '' && this.lastName.trim() === '') {
+      return;
+    }
     this.dataService.loadDancer(this.firstName, this.lastName);
   }
 
