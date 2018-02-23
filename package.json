@@ -3,9 +3,9 @@
   "version": "0.0.1-beta",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
     "install": "tsc & ng build --prod",
+    "start": "node ./backend/index.js",
+    "ng": "ng",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
