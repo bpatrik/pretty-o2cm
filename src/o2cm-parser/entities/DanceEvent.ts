@@ -20,11 +20,26 @@ export class Dancer implements DancerName {
   public firstName: string;
   public lastName: string;
 
+
   constructor(public name: string) {
-    const tmp = name.split(' ');
-    this.firstName = tmp[0] || name;
-    this.lastName = tmp[1] || '';
+    const n = Dancer.getName(name);
+    this.firstName = n.firstName;
+    this.lastName = n.lastName;
   }
+
+  public static getName(name: string): DancerName {
+    const tmp = name.trim().split(' ').filter(f => f.trim() !== '');
+    return {
+      firstName: tmp[0] ? tmp[0].trim() : name,
+      lastName: tmp[1] ? tmp[1].trim() : ''
+    };
+  }
+
+  equals(other: DancerName) {
+    return this.firstName.toLowerCase() === other.firstName.toLowerCase() && this.lastName.toLowerCase() === other.lastName.toLowerCase();
+  }
+
+
 }
 
 

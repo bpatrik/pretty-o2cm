@@ -7,8 +7,13 @@ import {EventParser} from './o2cm-parser/EventParser';
 
 const run = async () => {
   try {
-
-    let p = await EventParser.parse('ned16', DivisionTypes.Amateur, EventSkillTypes.Champ, HTTPLoader);
+    const dancer = DancerRepository.Instance.createOrGet('Charlotte Ryan');
+    let p = await IndividualParser.parse(dancer, HTTPLoader, () => {
+    }, [{
+      name: '10-08-17 - Harvard Beginners 2017',
+      date: 1507435200000,
+      linkCode: 'hbi17'
+    }, {name: '02-11-18 - Terrier DanceSport Competition 2018', date: 1518325200000, linkCode: 'bub18'}]);
 
     console.log(p);
     /* const dancer = DancerRepository.Instance.createOrGet('Patrik Braun');

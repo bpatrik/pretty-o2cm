@@ -11,6 +11,5 @@ export class SummaryComponent {
 
   constructor(public dataService: DataService) {
   }
-
 }
 

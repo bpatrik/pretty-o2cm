@@ -22,6 +22,10 @@ export class Competition implements ICompetition {
     this.linkCode = core.linkCode;
   }
 
+  get DanceEvents(): DanceEvent[] {
+    return this.dancedEvents;
+  }
+
   set DanceEvents(dancedEvents: DanceEvent[]) {
     if (this.dancedEvents) {
       throw new Error('Dance events already set');

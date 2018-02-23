@@ -37,7 +37,7 @@ export class Placement implements IPlacement {
   }
 
   hasDancer(dancer: Dancer) {
-    return this.dancers[0] === dancer || this.dancers[1] === dancer;
+    return (this.dancers[0] && this.dancers[0].equals(dancer)) || (this.dancers[1] && this.dancers[1].equals(dancer));
   }
 
 

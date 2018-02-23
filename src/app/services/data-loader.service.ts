@@ -10,7 +10,7 @@ import {Competition} from '../../o2cm-parser/entities/Competition';
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.1';
+  public static VERSION = '1.2';
 
 
   constructor() {
@@ -98,26 +98,6 @@ export class DataParserService {
       summary: summary,
       competitions: comps,
       version: DataParserService.VERSION
-    };
-  }
-
-  private getICompList(dancer: Dancer, comp: Competition) {
-    return {
-      competition: comp.toJSONable(),
-      dances:
-        comp.dancedEvents.map((d) => {
-          return <IDanceList>{
-            point: d.calcPoint(dancer),
-            isFinal: d.getPlacement(dancer).isFinal,
-            coupleCount: d.CoupleCount,
-            style: d.style,
-            pointSkill: d.pointSkill,
-            eventSkill: d.eventSkill,
-            placement: d.getPlacement(dancer).placement,
-            dances: d.dances,
-            partner: d.getPartner(dancer)
-          };
-        })
     };
   }
 

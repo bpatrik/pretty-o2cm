@@ -116,7 +116,7 @@ export class IndividualParser {
           console.error(err);
         }
       }
-      cmp.DanceEvents = des.filter(e => e.hasDancer(dancer));
+      cmp.DanceEvents = des.filter(e => e.hasDancer(dancer) === true);
       comps.push(cmp);
     }
     return comps;
@@ -132,6 +132,8 @@ export class IndividualParser {
     const page = await http.post(url, '');
     const compCores: CompetitionCore[] = this.parseCompetitions(page).filter(c => !c.equalsIn(parsedComps));
 
+
+    console.log('compCores', compCores);
 
     return new Individual(name.firstName, name.lastName, await this.loadEventDetails(name, compCores, http, progress));
   }
