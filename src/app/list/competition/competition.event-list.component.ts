@@ -36,7 +36,7 @@ export class CompetitionEventListComponent {
     }
     const ret: { color: string, points: number }[] = [];
     for (const key in tmp) {
-      if (!tmp.isPrototypeOf(key) || tmp[key] === 0) {
+      if (!tmp.hasOwnProperty(key) || tmp[key] === 0) {
         continue;
       }
       ret.push({color: key, points: tmp[key]});
