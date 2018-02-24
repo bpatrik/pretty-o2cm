@@ -4,7 +4,8 @@
       {{competition.competition.name}}
     </a>
     <div class="float-right">
-      <span class="badge bg-{{p.color}}" *ngFor="let p of getNewPoints()" title="points">+{{p.points}}</span>
+      <span class="badge bg-{{p.color}}" *ngFor="let p of getNewPoints()"
+            title="points for {{PointSkillTypes[p.skill]}}">+{{p.points}}</span>
     </div>
   </div>
   <div class="card-body">
