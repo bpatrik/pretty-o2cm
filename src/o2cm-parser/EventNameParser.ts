@@ -1,6 +1,6 @@
 import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, StyleTypes} from './entities/Types';
 import {Utils} from '../Utils';
-import {DanceEvent} from './entities/DanceEvent';
+import {DanceEvent, ISkill} from './entities/DanceEvent';
 
 export class EventNameParser {
 
@@ -15,17 +15,20 @@ export class EventNameParser {
     return null;
   }
 
-  private static parseSkill(name: string): EventSkillTypes {
+  private static parseSkill(name: string): ISkill {
     const list = Utils.enumToArray(EventSkillTypes);
     list.push({key: EventSkillTypes.PreChamp, value: 'Pre-Champ'});
     list.push({key: EventSkillTypes.Champ, value: 'Championship'});
+    list.sort(); // order to long to short
 
     for (let i = 0; i < list.length; i++) {
-      if (name.indexOf(list[i].value) !== -1) {
-        return list[i].key;
+      if (name.indexOf(' ' + list[i].value) !== -1) {
+        const startIndex = name.indexOf(list[i].value);
+        const rawStr = name.substring(name.lastIndexOf(' ', startIndex) + 1, name.indexOf(' ', startIndex));
+        return {type: list[i].key, str: rawStr};
       }
     }
-    console.warn('cant parse skill: ' + name);
+    console.warn('can\'t parse skill: ' + name);
     return null;
   }
 

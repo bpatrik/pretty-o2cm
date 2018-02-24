@@ -11,7 +11,7 @@ export interface IDanceEvent {
   raw: string;
   division: DivisionTypes;
   age: AgeTypes;
-  eventSkill: EventSkillTypes;
+  eventSkill: ISkill;
   style: StyleTypes;
   dances: DanceTypes[];
 }
@@ -42,6 +42,11 @@ export class Dancer implements DancerName {
 
 }
 
+export interface ISkill {
+  type: EventSkillTypes;
+  str: string;
+}
+
 
 export class DanceEvent implements IDanceEvent {
   placements: Placement[] = [];
@@ -51,10 +56,10 @@ export class DanceEvent implements IDanceEvent {
   constructor(public raw: string,
               public division: DivisionTypes,
               public age: AgeTypes,
-              public eventSkill: EventSkillTypes,
+              public eventSkill: ISkill,
               public style: StyleTypes,
               public dances: DanceTypes[]) {
-    this.pointSkill = EventSkillTypes.toPointSkillType(this.eventSkill);
+    this.pointSkill = EventSkillTypes.toPointSkillType(this.eventSkill.type);
   }
 
 
@@ -63,7 +68,7 @@ export class DanceEvent implements IDanceEvent {
       raw: this.raw,
       division: DivisionTypes[this.division],
       age: AgeTypes[this.age],
-      skill: EventSkillTypes[this.eventSkill],
+      skill: EventSkillTypes[this.eventSkill.type],
       style: StyleTypes[this.style],
       dances: this.dances.map(v => DanceTypes[v])
     };

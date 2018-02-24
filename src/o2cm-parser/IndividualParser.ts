@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import {DanceEvent} from './entities/DanceEvent';
+import {DanceEvent, ISkill} from './entities/DanceEvent';
 import {EventNameParser} from './EventNameParser';
 import {EventParser} from './EventParser';
 import {Individual} from './entities/Individual';
@@ -14,7 +14,7 @@ export interface IHTTP {
 
 export interface IDancedEvents {
   division: DivisionTypes;
-  eventSkill: EventSkillTypes;
+  eventSkill: ISkill;
 }
 
 export interface IComparableCompetition {
@@ -36,7 +36,7 @@ export class CompetitionCore implements IComparableCompetition {
 
   addEvent(event: IDancedEvents) {
     for (let i = 0; i < this.dancedEvents.length; i++) {
-      if (this.dancedEvents[i].division === event.division && this.dancedEvents[i].eventSkill === event.eventSkill) {
+      if (this.dancedEvents[i].division === event.division && this.dancedEvents[i].eventSkill.str === event.eventSkill.str) {
         return;
       }
     }

@@ -1,6 +1,6 @@
 import {HTTPLoader} from '../cmd-main/HTTPLoader';
 import * as cheerio from 'cheerio';
-import {DanceEvent} from './entities/DanceEvent';
+import {DanceEvent, ISkill} from './entities/DanceEvent';
 import {EventNameParser} from './EventNameParser';
 import {PlacementParser} from './DancerNameParser';
 import {IHTTP} from './IndividualParser';
@@ -21,46 +21,46 @@ export class EventParser {
     }
   }
 
-  private static skillToSelect(skill: EventSkillTypes) {
-    const base = 'AND+%28uidheat%260xFF00%29%3E%3E8+%3D';
-    switch (skill) {
+  private static skillToSelectBae = 'AND+%28uidheat%260xFF00%29%3E%3E8+%3D';
+
+  private static skillToSelectID(skill: ISkill): number {
+    switch (skill.type) {
       case EventSkillTypes.Newcomer:
-        return base + '32';
+        return 32;
       case EventSkillTypes.Bronze:
-        return base + '40';
+        return 40;
       case EventSkillTypes.Silver:
-        return base + '48';
+        return 48;
       case EventSkillTypes.Gold:
-        return base + '56';
+        return 56;
       case EventSkillTypes.Novice:
-        return base + '129';
+        return 129;
       case EventSkillTypes.PreChamp:
-        return base + '131';
+        return 131;
       case EventSkillTypes.Champ:
-        return base + '135';
+        return 135;
       case EventSkillTypes.Syllabus:
-        return base + '63';
+        return 63;
       case EventSkillTypes.Open:
-        return base + '133';
+        return 133;
       case EventSkillTypes.Beginner:
-        return base + '44';
+        return 44;
       case EventSkillTypes.Intermediate:
-        return base + '52';
+        return 52;
       case EventSkillTypes.Advanced:
-        return base + '60';
+        return 60;
       default:
         throw new Error('unsupported skill: ' + skill);
     }
   }
 
-  private static generateBody(event: string, division: DivisionTypes, skill: EventSkillTypes) {
+  private static generateBody(event: string, division: DivisionTypes, skillID: number) {
     return 'selDiv=' + this.divisionToSelect(division) +
-      '&selAge=&selSkl=' + this.skillToSelect(skill) +
+      '&selAge=&selSkl=' + this.skillToSelectBae + skillID +
       '&selSty=&selEnt=&submit=OK&event=' + event;
   }
 
-  private static parseEvents(page: string): DanceEvent[] {
-    const $ = cheerio.load(page);
+  private static parseEvents($: CheerioStatic): DanceEvent[] {
     const arr = $('tr', $('tbody').get(1)).toArray();
     const danceEvents = [];
     for (let i = 0; i < arr.length; i++) {
@@ -88,12 +88,29 @@ export class EventParser {
     return danceEvents;
   }
 
+  private static parseSkillTypes($: CheerioStatic, skill: ISkill): number[] {
+    const arr = $('#selSkl option').toArray().map((o) => {
+      return {
+        key: parseInt(o.attribs['value'].substring(o.attribs['value'].lastIndexOf('=') + 1), 10),
+        value: o.firstChild.data
+      };
+    }).filter(v => v.value.indexOf(skill.str) !== -1 && v.key !== this.skillToSelectID(skill));
+    return arr.map(v => v.key);
+  }
+
   public static getUrl(event: string) {
     return 'http://results.o2cm.com/event3.asp?event=' + event;
   }
 
-  public static async parse(event: string, division: DivisionTypes, skill: EventSkillTypes, http: IHTTP): Promise<DanceEvent[]> {
-    const page = await http.post('http://results.o2cm.com/event3.asp', this.generateBody(event, division, skill));
-    return this.parseEvents(page);
+  public static async parse(event: string, division: DivisionTypes, skill: ISkill, http: IHTTP): Promise<DanceEvent[]> {
+    const page = await http.post('http://results.o2cm.com/event3.asp', this.generateBody(event, division, this.skillToSelectID(skill)));
+    const $ = cheerio.load(page);
+    let events = this.parseEvents($);
+    const extraST = this.parseSkillTypes($, skill);
+    for (let i = 0; i < extraST.length; i++) {
+      const p = await http.post('http://results.o2cm.com/event3.asp', this.generateBody(event, division, extraST[i]));
+      events = events.concat(this.parseEvents(cheerio.load(p)));
+    }
+    return events;
   }
 }

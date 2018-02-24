@@ -1,19 +1,20 @@
 import {IndividualParser} from '../o2cm-parser/IndividualParser';
 import {DancerRepository} from '../o2cm-parser/DancerRepository';
 import {HTTPLoader} from './HTTPLoader';
+import {EventParser} from '../o2cm-parser/EventParser';
+import {DivisionTypes, EventSkillTypes} from '../o2cm-parser/entities/Types';
 
 
 const run = async () => {
   try {
-    const dancer = DancerRepository.Instance.createOrGet('Charlotte Ryan');
-    const p = await IndividualParser.parse(dancer, HTTPLoader, () => {
-    }, [{
-      name: '10-08-17 - Harvard Beginners 2017',
-      date: 1507435200000,
-      linkCode: 'hbi17'
-    }, {name: '02-11-18 - Terrier DanceSport Competition 2018', date: 1518325200000, linkCode: 'bub18'}]);
+    /* const dancer = DancerRepository.Instance.createOrGet('Ben Moss');
+     const p = await IndividualParser.parse(dancer, HTTPLoader);
+ */
 
-    console.log(p);
+    await EventParser.parse('bad10',
+      DivisionTypes.Amateur,
+      {type: EventSkillTypes.PreChamp, str: 'Pre-Champ'},
+      HTTPLoader);
     /* const dancer = DancerRepository.Instance.createOrGet('Patrik Braun');
      const person = await IndividualParser.parse(dancer, HTTPLoader);
 

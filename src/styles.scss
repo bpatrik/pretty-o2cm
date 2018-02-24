@@ -17,6 +17,10 @@
     background-color: $color;
     color: #{map-get($text-colors,$skill)};
   }
+
+  .text-#{$skill} {
+    color: $color;
+  }
   .bg-light-#{$skill} {
     background-color: $color-light;
   }

@@ -114,7 +114,7 @@ export class DataParserService {
               coupleCount: d.CoupleCount,
               style: d.style,
               pointSkill: d.pointSkill,
-              eventSkill: d.eventSkill,
+              eventSkill: d.eventSkill.type,
               placement: d.getPlacement(person.dancer).placement,
               dances: d.dances,
               partner: d.getPartner(person.dancer)
