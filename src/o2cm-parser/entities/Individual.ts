@@ -1,6 +1,7 @@
-import {DanceEvent, Dancer} from './DanceEvent';
+import {DanceEvent} from './DanceEvent';
 import {Competition} from './Competition';
 import {DancerRepository} from '../DancerRepository';
+import {Dancer} from './Dancer';
 
 
 export class Individual {

@@ -1,4 +1,5 @@
-import {Dancer} from './entities/DanceEvent';
+import {Dancer} from './entities/Dancer';
+
 
 export class DancerRepository {
   private static instance: DancerRepository = null;

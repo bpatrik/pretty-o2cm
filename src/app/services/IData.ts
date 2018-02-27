@@ -1,6 +1,7 @@
 import {ISummary} from './ISummary';
 import {ICompetition} from '../../o2cm-parser/entities/Competition';
 import {DanceTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
+import {PointWarning} from '../../o2cm-parser/entities/DanceEvent';
 
 
 export interface IDanceList {
@@ -11,7 +12,7 @@ export interface IDanceList {
   placement: number;
   coupleCount: number;
   isFinal: boolean;
-  point: number;
+  point: { value: number, warning: PointWarning };
   partner: DancerName;
 }
 

@@ -2,15 +2,14 @@ import {Injectable} from '@angular/core';
 import {StyleTypes} from '../../o2cm-parser/entities/Types';
 import {IDanceSummary, IEventSummary, IPointSummary, IStyleSummary, ISummary} from './ISummary';
 import {Individual} from '../../o2cm-parser/entities/Individual';
-import {DanceEvent, Dancer} from '../../o2cm-parser/entities/DanceEvent';
+import {DanceEvent} from '../../o2cm-parser/entities/DanceEvent';
 import {Rules} from './Rules';
 import {ICompetitionList, IDanceList, IData} from './IData';
-import {Competition} from '../../o2cm-parser/entities/Competition';
 
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.3';
+  public static VERSION = '1.4';
 
 
   constructor() {
@@ -168,7 +167,7 @@ export class DataParserService {
                   return prev;
                 }
               }
-              return prev + c.calcPoint(person.dancer, danceSkill);
+              return prev + c.calcPoint(person.dancer, danceSkill).value;
             }, 0);
             points.overall += p;
             if (p > 0) {

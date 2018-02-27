@@ -9,6 +9,8 @@ import {DivisionTypes, EventSkillTypes} from './entities/Types';
 
 export class EventParser {
 
+  private static skillToSelectBae = 'AND+%28uidheat%260xFF00%29%3E%3E8+%3D';
+
   private static divisionToSelect(division: DivisionTypes) {
     const base = 'AND+%28uidheat%260xFF000000%29%3E%3E24%3D+';
     switch (division) {
@@ -21,7 +23,6 @@ export class EventParser {
     }
   }
 
-  private static skillToSelectBae = 'AND+%28uidheat%260xFF00%29%3E%3E8+%3D';
 
   private static skillToSelectID(skill: ISkill): number {
     switch (skill.type) {
@@ -62,10 +63,14 @@ export class EventParser {
 
   private static parseEvents($: CheerioStatic): DanceEvent[] {
     const arr = $('tr', $('tbody').get(1)).toArray();
-    const danceEvents = [];
+    const danceEvents: DanceEvent[] = [];
+    let finalistParsed = false;
+    let nonFinalistParsed = false;
     for (let i = 0; i < arr.length; i++) {
       if ($('.h5b', arr[i]).length > 0) {
         danceEvents.push(EventNameParser.parse($('.h5b', arr[i]).get(0).firstChild.firstChild.data));
+        finalistParsed = false;
+        nonFinalistParsed = false;
         continue;
       }
 
@@ -73,12 +78,25 @@ export class EventParser {
         const placement = PlacementParser.parse($('.t2b', arr[i]).get(0).firstChild.data);
         placement.isFinal = true;
         placement.setEvent(danceEvents[danceEvents.length - 1]);
+        finalistParsed = true;
+        continue;
+      }
+
+      if ($(':contains(\'----\')', arr[i]).length > 0) {
+        // this event is ill rendered, the first round contains non finalists too, probably teo rounds
+        if (danceEvents[danceEvents.length - 1].Rounds === 0 &&
+          finalistParsed === true &&
+          nonFinalistParsed === true) {
+          danceEvents[danceEvents.length - 1].Rounds++;
+        }
+        danceEvents[danceEvents.length - 1].Rounds++;
         continue;
       }
 
       if ($('.t2n', arr[i]).length > 0 && $('.t2n', arr[i]).get(0).firstChild.data.trim() !== '') {
         const placement = PlacementParser.parse($('.t2n', arr[i]).get(0).firstChild.data);
         placement.isFinal = false;
+        nonFinalistParsed = true;
         placement.setEvent(danceEvents[danceEvents.length - 1]);
         continue;
       }

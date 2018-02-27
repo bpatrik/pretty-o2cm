@@ -1,4 +1,4 @@
-<div class="row border-{{color()}} bg-light-{{color()}}">
+<div class="row border-{{color()}} ">
   <ng-template #pointsPop>
     <div>
       <ng-container *ngIf="Rules.MaxPoints[eventSummary.pointSkill]">
@@ -68,12 +68,13 @@
       Based on points and/or timeout.
     </div>
   </ng-template>
-  <div class="progress" [tooltip]="progressPop" container="body">
+  <div class="progress  bg-light-{{color()}}" [tooltip]="progressPop" container="body">
     <div class="progress-bar bg-{{color()}}"
          role="progressbar"
          [style.width.%]="progress()"
          aria-valuenow="progress(eventSummary)"
          aria-valuemin="0" aria-valuemax="100">
+      <span class="bg-{{color()}}"> </span>
     </div>
   </div>
 </div>

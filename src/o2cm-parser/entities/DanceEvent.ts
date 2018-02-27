@@ -1,13 +1,13 @@
-import {Competition} from './Competition';
+import {Competition, ICompetition} from './Competition';
 import {IPlacement, Placement} from './Placement';
 import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from './Types';
 import {DancerName} from '../../app/services/IData';
-import {nmcall} from 'q';
+import {Dancer} from './Dancer';
 
 
 export interface IDanceEvent {
   placements: IPlacement[];
-  competition: Competition;
+  competition: ICompetition;
   pointSkill: PointSkillTypes;
   raw: string;
   division: DivisionTypes;
@@ -17,38 +17,8 @@ export interface IDanceEvent {
   dances: DanceTypes[];
 }
 
-export class Dancer implements DancerName {
-  public firstName: string;
-  public lastName: string;
-
-
-  constructor(public name: string) {
-    const n = Dancer.getName(name);
-    this.firstName = n.firstName;
-    this.lastName = n.lastName;
-  }
-
-  public static getName(name: string): DancerName {
-    name = name.trim();
-
-    const space = name.indexOf(' ');
-    let firstName = name;
-    let lastName = '';
-    if (space !== -1) {
-      firstName = name.substring(0, space).trim();
-      lastName = name.substring(space).trim();
-    }
-    return {
-      firstName: firstName,
-      lastName: lastName
-    };
-  }
-
-  equals(other: DancerName) {
-    return this.firstName.toLowerCase() === other.firstName.toLowerCase() && this.lastName.toLowerCase() === other.lastName.toLowerCase();
-  }
-
-
+export enum PointWarning {
+  QF_W_FEW_COUPLES, NOQF_W_MANY_COUPELS
 }
 
 export interface ISkill {
@@ -61,6 +31,7 @@ export class DanceEvent implements IDanceEvent {
   placements: Placement[] = [];
   competition: Competition;
   public pointSkill: PointSkillTypes;
+  public Rounds = 0;
 
   constructor(public raw: string,
               public division: DivisionTypes,
@@ -108,7 +79,7 @@ export class DanceEvent implements IDanceEvent {
     return this.placements.length;
   }
 
-  getPlacement(dancer: Dancer): Placement {
+  getPlacement(dancer: DancerName): Placement {
     for (let i = 0; i < this.placements.length; i++) {
       if (this.placements[i].hasDancer(dancer)) {
         return this.placements[i];
@@ -129,16 +100,26 @@ export class DanceEvent implements IDanceEvent {
   }
 
   hasQuarterFinal(): boolean {
-    // TODO: fix it. its just guessing
-    return this.placements.length > 30;
+    return this.Rounds >= 2 || this.placements.length >= 20;
   }
 
-  calcPoint(dancer: Dancer, skill: PointSkillTypes = this.pointSkill) {
-    const placement = this.getPlacement(dancer);
-    if (!placement.isFinal || skill > this.pointSkill) {
-      return 0;
+  private pointWarning(): PointWarning {
+    if (this.Rounds >= 2 && this.placements.length <= 15) {
+      return PointWarning.QF_W_FEW_COUPLES; // 'Quarter final detected, but too few couples were competing';
     }
+    if (this.Rounds < 2 && this.placements.length >= 20 &&  this.placements.length < 40) {
+      return PointWarning.NOQF_W_MANY_COUPELS; // 'No quarter final detected, but more then 20 couples were competing';
+    }
+    return null;
+  }
+
+  calcPoint(dancer: Dancer, skill: PointSkillTypes = this.pointSkill): { value: number, warning: PointWarning } {
+    const placement = this.getPlacement(dancer);
+    let warning: PointWarning = null;
     let point = 0;
+    if (!placement.isFinal || skill > this.pointSkill) {
+      return {value: point, warning: warning};
+    }
     if (placement.placement === 1) {
       point = 3;
     }
@@ -151,6 +132,7 @@ export class DanceEvent implements IDanceEvent {
     if (this.hasQuarterFinal()) {
       if (placement.placement >= 4 && placement.placement <= 6) {
         point = 1;
+        warning = this.pointWarning();
       }
     }
     if (skill === this.pointSkill - 1) {
@@ -160,8 +142,7 @@ export class DanceEvent implements IDanceEvent {
       point = 7;
     }
 
-
-    return point;
+    return {value: point, warning: warning};
   }
 
   toJSONable(): IDanceEvent {

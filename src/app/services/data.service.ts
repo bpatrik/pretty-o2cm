@@ -4,19 +4,16 @@ import {
   AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, PointSkillTypes,
   StyleTypes
 } from '../../o2cm-parser/entities/Types';
-import {CompetitionCore, IComparableCompetition, IHTTP, IndividualParser} from '../../o2cm-parser/IndividualParser';
+import {CompetitionCore, IHTTP, IndividualParser} from '../../o2cm-parser/IndividualParser';
 import {HttpClient} from '@angular/common/http';
-import {IDanceSummary, IEventSummary, IPointSummary, IStyleSummary, ISummary} from './ISummary';
-import {Competition, ICompetition} from '../../o2cm-parser/entities/Competition';
-import {Individual} from '../../o2cm-parser/entities/Individual';
+import {Competition} from '../../o2cm-parser/entities/Competition';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
-import {ActivatedRoute, Data, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Params} from '@angular/router/src/shared';
-import {DanceEvent, Dancer} from '../../o2cm-parser/entities/DanceEvent';
+import {DanceEvent} from '../../o2cm-parser/entities/DanceEvent';
 import {CacheService} from './cache.service';
-import {Rules} from './Rules';
 import {DataParserService} from './data-loader.service';
-import {DancerName, IData, ILoading} from './IData';
+import {IData, ILoading} from './IData';
 
 @Injectable()
 export class DataService {
@@ -129,7 +126,7 @@ export class DataService {
               placement: 2,
               coupleCount: 20,
               isFinal: true,
-              point: 2,
+              point: {value: 2, warning: null},
               partner: {firstName: 'Test', lastName: 'John'}
             },
             {
@@ -140,7 +137,7 @@ export class DataService {
               placement: 12,
               coupleCount: 20,
               isFinal: false,
-              point: 2,
+              point: {value: 2, warning: null},
               partner: {firstName: 'Test', lastName: 'John'}
             }
           ]

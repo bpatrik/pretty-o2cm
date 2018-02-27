@@ -33,7 +33,7 @@ export class CompetitionEventListComponent {
     for (let i = 0; i < this.competition.dances.length; i++) {
       const key = this.competition.dances[i].pointSkill;
       tmp[key] = tmp[key] || 0;
-      tmp[key] += this.competition.dances[i].point;
+      tmp[key] += this.competition.dances[i].point.value;
     }
     const ret: { color: string, points: number, skill: PointSkillTypes }[] = [];
     for (const key in tmp) {

@@ -1,4 +1,6 @@
-import {DanceEvent, Dancer} from './DanceEvent';
+import {DanceEvent} from './DanceEvent';
+import {DancerName} from '../../app/services/IData';
+import {Dancer} from './Dancer';
 
 export interface IPlacement {
   dancers: Dancer[];
@@ -36,7 +38,7 @@ export class Placement implements IPlacement {
     this.event.addPlacement(this);
   }
 
-  hasDancer(dancer: Dancer) {
+  hasDancer(dancer: DancerName) {
     return (this.dancers[0] && this.dancers[0].equals(dancer)) || (this.dancers[1] && this.dancers[1].equals(dancer));
   }
 

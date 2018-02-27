@@ -15,6 +15,5 @@ npm install
 npm start
 ```
 
-## Known bugs:
-- Some event are not parsed
-- The point calculation are only estimation. The app thinks if an event has more tha 30 couples then it has a quarter-final too. 
+## Known bugs: 
+- The point calculation are only estimation. The app thinks if an event has more tha 20 couples or at the event result page more than two `----` lines are then it has a quarter-final too. 
