@@ -2,6 +2,7 @@ import {Competition} from './Competition';
 import {IPlacement, Placement} from './Placement';
 import {AgeTypes, DanceTypes, DivisionTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from './Types';
 import {DancerName} from '../../app/services/IData';
+import {nmcall} from 'q';
 
 
 export interface IDanceEvent {
@@ -28,10 +29,18 @@ export class Dancer implements DancerName {
   }
 
   public static getName(name: string): DancerName {
-    const tmp = name.trim().split(' ').filter(f => f.trim() !== '');
+    name = name.trim();
+
+    const space = name.indexOf(' ');
+    let firstName = name;
+    let lastName = '';
+    if (space !== -1) {
+      firstName = name.substring(0, space).trim();
+      lastName = name.substring(space).trim();
+    }
     return {
-      firstName: tmp[0] ? tmp[0].trim() : name,
-      lastName: tmp[1] ? tmp[1].trim() : ''
+      firstName: firstName,
+      lastName: lastName
     };
   }
 

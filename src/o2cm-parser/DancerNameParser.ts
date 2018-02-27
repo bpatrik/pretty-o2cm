@@ -25,11 +25,20 @@ export class PlacementParser {
     }
     names = rawName.split('&');
 
-
     const plcmnt = new Placement(placement, number);
-    for (let i = 0; i < names.length; i++) {
-      plcmnt.addDancer(DancerRepository.Instance.createOrGet(names[i].trim()));
+    if (names.length > 0) {
+      plcmnt.addDancer(DancerRepository.Instance.createOrGet(names[0].trim()));
     }
+
+    if (names.length > 1) {
+      const stateIndex = names[1].indexOf(' - ');
+      let follow = names[1];
+      if (stateIndex !== -1) {
+        follow = names[1].substring(0, stateIndex);
+      }
+      plcmnt.addDancer(DancerRepository.Instance.createOrGet(follow.trim()));
+    }
+
 
     return plcmnt;
   }

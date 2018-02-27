@@ -29,7 +29,6 @@ export interface IData {
   dancerName: DancerName;
   summary: ISummary;
   competitions: ICompetitionList[];
-  version: string;
 }
 
 

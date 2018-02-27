@@ -46,8 +46,7 @@ export class DataService {
         firstName: '',
         lastName: ''
       }, summary: {},
-      competitions: [],
-      version: DataParserService.VERSION
+      competitions: []
     });
     this.loading = new BehaviorSubject<ILoading>(null);
 
@@ -83,7 +82,6 @@ export class DataService {
     ];
 
     this.data.next({
-      version: DataParserService.VERSION,
       dancerName: {firstName: 'Patrik', lastName: 'Braun'},
       summary: {
         Latin: {
@@ -163,7 +161,7 @@ export class DataService {
       lastName: lastName
     };
     const cache: IData = this.cacheService.get(name);
-    if (cache && cache.version === DataParserService.VERSION) {
+    if (cache) {
       this.data.next(cache);
 
       const person = await IndividualParser.parse(name,
@@ -184,8 +182,7 @@ export class DataService {
     this.data.next({
       dancerName: name,
       summary: {},
-      competitions: [],
-      version: DataParserService.VERSION
+      competitions: []
     });
     try {
       const person = await IndividualParser.parse(name,

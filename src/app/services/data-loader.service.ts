@@ -10,7 +10,7 @@ import {Competition} from '../../o2cm-parser/entities/Competition';
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.2';
+  public static VERSION = '1.3';
 
 
   constructor() {
@@ -96,8 +96,7 @@ export class DataParserService {
     return <IData>{
       dancerName: {firstName: person.dancer.firstName, lastName: person.dancer.lastName},
       summary: summary,
-      competitions: comps,
-      version: DataParserService.VERSION
+      competitions: comps
     };
   }
 
