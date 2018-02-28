@@ -32,7 +32,12 @@ export class DataService {
               private dataParser: DataParserService) {
     this.proxyHTTP = {
       post: (url: string, body: any): Promise<string> => {
-        return this.http.post('/proxy', {url: url, body: body}, {
+        console.log(encodeURI(url));
+        console.log(encodeURIComponent(url));
+        return this.http.get('/proxy/' + encodeURIComponent(url), {
+          params: {
+            body: body
+          },
           responseType: 'text'
         }).toPromise();
       }

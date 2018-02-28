@@ -55,27 +55,42 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-
-app.post('/proxy', (req: Request, res: Response, next: NextFunction) => {
-  const options = {
-    url: req.body.url,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: req.body.body
-  };
-
-  request.post(options, (error, response, body) => {
-    if (error) {
-      return next(error);
+const FiFoCache: { key: string, body: string }[] = [];
+const MAX_CACHE_SIZE = 100;
+app.get('/proxy/:url', (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const key = req.params.url + '?body' + req.query.body;
+    for (let i = 0; i < FiFoCache.length; i++) {
+      if (FiFoCache[i].key === key) {
+        return res.send(FiFoCache[i].body);
+      }
     }
+    const options = {
+      url: req.params.url,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: req.query.body
+    };
 
-    if (response.statusCode === 200) {
-      res.send(body);
-    } else {
-      next('bad statusCode: ' + response.statusCode);
-    }
-  });
+    request.post(options, (error, response, body) => {
+      if (error) {
+        return next(error);
+      }
+
+      if (response.statusCode === 200) {
+        FiFoCache.push({key: key, body: body});
+        if (FiFoCache.length > MAX_CACHE_SIZE) {
+          FiFoCache.shift();
+        }
+        res.send(body);
+      } else {
+        next('bad statusCode: ' + response.statusCode);
+      }
+    });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 app.use(['/'], _express.static(_path.join(__dirname, '../dist')));
