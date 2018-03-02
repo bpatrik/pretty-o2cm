@@ -7,7 +7,6 @@ import {Dancer} from './Dancer';
 
 export interface IDanceEvent {
   placements: IPlacement[];
-  competition: ICompetition;
   pointSkill: PointSkillTypes;
   raw: string;
   division: DivisionTypes;
@@ -42,6 +41,15 @@ export class DanceEvent implements IDanceEvent {
     this.pointSkill = EventSkillTypes.toPointSkillType(this.eventSkill.type);
   }
 
+
+  public static getPlacement(that: IDanceEvent, dancer: DancerName) {
+    for (let i = 0; i < that.placements.length; i++) {
+      if (Placement.hasDancer(that.placements[i], dancer)) {
+        return that.placements[i];
+      }
+    }
+    return null;
+  }
 
   toString() {
     return {
@@ -80,11 +88,7 @@ export class DanceEvent implements IDanceEvent {
   }
 
   getPlacement(dancer: DancerName): Placement {
-    for (let i = 0; i < this.placements.length; i++) {
-      if (this.placements[i].hasDancer(dancer)) {
-        return this.placements[i];
-      }
-    }
+    return <Placement>DanceEvent.getPlacement(this, dancer);
   }
 
   getPartner(dancer: Dancer): Dancer {
@@ -107,7 +111,7 @@ export class DanceEvent implements IDanceEvent {
     if (this.Rounds >= 2 && this.placements.length <= 15) {
       return PointWarning.QF_W_FEW_COUPLES; // 'Quarter final detected, but too few couples were competing';
     }
-    if (this.Rounds < 2 && this.placements.length >= 20 &&  this.placements.length < 40) {
+    if (this.Rounds < 2 && this.placements.length >= 20 && this.placements.length < 40) {
       return PointWarning.NOQF_W_MANY_COUPELS; // 'No quarter final detected, but more then 20 couples were competing';
     }
     return null;
@@ -148,7 +152,6 @@ export class DanceEvent implements IDanceEvent {
   toJSONable(): IDanceEvent {
     return {
       age: this.age,
-      competition: null,
       dances: this.dances,
       division: this.division,
       eventSkill: this.eventSkill,

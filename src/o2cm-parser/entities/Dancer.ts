@@ -32,8 +32,12 @@ export class Dancer implements DancerName {
     };
   }
 
-  equals(other: DancerName) {
-    return this.firstName.toLowerCase() === other.firstName.toLowerCase() && this.lastName.toLowerCase() === other.lastName.toLowerCase();
+  public static equals(that: DancerName, other: DancerName): boolean {
+    return that.firstName.toLowerCase() === other.firstName.toLowerCase() && that.lastName.toLowerCase() === other.lastName.toLowerCase();
+  }
+
+  equals(other: DancerName): boolean {
+    return Dancer.equals(this, other);
   }
 
 

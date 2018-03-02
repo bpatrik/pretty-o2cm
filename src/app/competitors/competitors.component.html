@@ -1,0 +1,8 @@
+<app-frame>
+  <ng-container *ngFor="let styles of perStyles">
+    <div class="col-md-6">
+      <app-competitors-panel-component [panelName]="StyleTypes[styles.style]" [danceEvents]="styles.dances">
+      </app-competitors-panel-component>
+    </div>
+  </ng-container>
+</app-frame>

@@ -3,7 +3,7 @@ import {DancerName} from '../../app/services/IData';
 import {Dancer} from './Dancer';
 
 export interface IPlacement {
-  dancers: Dancer[];
+  dancers: DancerName[];
   placement: number;
   leaderNumber: number;
   isFinal: boolean;
@@ -22,6 +22,12 @@ export class Placement implements IPlacement {
     this.placement = placement;
     this.leaderNumber = leaderNumber;
   }
+
+  public static hasDancer(that: IPlacement, other: DancerName) {
+    return (that.dancers[0] && Dancer.equals(that.dancers[0], other)) ||
+      (that.dancers[1] && Dancer.equals(that.dancers[1], other));
+  }
+
 
   addDancer(dancer: Dancer) {
     this.dancers.push(dancer);

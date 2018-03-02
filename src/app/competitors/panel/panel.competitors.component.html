@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="card-header  text-center">
+    {{panelName}}
+    <div class="float-right">
+      <button class="btn btn-default btn-sm" (click)="toggleExpand($event)">
+        <span *ngIf="!expand" class="oi oi-chevron-right"></span>
+        <span *ngIf="expand" class="oi oi-chevron-bottom"></span>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="text-center">
+
+      <ng-container *ngFor="let rank of rankings; let i = index">
+        <ng-template #rankPop>
+          <ng-container *ngIf="rank.score > max.scoreDiff*0.6">
+            Watch out, a really good dancer!
+          </ng-container>
+          <ng-container *ngIf="rank.score > max.scoreDiff*0.3 && rank.score <= max.scoreDiff*0.6">
+            Watch out, a good dancer!
+          </ng-container>
+          <ng-container *ngIf="rank.score < max.scoreDiff*0.3 && rank.score > -max.scoreDiff*0.3">
+            A dancer with similar skills to your's.
+          </ng-container>
+          <ng-container *ngIf="rank.score < -max.scoreDiff*0.3">
+            No worries.
+          </ng-container>
+        </ng-template>
+        <div *ngIf="i<8 || (i> myRank-5 && i<myRank+5) || expand">
+          <a [ngClass]="{'me':i == myRank}"
+             [href]="url(rank.dancer)"
+             class="dancer"
+             style="white-space: nowrap">
+            <span class="circle" [style.background]="color(rank.score)" [tooltip]="rankPop" container="body"></span>
+            {{rank.dancer.firstName}} {{rank.dancer.lastName}}
+          </a>
+        </div>
+        <div *ngIf="i==9 && (myRank-5>9) && !expand">
+          <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
+        </div>
+        <div *ngIf="i==myRank+9 && !expand">
+          <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

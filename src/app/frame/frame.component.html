@@ -24,6 +24,12 @@
              [queryParams]="  {firstName:dataService.data.value.dancerName.firstName,
         lastName:dataService.data.value.dancerName.lastName}">List</a>
         </li>
+        <li class="nav-item" [routerLinkActive]="['active']">
+          <a class="nav-link" href="#"
+             [routerLink]="['/competitors']"
+             [queryParams]="  {firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}">Competitors</a>
+        </li>
       </ul>
     </div>
 
