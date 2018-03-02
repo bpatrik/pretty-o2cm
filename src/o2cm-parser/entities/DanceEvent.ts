@@ -42,7 +42,7 @@ export class DanceEvent implements IDanceEvent {
   }
 
 
-  public static getPlacement(that: IDanceEvent, dancer: DancerName) {
+  public static getPlacement(that: IDanceEvent, dancer: DancerName): IPlacement {
     for (let i = 0; i < that.placements.length; i++) {
       if (Placement.hasDancer(that.placements[i], dancer)) {
         return that.placements[i];
@@ -161,4 +161,6 @@ export class DanceEvent implements IDanceEvent {
       style: this.style
     };
   }
+
+
 }

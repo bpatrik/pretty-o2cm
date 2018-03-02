@@ -7,7 +7,6 @@ export interface IPlacement {
   placement: number;
   leaderNumber: number;
   isFinal: boolean;
-  event: DanceEvent;
 }
 
 export class Placement implements IPlacement {
@@ -54,8 +53,7 @@ export class Placement implements IPlacement {
       dancers: this.dancers,
       placement: this.placement,
       leaderNumber: this.leaderNumber,
-      isFinal: this.isFinal,
-      event: null
+      isFinal: this.isFinal
     };
   }
 }

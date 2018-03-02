@@ -100,9 +100,8 @@ export class EventParser {
         placement.setEvent(danceEvents[danceEvents.length - 1]);
         continue;
       }
-
-
     }
+
     return danceEvents;
   }
 

@@ -13,8 +13,8 @@ import {IDatedDanceEvent} from './panel/IDatedDanceEvent';
 export class CompetitorsComponent {
 
 
-  StyleTypes = StyleTypes;
-  private perStyles: { style: StyleTypes, dances: IDatedDanceEvent[] }[] = [];
+  public StyleTypes = StyleTypes;
+  public perStyles: { style: StyleTypes, dances: IDatedDanceEvent[] }[] = [];
 
   constructor(public dataService: DataService) {
     this.dataService.data.subscribe(() => {

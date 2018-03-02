@@ -61,7 +61,8 @@
       Point calculations might incorrect, because: <br/>
       <strong>{{pointWarningStr()}}</strong>
     </ng-template>
-    <span class="oi oi-warning text-{{color()}}" *ngIf="dance.point.warning" [tooltip]="pointWarning" container="body"></span>
+    <span class="oi oi-warning text-{{color()}}" *ngIf="dance.point.warning" [tooltip]="pointWarning"
+          container="body"></span>
 
     <span *ngIf="dance.isFinal" title="being in finals" class="oi oi-badge  text-{{color()}}"></span>
   </div>
