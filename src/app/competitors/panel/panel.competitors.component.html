@@ -1,15 +1,16 @@
 <div class="card">
   <div class="card-header  text-center">
     {{panelName}}
-    <div class="float-right">
-      <button [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
+    <div class="float-right"  *ngIf="myRank<rankings.length*0.5">
+      <button
+              [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
               (click)="toggleExpand($event)">
         <span *ngIf="!expand" class="oi oi-chevron-right"></span>
         <span *ngIf="expand" class="oi oi-chevron-bottom"></span>
       </button>
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body" *ngIf="myRank<rankings.length*0.7">
     <div>
       <ng-template #leaderPop>
         Leader
@@ -71,7 +72,7 @@
               {{rank.dancer.firstName}} {{rank.dancer.lastName}}
             </div>
             <div class="col3 text-right">
-              <span class="placement-section" *ngIf="i == myRank">- {{placementDescription()}}</span>
+              <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
             </div>
           </a>
         </div>
@@ -87,12 +88,16 @@
         </div>
 
         <div class="row"
-             *ngIf="!(myRank<rankings.length-maxRender/2 && !expand) && i==rankings.length-1 && myRank>rankings.length*0.75">
+             *ngIf="!(myRank<rankings.length-maxRender/2 && !expand) && i==rankings.length-1">
           <div class="col-12 text-center">
             <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
           </div>
         </div>
       </ng-container>
     </div>
+  </div>
+
+  <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">
+    Not enough data to show :(
   </div>
 </div>

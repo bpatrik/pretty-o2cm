@@ -20,7 +20,7 @@ export class CompetitorsPanelComponent implements OnChanges {
   @Input() panelName: string;
   @Input() roleFilter: RoleType;
   @Input() danceEvents: IDatedDanceEvent[];
-  @Input() short: boolean = false;
+  @Input() short = false;
 
   RoleType = RoleType;
   expand = false;
@@ -74,6 +74,9 @@ export class CompetitorsPanelComponent implements OnChanges {
           list[key] = list[key] || {points: 0, accuracy: 0, role: role};
           list[key].points += point * accuracy;
           list[key].accuracy += accuracy;
+          if (plm === myPlacement) {
+            list[key].accuracy += 999;
+          }
           list[key].role = list[key].role === role ? role : RoleType.Mixed;
         };
         if (plm.follower && !Dancer.isTBA(plm.follower)) {
@@ -192,13 +195,13 @@ export class CompetitorsPanelComponent implements OnChanges {
   }
 
   placementDescription(): string {
-    const divisions = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5];
+    const divisions = [0.05, 0.1, 0.15, 0.2, 0.25];
     for (let i = 0; i < divisions.length; i++) {
       if (this.myRank < this.rankings.length * divisions[i]) {
-        return 'top ' + divisions[i] * 100 + '%';
+        return '- top ' + divisions[i] * 100 + '%';
       }
     }
-    return 'bottom 50%';
+    return '';
   }
 
 }
