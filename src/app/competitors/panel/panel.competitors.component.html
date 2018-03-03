@@ -2,7 +2,8 @@
   <div class="card-header  text-center">
     {{panelName}}
     <div class="float-right">
-      <button [ngClass]="{'btn-primary':expand}" class="btn btn-default btn-sm" (click)="toggleExpand($event)">
+      <button [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
+              (click)="toggleExpand($event)">
         <span *ngIf="!expand" class="oi oi-chevron-right"></span>
         <span *ngIf="expand" class="oi oi-chevron-bottom"></span>
       </button>
@@ -10,7 +11,6 @@
   </div>
   <div class="card-body">
     <div>
-
       <ng-template #leaderPop>
         Leader
       </ng-template>

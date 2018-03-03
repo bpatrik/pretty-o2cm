@@ -24,6 +24,7 @@ export class CompetitorsComponent {
   public StyleTypes = StyleTypes;
   public DanceTypes = DanceTypes;
   public RoleType = RoleType;
+  showInfo = false;
 
   constructor(public dataService: DataService) {
     this.dataService.data.subscribe(() => {

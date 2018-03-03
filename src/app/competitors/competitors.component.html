@@ -1,8 +1,29 @@
 <app-frame>
+  <div class="col-md-12" *ngIf="showInfo">
+    <div class="card">
+      <div class="card-header  ">
+        Info
+      </div>
+      <div class="card-body">
+        This page shows a personalized ranking based on your previous competitions.
+        Your competitors are compared to your performance to determine
+        if they are better or weaker dancer than you.
+        Recent competitions have higher weight in the scoring system. <br/>
+        Legend:
+        <ul style="list-style-type: none;">
+          <li><span class="oi oi-chevron-top text-warning"></span> - Better dancers.</li>
+          <li><span class="oi oi-minus text-primary"></span> - You.</li>
+          <li><span class="oi oi-chevron-bottom text-success"></span> - Weaker dancers.</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
   <div class="col-md-12">
     <div class="card">
       <div class="card-header text-white bg-primary">
         Filters
+        <button class="btn btn-light float-right" style="margin: -7px;" (click)="showInfo=!showInfo"><span class="oi oi-info"></span></button>
       </div>
       <div class="card-body">
         <div class="row">
