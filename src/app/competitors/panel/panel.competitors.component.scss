@@ -2,20 +2,44 @@
   font-weight: bold;
 }
 
+.card{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
 
 .circle {
-  color:#ffc107;
+  color: #ffc107;
   width: 15px;
   height: 15px;
   border-radius: 50%;
   display: inline-block;
 }
 
-
-.dancer{
+.dancer {
   color: #212529;
 }
 
-.oi-ellipses{
+.oi-ellipses {
   font-size: x-large;
+}
+
+.rank-icon {
+  display: inline-block;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  bottom: 7px;
+}
+
+.placement-section{
+  font-weight: normal;
+  color: #6c757d;
+}
+
+.rank-icon .oi-chevron-top {
+  position: absolute;
+}
+
+.role{
+  height: 20px;
 }

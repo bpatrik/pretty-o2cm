@@ -1,8 +1,61 @@
 <app-frame>
-  <ng-container *ngFor="let styles of perStyles">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header text-white bg-primary">
+        Filters
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <select [ngClass]="{'bg-primary text-white' : groupByFilter!=-1}"
+                    class="form-control" id="groupByFilter" [(ngModel)]="groupByFilter">
+              <option value="-1">Group by</option>
+              <option value="0">By style</option>
+              <option value="1">By dance</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select [ngClass]="{'bg-primary text-white' : roleFilter!=RoleType.Mixed}"
+                    class="form-control" id="roleFilter" [(ngModel)]="roleFilter">
+              <option [value]="RoleType.Mixed">All roles</option>
+              <option [value]="RoleType.Lead">Leader only</option>
+              <option [value]="RoleType.Follow">Follower only</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="groupByFilter == -1">
     <div class="col-md-6">
-      <app-competitors-panel-component [panelName]="StyleTypes[styles.style]" [danceEvents]="styles.dances">
+      <app-competitors-panel-component
+        [panelName]="'All'"
+        [danceEvents]="AllDances"
+        [roleFilter]="roleFilter">
       </app-competitors-panel-component>
     </div>
+  </ng-container>
+  <ng-container *ngIf="groupByFilter == 0">
+    <ng-container *ngFor="let styles of PerStyles">
+      <div class="col-md-6">
+        <app-competitors-panel-component
+          [panelName]="StyleTypes[styles.style]"
+          [danceEvents]="styles.dances"
+          [roleFilter]="roleFilter">
+        </app-competitors-panel-component>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="groupByFilter == 1">
+    <ng-container *ngFor="let dance of PerDance">
+      <div class="col-md-6">
+        <app-competitors-panel-component
+          [panelName]="StyleTypes[dance.style]+': '+DanceTypes[dance.dance]"
+          [danceEvents]="dance.dances"
+          [short]="true"
+          [roleFilter]="roleFilter">
+        </app-competitors-panel-component>
+      </div>
+    </ng-container>
   </ng-container>
 </app-frame>

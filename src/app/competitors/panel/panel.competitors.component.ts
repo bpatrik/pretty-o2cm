@@ -1,9 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {DanceEvent} from '../../../o2cm-parser/entities/DanceEvent';
 import {DancerName} from '../../services/IData';
 import {DataService} from '../../services/data.service';
 import {Dancer} from '../../../o2cm-parser/entities/Dancer';
 import {IDatedDanceEvent} from './IDatedDanceEvent';
+import {RoleType} from '../RoleType';
 
 
 @Component({
@@ -11,15 +12,19 @@ import {IDatedDanceEvent} from './IDatedDanceEvent';
   templateUrl: './panel.competitors.component.html',
   styleUrls: ['./panel.competitors.component.scss'],
 })
-export class CompetitorsPanelComponent {
+export class CompetitorsPanelComponent implements OnChanges {
   static tenPercentDivider = (1000 * 60 * 60 * 24 * 182) / 0.7;
   static COLOR_STRONGER = [255, 193, 7];
   static COLOR_EQUAL = [0, 123, 255];
   static COLOR_WEAKER = [40, 167, 69];
   @Input() panelName: string;
+  @Input() roleFilter: RoleType;
+  @Input() danceEvents: IDatedDanceEvent[];
+  @Input() short: boolean = false;
 
+  RoleType = RoleType;
   expand = false;
-  rankings: { dancer: DancerName, score: number, accuracy: number }[] = [];
+  rankings: { dancer: DancerName, score: number, accuracy: number, role: RoleType }[] = [];
   myRank = 0;
   min = {
     score: 0,
@@ -31,27 +36,51 @@ export class CompetitorsPanelComponent {
     scoreDiff: 0
   };
 
-  @Input() set danceEvents(dances: IDatedDanceEvent[]) {
-    const list: { [key: string]: { points: number, accuracy: number } } = {};
+  maxRender = 8;
+
+
+  constructor(public dataService: DataService) {
+  }
+
+
+  ngOnChanges(): void {
+    if (this.short) {
+      this.maxRender = 4;
+    } else {
+      this.maxRender = 8;
+    }
+    if (this.danceEvents && typeof this.roleFilter !== 'undefined') {
+      this.roleFilter = parseInt(this.roleFilter + '', 10);
+      this.calcRanks();
+    }
+  }
+
+  private calcRanks() {
+    const list: { [key: string]: { points: number, accuracy: number, role: RoleType } } = {};
     const me = this.dataService.data.getValue().dancerName;
 
 
-    for (let i = 0; i < dances.length; i++) {
-      const myPlacement = DanceEvent.getPlacement(dances[i], me);
+    for (let i = 0; i < this.danceEvents.length; i++) {
+      const myPlacement = DanceEvent.getPlacement(this.danceEvents[i], me);
 
-      for (let j = 0; j < dances[i].placements.length; j++) {
-        const plm = dances[i].placements[j];
-        const point = (myPlacement.placement - dances[i].placements[j].placement) / dances[i].placements.length;
-        const base = 1 - ((Date.now() - dances[i].date) / CompetitorsPanelComponent.tenPercentDivider);
+      for (let j = 0; j < this.danceEvents[i].placements.length; j++) {
+        const plm = this.danceEvents[i].placements[j];
+        const point = (myPlacement.placement - this.danceEvents[i].placements[j].placement) / this.danceEvents[i].placements.length;
+        const base = 1 - ((Date.now() - this.danceEvents[i].date) / CompetitorsPanelComponent.tenPercentDivider);
         const accuracy = base * base;
-        for (let k = 0; k < dances[i].placements[j].dancers.length; k++) {
-          const key = (plm.dancers[k].firstName + ' ' + plm.dancers[k].lastName).trim();
-          if (key === '') {
-            continue;
-          }
-          list[key] = list[key] || {points: 0, accuracy: 0};
+
+        const addPoint = (dancer: DancerName, role: RoleType) => {
+          const key = (dancer.firstName + ' ' + dancer.lastName).trim();
+          list[key] = list[key] || {points: 0, accuracy: 0, role: role};
           list[key].points += point * accuracy;
           list[key].accuracy += accuracy;
+          list[key].role = list[key].role === role ? role : RoleType.Mixed;
+        };
+        if (plm.follower && !Dancer.isTBA(plm.follower)) {
+          addPoint(plm.follower, RoleType.Follow);
+        }
+        if (plm.leader && !Dancer.isTBA(plm.leader)) {
+          addPoint(plm.leader, RoleType.Lead);
         }
       }
     }
@@ -59,10 +88,19 @@ export class CompetitorsPanelComponent {
     const rankings = Object.keys(list);
 
     this.rankings = rankings.map((key) => {
-      return {dancer: Dancer.getName(key), score: list[key].points, accuracy: list[key].accuracy};
+      return {
+        dancer: Dancer.getName(key),
+        score: list[key].points,
+        accuracy: list[key].accuracy,
+        role: list[key].role
+      };
     }).sort((a, b) => {
       return b.accuracy - a.accuracy;
-    }).slice(0, Math.min(Math.max(rankings.length * 0.4, 50), 200));
+    }).slice(0, Math.min(Math.max(rankings.length * 0.5, 100), 300))
+      .filter((r) => r.role === this.roleFilter ||
+        r.role === RoleType.Mixed ||
+        this.roleFilter === RoleType.Mixed ||
+        Dancer.equals(r.dancer, me));
 
     this.min.accuracy = this.rankings[this.rankings.length - 1].accuracy;
     this.max.accuracy = this.rankings[0].accuracy;
@@ -95,10 +133,6 @@ export class CompetitorsPanelComponent {
 
   }
 
-  constructor(public dataService: DataService) {
-  }
-
-
   url(dancer: DancerName) {
     return window.location.origin +
       window.location.pathname +
@@ -124,7 +158,10 @@ export class CompetitorsPanelComponent {
 
   color(score: number) {
     const color = [0, 0, 0];
-    const max = Math.min(Math.abs(this.max.score), Math.abs(this.min.score));
+    let max = Math.min(Math.abs(this.max.score), Math.abs(this.min.score));
+    if (max === 0) {
+      max += Number.EPSILON;
+    }
     const endColor = score > 0 ? CompetitorsPanelComponent.COLOR_STRONGER : CompetitorsPanelComponent.COLOR_WEAKER;
     const multiple = Math.min(Math.abs(score / max), 1);
     for (let i = 0; i < 3; i++) {
@@ -134,9 +171,34 @@ export class CompetitorsPanelComponent {
     return this.rgbToHex(color[0], color[1], color[2]);
   }
 
-  size(accuracy: number) {
-    const multiple = (accuracy - this.min.accuracy) / (this.max.accuracy - this.min.accuracy);
-    return (0.4 * multiple + 0.6);
+  isBetter3(score: number) {
+    return score > this.max.scoreDiff * 0.75;
+  }
+
+  isBetter2(score: number) {
+    return score > this.max.scoreDiff * 0.5 && score <= this.max.scoreDiff * 0.75;
+  }
+
+  isBetter1(score: number) {
+    return score > this.max.scoreDiff * 0.25 && score <= this.max.scoreDiff * 0.5;
+  }
+
+  isTheSame(score: number) {
+    return score < this.max.scoreDiff * 0.25 && score > -this.max.scoreDiff * 0.25;
+  }
+
+  isWorst(score: number) {
+    return score < -this.max.scoreDiff * 0.25;
+  }
+
+  placementDescription(): string {
+    const divisions = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5];
+    for (let i = 0; i < divisions.length; i++) {
+      if (this.myRank < this.rankings.length * divisions[i]) {
+        return 'top ' + divisions[i] * 100 + '%';
+      }
+    }
+    return 'bottom 50%';
   }
 
 }

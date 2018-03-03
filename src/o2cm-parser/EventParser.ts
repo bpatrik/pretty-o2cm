@@ -1,4 +1,3 @@
-import {HTTPLoader} from '../cmd-main/HTTPLoader';
 import * as cheerio from 'cheerio';
 import {DanceEvent, ISkill} from './entities/DanceEvent';
 import {EventNameParser} from './EventNameParser';
@@ -75,7 +74,11 @@ export class EventParser {
       }
 
       if ($('.t2b', arr[i]).length > 0 && $('.t2b', arr[i]).get(0).firstChild.data.trim() !== '') {
-        const placement = PlacementParser.parse($('.t2b', arr[i]).get(0).firstChild.data);
+
+        const placement = PlacementParser.parse($('.t2b', arr[i]).html()
+          .replace(new RegExp('&amp;', 'g'), '&')
+          .replace(new RegExp('<b>', 'g'), '')
+          .replace(new RegExp('</b>', 'g'), ''));
         placement.isFinal = true;
         placement.setEvent(danceEvents[danceEvents.length - 1]);
         finalistParsed = true;
@@ -94,7 +97,10 @@ export class EventParser {
       }
 
       if ($('.t2n', arr[i]).length > 0 && $('.t2n', arr[i]).get(0).firstChild.data.trim() !== '') {
-        const placement = PlacementParser.parse($('.t2n', arr[i]).get(0).firstChild.data);
+        const placement = PlacementParser.parse($('.t2n', arr[i]).html()
+          .replace(new RegExp('&amp;', 'g'), '&')
+          .replace(new RegExp('<b>', 'g'), '')
+          .replace(new RegExp('</b>', 'g'), ''));
         placement.isFinal = false;
         nonFinalistParsed = true;
         placement.setEvent(danceEvents[danceEvents.length - 1]);
@@ -119,7 +125,10 @@ export class EventParser {
     return 'http://results.o2cm.com/event3.asp?event=' + event;
   }
 
-  public static async parse(event: string, division: DivisionTypes, skill: ISkill, http: IHTTP): Promise<DanceEvent[]> {
+  public static async parse(event: string,
+                            division: DivisionTypes,
+                            skill: ISkill,
+                            http: IHTTP): Promise<DanceEvent[]> {
     const page = await http.post('http://results.o2cm.com/event3.asp', this.generateBody(event, division, this.skillToSelectID(skill)));
     const $ = cheerio.load(page);
     let events = this.parseEvents($);

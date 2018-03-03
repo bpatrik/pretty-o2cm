@@ -1,8 +1,4 @@
-import {AgeTypes, DanceTypes, DivisionTypes, PointSkillTypes, StyleTypes} from './Types';
-import {ISkill} from './DanceEvent';
-import {IPlacement} from './Placement';
 import {DancerName} from '../../app/services/IData';
-import {ICompetition} from './Competition';
 
 
 export class Dancer implements DancerName {
@@ -16,6 +12,9 @@ export class Dancer implements DancerName {
     this.lastName = n.lastName;
   }
 
+  static isTBA(dancer: DancerName): boolean {
+    return dancer.firstName.toLowerCase() === 'tba' && dancer.lastName.toLowerCase() === 'tba';
+  }
   public static getName(name: string): DancerName {
     name = name.trim();
 
@@ -40,5 +39,11 @@ export class Dancer implements DancerName {
     return Dancer.equals(this, other);
   }
 
+  toJSONable(): DancerName {
+    return {
+      firstName: this.firstName,
+      lastName: this.lastName
+    };
+  }
 
 }

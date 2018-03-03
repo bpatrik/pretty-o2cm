@@ -5,15 +5,11 @@ import {Dancer} from './Dancer';
 
 
 export class Individual {
-  firstName: string;
-  lastName: string;
   competitions: Competition[];
   dancer: Dancer;
 
 
   constructor(firstName: string, lastName: string, competitions: Competition[]) {
-    this.firstName = firstName;
-    this.lastName = lastName;
     this.dancer = DancerRepository.Instance.createOrGet(firstName + ' ' + lastName);
     this.competitions = competitions;
   }

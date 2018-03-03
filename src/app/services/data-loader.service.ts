@@ -91,9 +91,8 @@ export class DataParserService {
   public parseDancer(person: Individual): IData {
     const summary = this.getSummary(person);
     const comps = this.getCompetitions(person);
-    console.log(summary);
     return <IData>{
-      dancerName: {firstName: person.dancer.firstName, lastName: person.dancer.lastName},
+      dancerName: person.dancer,
       summary: summary,
       competitions: comps
     };
@@ -191,7 +190,7 @@ export class DataParserService {
           });
         }
         danceSummaries.push({
-          dance: <any>danceType,
+          dance: parseInt(danceType, 10),
           entries: entries
         });
       }

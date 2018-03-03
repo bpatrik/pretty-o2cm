@@ -94,10 +94,10 @@ export class DanceEvent implements IDanceEvent {
   getPartner(dancer: Dancer): Dancer {
     for (let i = 0; i < this.placements.length; i++) {
       if (this.placements[i].hasDancer(dancer)) {
-        if (this.placements[i].dancers[0] === dancer) {
-          return this.placements[i].dancers[1] || new Dancer('TBA');
+        if (this.placements[i].leader.equals(dancer)) {
+          return this.placements[i].follower || new Dancer('TBA');
         } else {
-          return this.placements[i].dancers[0] || new Dancer('TBA');
+          return this.placements[i].leader || new Dancer('TBA');
         }
       }
     }
