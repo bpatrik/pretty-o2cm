@@ -1,7 +1,9 @@
 <app-frame>
   <div class="col-md-12 justify-content-center">
     <div class="card ">
-      <div class="card-header text-white bg-primary">
+      <div
+        [ngClass]="{'bg-primary text-white' : skillFilter!==-1 || styleFilter!==-1 || danceFilter!==-1 || isFinalsFilter!==-1}"
+        class="card-header">
         Filters
       </div>
       <div class="card-body">

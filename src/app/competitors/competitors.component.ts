@@ -4,7 +4,6 @@ import {DanceEvent, IDanceEvent} from '../../o2cm-parser/entities/DanceEvent';
 import {DanceTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
 import {IDatedDanceEvent} from './panel/IDatedDanceEvent';
 import {RoleType} from './RoleType';
-import {Placement} from '../../o2cm-parser/entities/Placement';
 import {Dancer} from '../../o2cm-parser/entities/Dancer';
 
 
@@ -21,19 +20,31 @@ export class CompetitorsComponent {
   public allDance: IDatedDanceEvent[] = null;
   public groupByFilter = 0;
   public roleFilter: RoleType = 0;
+  public dateFilter = Date.now();
   public StyleTypes = StyleTypes;
   public DanceTypes = DanceTypes;
   public RoleType = RoleType;
-  showInfo = false;
+  showInfo = true;
+  now = 0;
 
   constructor(public dataService: DataService) {
+    this.now = Date.now();
+    this.dateFilter = this.now;
     this.dataService.data.subscribe(() => {
       this.setPotentialRole();
       this.allDance = null;
       this.perStyles = null;
+      this.perDance = null;
       // this.setPotentialRole();
     });
     this.setPotentialRole();
+  }
+
+
+  updateFiltered() {
+    this.allDance = null;
+    this.perStyles = null;
+    this.perDance = null;
   }
 
   get AllDances(): IDatedDanceEvent[] {
@@ -59,6 +70,7 @@ export class CompetitorsComponent {
 
   generateEventsPerStyle() {
     const projection = this.dataService.data.getValue().competitions
+      .filter(c => c.competition.date <= this.dateFilter)
       .reduce((p, c) => p.concat(c.competition.dancedEvents
         .map((d: IDatedDanceEvent) => {
           d.date = c.competition.date;
@@ -77,6 +89,7 @@ export class CompetitorsComponent {
 
   generateEventsPerDance() {
     const projection = this.dataService.data.getValue().competitions
+      .filter(c => c.competition.date <= this.dateFilter)
       .reduce((p, c) => p.concat(c.competition.dancedEvents
         .map((d: IDatedDanceEvent) => {
           d.date = c.competition.date;
@@ -128,8 +141,9 @@ export class CompetitorsComponent {
   }
 
   private generateAllDance() {
-    this.allDance = this.dataService.data.getValue()
-      .competitions.reduce((p, c) => p.concat(c.competition.dancedEvents.map((d: IDatedDanceEvent) => {
+    this.allDance = this.dataService.data.getValue().competitions
+      .filter(c => c.competition.date <= this.dateFilter)
+      .reduce((p, c) => p.concat(c.competition.dancedEvents.map((d: IDatedDanceEvent) => {
         d.date = c.competition.date;
         return d;
       })), []);

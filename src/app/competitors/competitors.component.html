@@ -1,27 +1,29 @@
 <app-frame>
   <div class="col-md-12" *ngIf="showInfo">
     <div class="card">
-      <div class="card-header  ">
+      <div class="card-header">
         Info
+        <button type="button" class="close float-right" aria-label="Close" (click)="showInfo=false">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="card-body">
-        This page shows a personalized ranking based on your previous competitions.
-        Your competitors are compared to your performance to determine
-        if they are better or weaker dancer than you.
-        Recent competitions have higher weight in the scoring system. <br/>
-        Legend:
-        <ul style="list-style-type: none;">
-          <li><span class="oi oi-chevron-top text-warning"></span> - Better dancers.</li>
-          <li><span class="oi oi-minus text-primary"></span> - Like you.</li>
-          <li><span class="oi oi-chevron-bottom text-success"> </span> - Weaker dancers.</li>
-        </ul>
+        These dancers have similar performance on competitions like you. <br/>
+        <div class="text-center">
+          Legend:
+          <span class="oi oi-chevron-top text-warning"></span> - Better dancers;
+          <span class="oi oi-minus text-primary"></span> - Like you;
+          <span class="oi oi-chevron-bottom text-success"> </span> - Weaker dancers.
+        </div>
 
       </div>
     </div>
   </div>
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header text-white bg-primary">
+      <div
+        [ngClass]="{'bg-primary text-white' : groupByFilter!=-1 || roleFilter!=RoleType.Mixed || dateFilter!=now}"
+        class="card-header">
         Filters
         <button class="btn btn-light float-right" style="margin: -7px;" (click)="showInfo=!showInfo"><span
           class="oi oi-info"></span></button>
@@ -42,6 +44,15 @@
               <option [value]="RoleType.Mixed">All roles</option>
               <option [value]="RoleType.Lead">Leader only</option>
               <option [value]="RoleType.Follow">Follower only</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select [ngClass]="{'bg-primary text-white' : dateFilter!=now}"
+                    class="form-control" id="dateFilter" [(ngModel)]="dateFilter"  (change)="updateFiltered()">
+              <option [value]="now">Until</option>
+              <option *ngFor="let comp of dataService.data.getValue().competitions" [value]="comp.competition.date">
+                {{comp.competition.name}}
+              </option>
             </select>
           </div>
         </div>

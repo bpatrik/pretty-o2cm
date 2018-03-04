@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header  text-center">
     {{panelName}}
-    <div class="float-right" *ngIf="myRank<rankings.length*0.5">
+    <div class="float-right" *ngIf="myRank<rankings.length*0.7">
       <button
         [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
         (click)="toggleExpand($event)">
@@ -10,7 +10,7 @@
       </button>
     </div>
   </div>
-  <div class="card-body" *ngIf="myRank<rankings.length*0.5">
+  <div class="card-body" *ngIf="myRank<rankings.length*0.7">
     <div>
       <ng-template #leaderPop>
         Leader
@@ -22,17 +22,14 @@
         Follower and Leader
       </ng-template>
 
-      <div class="row" *ngIf="renderSections.openTop">
+      <div class="row" *ngIf="renderSections.openTop" (click)="toggleExpand()">
         <div class="col-12 text-center">
           <span class="oi oi-ellipses"></span>
         </div>
       </div>
       <ng-container *ngFor="let rank of rankings; let i = index">
         <ng-template #rankPop>
-          <ng-container *ngIf="isBetter2(rank.score) || isBetter3(rank.score)">
-            Watch out, a really good dancer!
-          </ng-container>
-          <ng-container *ngIf="isBetter1(rank.score)">
+          <ng-container *ngIf="isBetter(rank.score)">
             Watch out, a good dancer!
           </ng-container>
           <ng-container *ngIf="isTheSame(rank.score)">
@@ -42,26 +39,14 @@
             No worries.
           </ng-container>
         </ng-template>
-        <div *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ||
-                    (i>=renderSections.second.start && i<renderSections.second.end)">
+        <div *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
           <a [ngClass]="{'me':i == myRank}"
              [href]="url(rank.dancer)"
              class="dancer row"
              style="white-space: nowrap">
             <div class="col-1 offset-sm-2">
-              <div [tooltip]="rankPop" container="body" class="rank-icon" [style.color]="color(rank.score)"
-                   *ngIf="isBetter3(rank.score)" style="transform: scale(1,0.8)">
-                <span class="oi oi-chevron-top" style="top:-1px;"></span>
-                <span class="oi oi-chevron-top" style="top:7px;"></span>
-                <span class="oi oi-chevron-top" style="top:15px;"></span>
-              </div>
-              <div [tooltip]="rankPop" container="body" class="rank-icon" [style.color]="color(rank.score)"
-                   *ngIf="isBetter2(rank.score)">
-                <span class="oi oi-chevron-top"></span>
-                <span class="oi oi-chevron-top" style="top:9px;"></span>
-              </div>
               <span [tooltip]="rankPop" container="body" class="oi oi-chevron-top" [style.color]="color(rank.score)"
-                    *ngIf="isBetter1(rank.score)"></span>
+                    *ngIf="isBetter(rank.score)"></span>
               <span class="oi oi-minus" [tooltip]="rankPop" container="body" [style.color]="color(rank.score)"
                     *ngIf="isTheSame(rank.score)"></span>
               <span class="oi oi-chevron-bottom" [style.color]="color(rank.score)"
@@ -80,15 +65,8 @@
             </div>
             <div class="col3 text-right">
               <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
-              <span *ngIf="rank.gotBetter" class="oi oi-graph"> </span>
             </div>
           </a>
-        </div>
-        <div class="row"
-             *ngIf="renderSections.skippedMiddle && i==renderSections.first.end">
-          <div class="col-12 text-center">
-            <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
-          </div>
         </div>
 
         <div class="row"
@@ -99,14 +77,14 @@
         </div>
       </ng-container>
     </div>
-    <div class="card-body text-center" *ngIf="gotBetterCount > 0">
-      <span class="oi oi-graph"> </span>:
-      You outperformed <strong>{{gotBetterCount}}</strong> of your competitors on your last competition
-      comparing to their past performance.
-    </div>
   </div>
 
-  <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.5">
+  <div class="card-footer" *ngIf="gotBetterCount > 0">
+    You outperformed <span class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors on your last competition
+    comparing to their past performance.
+  </div>
+
+  <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">
     Not enough data to show :(
   </div>
 </div>

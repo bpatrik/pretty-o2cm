@@ -34,16 +34,14 @@ export class CompetitorsPanelComponent implements OnChanges {
     scoreDiff: 0
   };
 
-  maxRender = 8;
+  maxRender = {
+    compact: 8,
+    expanded: 30
+  };
   gotBetterCount = 0;
   renderSections = {
     openTop: false,
     first: {
-      start: 0,
-      end: 0
-    },
-    skippedMiddle: false,
-    second: {
       start: 0,
       end: 0
     }
@@ -51,41 +49,35 @@ export class CompetitorsPanelComponent implements OnChanges {
 
 
   constructor(public dataService: DataService) {
-    this.updateRenderBounderies();
+    this.updateRenderBoundaries();
   }
 
 
   ngOnChanges(): void {
     if (this.short) {
-      this.maxRender = 4;
+      this.maxRender.compact = 4;
     } else {
-      this.maxRender = 8;
+      this.maxRender.compact = 8;
     }
     if (this.danceEvents && typeof this.roleFilter !== 'undefined') {
       this.roleFilter = parseInt(this.roleFilter + '', 10);
       this.calcRanks();
     }
-    this.updateRenderBounderies();
+    this.updateRenderBoundaries();
 
   }
 
-  private updateRenderBounderies() {
+  private updateRenderBoundaries() {
     if (this.expand) {
-      this.renderSections.first.start = Math.max(0, this.myRank - this.rankings.length * 0.25);
-      this.renderSections.first.end = Math.min(this.rankings.length - 1,
-        Math.max(this.myRank + this.rankings.length * 0.25, this.renderSections.first.start + this.rankings.length * 0.4));
-      this.renderSections.second.start = this.renderSections.first.start;
-      this.renderSections.second.end = this.renderSections.first.end;
+      this.renderSections.first.start = Math.floor(Math.max(0, this.myRank - this.maxRender.expanded / 2));
+      this.renderSections.first.end = Math.floor(Math.min(this.rankings.length - 1,
+        Math.max(this.myRank + this.maxRender.expanded / 2, this.renderSections.first.start + this.maxRender.expanded )));
     } else {
-      this.renderSections.first.start = Math.max(0, this.myRank - this.rankings.length * 0.25);
-      this.renderSections.first.end = Math.min(this.rankings.length - 1, this.renderSections.first.start + this.maxRender);
-      this.renderSections.second.start = Math.max(0, this.myRank - this.maxRender / 2);
-      this.renderSections.second.end = Math.min(this.rankings.length - 1, this.myRank + this.maxRender / 2);
+      this.renderSections.first.start = Math.max(0, this.myRank - this.maxRender.compact / 2);
+      this.renderSections.first.end = Math.min(this.rankings.length - 1, this.myRank + this.maxRender.compact / 2);
 
     }
     this.renderSections.openTop = this.renderSections.first.start > 0;
-    this.renderSections.skippedMiddle = this.renderSections.first.end < this.renderSections.second.start;
-
   }
 
   private calcRanks() {
@@ -195,7 +187,7 @@ export class CompetitorsPanelComponent implements OnChanges {
 
   toggleExpand(event) {
     this.expand = !this.expand;
-    this.updateRenderBounderies();
+    this.updateRenderBoundaries();
     event.stopPropagation();
   }
 
@@ -223,24 +215,17 @@ export class CompetitorsPanelComponent implements OnChanges {
     return this.rgbToHex(color[0], color[1], color[2]);
   }
 
-  isBetter3(score: number) {
-    return score > this.max.scoreDiff * 0.75;
-  }
 
-  isBetter2(score: number) {
-    return score > this.max.scoreDiff * 0.4 && score <= this.max.scoreDiff * 0.75;
-  }
-
-  isBetter1(score: number) {
-    return score > this.max.scoreDiff * 0.15 && score <= this.max.scoreDiff * 0.4;
+  isBetter(score: number) {
+    return score > this.max.scoreDiff * 0.08;
   }
 
   isTheSame(score: number) {
-    return score < this.max.scoreDiff * 0.15 && score > -this.max.scoreDiff * 0.15;
+    return score < this.max.scoreDiff * 0.08 && score > -this.max.scoreDiff * 0.08;
   }
 
   isWorst(score: number) {
-    return score < -this.max.scoreDiff * 0.15;
+    return score < -this.max.scoreDiff * 0.08;
   }
 
   placementDescription(): string {
