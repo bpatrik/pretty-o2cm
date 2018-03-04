@@ -65,12 +65,14 @@
             </div>
             <div class="col3 text-right">
               <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
+              <span *ngIf="rank.gotBetter">up</span>
+              <span *ngIf="rank.getWorst">down</span>
             </div>
           </a>
         </div>
 
         <div class="row"
-             *ngIf="i==rankings.length-1 && !(renderSections.skippedMiddle && i==renderSections.first.end)">
+             *ngIf="i==rankings.length-1 && !(i==renderSections.first.end)">
           <div class="col-12 text-center">
             <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
           </div>
@@ -82,6 +84,8 @@
   <div class="card-footer" *ngIf="gotBetterCount > 0">
     You outperformed <span class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
     who usually perform better than you on your last competition.
+
+    You were outperformed by <span class="badge badge-warning"><strong>{{gotWorstCount}}</strong></span>
   </div>
 
   <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">

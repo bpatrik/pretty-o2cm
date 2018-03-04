@@ -67,7 +67,12 @@ export class EventParser {
     let nonFinalistParsed = false;
     for (let i = 0; i < arr.length; i++) {
       if ($('.h5b', arr[i]).length > 0) {
-        danceEvents.push(EventNameParser.parse($('.h5b', arr[i]).get(0).firstChild.firstChild.data));
+        const href = $('a', arr[i]).get(0).attribs['href'];
+        let heatid = href.substring(href.indexOf('heatid=') + 7);
+        if (heatid.indexOf('&') !== -1) {
+          heatid = heatid.substring(0, heatid.indexOf('&'));
+        }
+        danceEvents.push(EventNameParser.parse($('.h5b', arr[i]).get(0).firstChild.firstChild.data, heatid));
         finalistParsed = false;
         nonFinalistParsed = false;
         continue;
@@ -87,12 +92,12 @@ export class EventParser {
 
       if ($(':contains(\'----\')', arr[i]).length > 0) {
         // this event is ill rendered, the first round contains non finalists too, probably teo rounds
-        if (danceEvents[danceEvents.length - 1].Rounds === 0 &&
+        if (danceEvents[danceEvents.length - 1].rounds === 0 &&
           finalistParsed === true &&
           nonFinalistParsed === true) {
-          danceEvents[danceEvents.length - 1].Rounds++;
+          danceEvents[danceEvents.length - 1].rounds++;
         }
-        danceEvents[danceEvents.length - 1].Rounds++;
+        danceEvents[danceEvents.length - 1].rounds++;
         continue;
       }
 

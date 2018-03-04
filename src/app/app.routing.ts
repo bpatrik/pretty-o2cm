@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {SummaryComponent} from './summary/summary.component';
 import {EventListComponent} from './list/event-list.component';
 import {CompetitorsComponent} from './competitors/competitors.component';
+import {EventComponent} from './event/event.component';
 
 const ROUTES: Routes = [
   {
@@ -16,6 +17,10 @@ const ROUTES: Routes = [
   {
     path: 'competitors',
     component: CompetitorsComponent
+  },
+  {
+    path: 'event',
+    component: EventComponent
   },
   {path: '', redirectTo: '/summary', pathMatch: 'full'},
   {path: '**', redirectTo: '/summary', pathMatch: 'full'}

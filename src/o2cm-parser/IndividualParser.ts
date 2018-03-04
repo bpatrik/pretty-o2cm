@@ -91,10 +91,14 @@ export class IndividualParser {
 
       // its an event. we collect only the event/comp link codes. We collect only unique division+skill pairs
       if ($('a', arr[i]).length > 0 && competitions.length > 0) {
-        const event = EventNameParser.parse($('a', arr[i]).get(0).firstChild.data);
         const href = $('a', arr[i]).get(0).attribs['href'];
         let eventLink = href.substring(href.indexOf('event=') + 6);
         eventLink = eventLink.substring(0, eventLink.indexOf('&'));
+        let heatid = href.substring(href.indexOf('heatid=') + 7);
+        if (heatid.indexOf('&') !== -1) {
+          heatid = heatid.substring(0, heatid.indexOf('&'));
+        }
+        const event = EventNameParser.parse($('a', arr[i]).get(0).firstChild.data, heatid);
         const cmp = competitions[competitions.length - 1];
         cmp.addEvent(event);
         cmp.linkCode = eventLink;

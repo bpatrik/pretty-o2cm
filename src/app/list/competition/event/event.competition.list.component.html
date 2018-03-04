@@ -36,7 +36,14 @@
       </div>
     </div>
   </div>
-  <div class="col col-sm-12 col-lg-5 text-center" style="white-space: nowrap">
+  <div class="col col-sm-12 col-lg-5 text-center" style="white-space: nowrap"
+       [routerLink]="['/event']"
+       [queryParams]="{
+        compCode:dance.compCode,
+        heatid:dance.heatid,
+        firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}"
+  >
     <ng-container *ngFor="let d of dance.dances; let i=index">
       <ng-container *ngIf="i>0">/</ng-container>
       {{DanceTypes[d]}}

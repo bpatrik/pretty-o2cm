@@ -23,6 +23,11 @@ export class DataService {
   public loading: BehaviorSubject<ILoading>;
   private proxyHTTP: IHTTP;
 
+  queryParams = {
+    heatid: '',
+    compCode: ''
+  };
+
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -32,8 +37,6 @@ export class DataService {
               private dataParser: DataParserService) {
     this.proxyHTTP = {
       post: (url: string, body: any): Promise<string> => {
-        console.log(encodeURI(url));
-        console.log(encodeURIComponent(url));
         return this.http.get('/proxy/' + encodeURIComponent(url), {
           params: {
             body: body
@@ -58,6 +61,8 @@ export class DataService {
         value['lastName'] !== this.data.getValue().dancerName.lastName) {
         this.loadDancer(value['firstName'], value['lastName']);
       }
+      this.queryParams.compCode = value['compCode'];
+      this.queryParams.heatid = value['heatid'];
     });
 
     this.data.subscribe((value) => {
@@ -65,7 +70,12 @@ export class DataService {
         return;
       }
       this.router.navigate([], {
-        queryParams: {firstName: value.dancerName.firstName, lastName: value.dancerName.lastName}
+        queryParams: {
+          firstName: value.dancerName.firstName,
+          lastName: value.dancerName.lastName,
+          compCode: this.queryParams.compCode,
+          heatid: this.queryParams.heatid,
+        }
       });
     });
     // this.loadData();
@@ -77,7 +87,7 @@ export class DataService {
     const comp = new Competition(new CompetitionCore('BU comp'));
     comp.date = Date.now();
     comp.dancedEvents = [
-      new DanceEvent('A dance', DivisionTypes.Amateur, AgeTypes.Adult, {
+      new DanceEvent('A dance', 'na', DivisionTypes.Amateur, AgeTypes.Adult, {
         type: EventSkillTypes.Bronze,
         str: ''
       }, StyleTypes.Smooth, [DanceTypes.Waltz])
@@ -132,7 +142,9 @@ export class DataService {
               coupleCount: 20,
               isFinal: true,
               point: {value: 2, warning: null},
-              partner: {firstName: 'Test', lastName: 'John'}
+              partner: {firstName: 'Test', lastName: 'John'},
+              compCode: '',
+              heatid: ''
             },
             {
               pointSkill: PointSkillTypes.Bronze,
@@ -143,7 +155,9 @@ export class DataService {
               coupleCount: 20,
               isFinal: false,
               point: {value: 2, warning: null},
-              partner: {firstName: 'Test', lastName: 'John'}
+              partner: {firstName: 'Test', lastName: 'John'},
+              compCode: '',
+              heatid: ''
             }
           ]
         }

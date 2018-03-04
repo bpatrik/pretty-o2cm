@@ -7,6 +7,15 @@ import {IDatedDanceEvent} from './IDatedDanceEvent';
 import {RoleType} from '../RoleType';
 
 
+export interface IRank {
+  dancer: DancerName;
+  score: number;
+  accuracy: number;
+  role: RoleType;
+  gotBetter: boolean;
+  getWorst: boolean;
+}
+
 @Component({
   selector: 'app-competitors-panel-component',
   templateUrl: './panel.competitors.component.html',
@@ -24,7 +33,7 @@ export class CompetitorsPanelComponent implements OnChanges {
 
   RoleType = RoleType;
   expand = false;
-  rankings: { dancer: DancerName, score: number, accuracy: number, role: RoleType, gotBetter: boolean }[] = [];
+  rankings: IRank[] = [];
   myRank = 0;
   min = {
     score: 0,
@@ -39,6 +48,7 @@ export class CompetitorsPanelComponent implements OnChanges {
     expanded: 30
   };
   gotBetterCount = 0;
+  gotWorstCount = 0;
   renderSections = {
     openTop: false,
     first: {
@@ -139,7 +149,8 @@ export class CompetitorsPanelComponent implements OnChanges {
         score: list[key].points,
         accuracy: list[key].accuracy,
         role: list[key].role,
-        gotBetter: list[key].fromLastComp < 0 && list[key].previousScore > 0
+        gotBetter: list[key].fromLastComp < 0 && list[key].previousScore > 0,
+        getWorst: list[key].previousScore < 0 && list[key].fromLastComp > 0
       };
     }).sort((a, b) => {
       if (b.accuracy === a.accuracy) {
@@ -174,6 +185,7 @@ export class CompetitorsPanelComponent implements OnChanges {
     }
 
     this.gotBetterCount = this.rankings.filter(r => r.gotBetter === true).length;
+    this.gotWorstCount = this.rankings.filter(r => r.getWorst === true).length;
 
   }
 

@@ -3,6 +3,7 @@ import {IDanceList} from '../../../services/IData';
 import {Rules} from '../../../services/Rules';
 import {DanceTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
 import {PointWarning} from '../../../../o2cm-parser/entities/DanceEvent';
+import {DataService} from '../../../services/data.service';
 
 
 @Component({
@@ -23,6 +24,10 @@ export class CompetitionEventComponent {
   @Input() dance: IDanceList;
   @Input() showPercentage: boolean;
   @Output() pointPresentation = new EventEmitter();
+
+
+  constructor(public dataService: DataService) {
+  }
 
   color() {
     return PointSkillTypes[this.dance.pointSkill].toLowerCase();

@@ -1,0 +1,36 @@
+<app-frame>
+  <ng-container *ngIf="competition && dance">
+    <div class="card" style="width: 100%">
+      <div class="card-header">
+        {{competition.rawName}}: {{dance.raw}}
+      </div>
+      <div class="card-body">
+        <div [ngClass]="{'me':this.myPlacementIndex ==i}" class="row"
+             *ngFor="let plm of dance.placements;let i = index">
+          <div class="col-2" style="white-space: nowrap">
+            {{plm.placement}} / {{dance.placements.length}}
+          </div>
+          <div class="col-3" style="white-space: nowrap">
+            ({{plm.leaderNumber}}) {{plm.leader.firstName}} {{plm.leader.lastName}}
+          </div>
+
+          <div class="col-3" style="white-space: nowrap">
+            {{plm.follower.firstName}} {{plm.follower.lastName}}
+          </div>
+
+          <div class="col  col-lg-1 text-right" style="white-space: nowrap">
+            <ng-container *ngIf="points[i].value>0">
+              <span class="badge bg-{{color()}}" *ngIf="!noPointReason()" title="points">+{{points[i].value}}</span>
+            </ng-container>
+            <span *ngIf="plm.isFinal" title="being in finals" class="oi oi-badge  text-{{color()}}"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngIf="!competition || !dance">
+    No event to show :(
+  </ng-container>
+</app-frame>

@@ -9,7 +9,7 @@ import {ICompetitionList, IDanceList, IData} from './IData';
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.6';
+  public static VERSION = '1.7';
 
 
   constructor() {
@@ -114,7 +114,9 @@ export class DataParserService {
               eventSkill: d.eventSkill.type,
               placement: d.getPlacement(person.dancer).placement,
               dances: d.dances,
-              partner: d.getPartner(person.dancer)
+              partner: d.getPartner(person.dancer),
+              compCode: person.Competitions[i].linkCode,
+              heatid: d.heatid
             };
           })
       });
