@@ -139,7 +139,7 @@ export class CompetitorsPanelComponent implements OnChanges {
       };
     }).sort((a, b) => {
       return b.accuracy - a.accuracy;
-    }).slice(0, Math.min(Math.max(rankings.length * 0.5, 100), 300))
+    }).slice(0, Math.min(Math.max(rankings.length * 0.5, 150), 500))
       .filter((r) => r.role === this.roleFilter ||
         r.role === RoleType.Mixed ||
         this.roleFilter === RoleType.Mixed ||

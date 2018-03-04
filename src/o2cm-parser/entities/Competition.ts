@@ -3,6 +3,7 @@ import {CompetitionCore, IComparableCompetition} from '../IndividualParser';
 
 
 export interface ICompetition extends IComparableCompetition {
+  rawName: string;
   name: string;
   date: number;
   linkCode: string;
@@ -10,6 +11,7 @@ export interface ICompetition extends IComparableCompetition {
 }
 
 export class Competition implements ICompetition {
+  rawName: string;
   name: string;
   date: number;
   linkCode: string;
@@ -17,6 +19,7 @@ export class Competition implements ICompetition {
 
 
   constructor(core: CompetitionCore) {
+    this.rawName = core.rawName;
     this.name = core.name;
     this.date = core.date;
     this.linkCode = core.linkCode;
@@ -38,6 +41,7 @@ export class Competition implements ICompetition {
 
   toJSONable(): ICompetition {
     return {
+      rawName: this.rawName,
       name: this.name,
       date: this.date,
       linkCode: this.linkCode,

@@ -49,9 +49,9 @@
           <div class="col-md-3">
             <select [ngClass]="{'bg-primary text-white' : dateFilter!=now}"
                     class="form-control" id="dateFilter" [(ngModel)]="dateFilter"  (change)="updateFiltered()">
-              <option [value]="now">Until</option>
+              <option [value]="now">Until today</option>
               <option *ngFor="let comp of dataService.data.getValue().competitions" [value]="comp.competition.date">
-                {{comp.competition.name}}
+               Until {{comp.competition.date | date}}, {{comp.competition.name}}
               </option>
             </select>
           </div>

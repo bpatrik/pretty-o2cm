@@ -18,7 +18,7 @@ export class CompetitionEventListComponent {
 
   noPointReason() {
     for (let i = 0; i < Rules.NoPointExceptions.length; i++) {
-      if (this.competition.competition.name.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
+      if (this.competition.competition.rawName.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
         return Rules.NoPointExceptions[i].reason;
       }
     }

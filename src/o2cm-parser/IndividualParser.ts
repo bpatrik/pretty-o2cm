@@ -18,20 +18,21 @@ export interface IDancedEvents {
 }
 
 export interface IComparableCompetition {
-  name: string;
+  rawName: string;
   date: number;
   linkCode: string;
 }
 
 export class CompetitionCore implements IComparableCompetition {
+  rawName: string;
   name: string;
   date: number;
   linkCode: string;
   dancedEvents: IDancedEvents[] = [];
 
 
-  constructor(name: string) {
-    this.name = name;
+  constructor(rawName: string) {
+    this.rawName = rawName;
   }
 
   addEvent(event: IDancedEvents) {
@@ -45,7 +46,7 @@ export class CompetitionCore implements IComparableCompetition {
 
   equalsIn(filters: IComparableCompetition[]): boolean {
     for (let i = 0; i < filters.length; i++) {
-      if (this.name === filters[i].name && this.date === filters[i].date && this.linkCode === filters[i].linkCode) {
+      if (this.rawName === filters[i].rawName && this.date === filters[i].date && this.linkCode === filters[i].linkCode) {
         return true;
       }
     }
@@ -77,6 +78,11 @@ export class IndividualParser {
           cmp.date = (new Date((parseInt(nums[2], 10) < 60 ? parseInt(nums[2], 10) + 2000 : parseInt(nums[2], 10)),
             parseInt(nums[0], 10) - 1,
             parseInt(nums[1], 10))).getTime();
+
+          cmp.name = eventName.replace(matched[0], '').trim();
+          if (cmp.name.startsWith('-')) {
+            cmp.name = cmp.name.replace('-', '').trim();
+          }
         }
 
         competitions.push(cmp);
@@ -118,7 +124,7 @@ export class IndividualParser {
         url: EventParser.getUrl(cmp.linkCode),
         current: i + 1,
         maximum: compCores.length,
-        details: cmp.name
+        details: cmp.rawName
       });
       let des: DanceEvent[] = [];
       for (let j = 0; j < compCores[i].dancedEvents.length; j++) {

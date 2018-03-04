@@ -9,7 +9,7 @@ import {ICompetitionList, IDanceList, IData} from './IData';
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.5';
+  public static VERSION = '1.6';
 
 
   constructor() {
@@ -162,7 +162,7 @@ export class DataParserService {
             }
             const p = tmp[danceType][ds].reduce((prev, c) => {
               for (let i = 0; i < Rules.NoPointExceptions.length; i++) {
-                if (c.Competition.name.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
+                if (c.Competition.rawName.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
                   return prev;
                 }
               }

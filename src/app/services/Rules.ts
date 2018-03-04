@@ -1,7 +1,11 @@
 import {PointSkillTypes} from '../../o2cm-parser/entities/Types';
 
 
-export const Rules = {
+export const Rules: {
+  MaxPoints: { [key: number]: number };
+  Timeout: { [key: number]: number };
+  NoPointExceptions: { name: string, reason: string }[];
+} = {
   MaxPoints: {},
   Timeout: {},
   NoPointExceptions: []
