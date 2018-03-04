@@ -24,22 +24,34 @@ export class CompetitorsPanelComponent implements OnChanges {
 
   RoleType = RoleType;
   expand = false;
-  rankings: { dancer: DancerName, score: number, accuracy: number, role: RoleType }[] = [];
+  rankings: { dancer: DancerName, score: number, accuracy: number, role: RoleType, gotBetter: boolean }[] = [];
   myRank = 0;
   min = {
     score: 0,
-    accuracy: 0
   };
   max = {
     score: 0,
-    accuracy: 0,
     scoreDiff: 0
   };
 
   maxRender = 8;
+  gotBetterCount = 0;
+  renderSections = {
+    openTop: false,
+    first: {
+      start: 0,
+      end: 0
+    },
+    skippedMiddle: false,
+    second: {
+      start: 0,
+      end: 0
+    }
+  };
 
 
   constructor(public dataService: DataService) {
+    this.updateRenderBounderies();
   }
 
 
@@ -53,13 +65,40 @@ export class CompetitorsPanelComponent implements OnChanges {
       this.roleFilter = parseInt(this.roleFilter + '', 10);
       this.calcRanks();
     }
+    this.updateRenderBounderies();
+
+  }
+
+  private updateRenderBounderies() {
+    if (this.expand) {
+      this.renderSections.first.start = Math.max(0, this.myRank - this.rankings.length * 0.25);
+      this.renderSections.first.end = Math.min(this.rankings.length - 1,
+        Math.max(this.myRank + this.rankings.length * 0.25, this.renderSections.first.start + this.rankings.length * 0.4));
+      this.renderSections.second.start = this.renderSections.first.start;
+      this.renderSections.second.end = this.renderSections.first.end;
+    } else {
+      this.renderSections.first.start = Math.max(0, this.myRank - this.rankings.length * 0.25);
+      this.renderSections.first.end = Math.min(this.rankings.length - 1, this.renderSections.first.start + this.maxRender);
+      this.renderSections.second.start = Math.max(0, this.myRank - this.maxRender / 2);
+      this.renderSections.second.end = Math.min(this.rankings.length - 1, this.myRank + this.maxRender / 2);
+
+    }
+    this.renderSections.openTop = this.renderSections.first.start > 0;
+    this.renderSections.skippedMiddle = this.renderSections.first.end < this.renderSections.second.start;
+
   }
 
   private calcRanks() {
-    const list: { [key: string]: { points: number, accuracy: number, role: RoleType } } = {};
+    const list: {
+      [key: string]: {
+        points: number,
+        accuracy: number, role: RoleType, fromLastComp: number, previousScore: number
+      }
+    } = {};
     const me = this.dataService.data.getValue().dancerName;
 
-
+    this.danceEvents.sort((a, b) => a.date - b.date);
+    const lastCompDate = this.danceEvents[this.danceEvents.length - 1].date;
     for (let i = 0; i < this.danceEvents.length; i++) {
       const myPlacement = DanceEvent.getPlacement(this.danceEvents[i], me);
 
@@ -71,11 +110,19 @@ export class CompetitorsPanelComponent implements OnChanges {
 
         const addPoint = (dancer: DancerName, role: RoleType) => {
           const key = (dancer.firstName + ' ' + dancer.lastName).trim();
-          list[key] = list[key] || {points: 0, accuracy: 0, role: role};
+          list[key] = list[key] || {
+            points: 0, accuracy: 0,
+            role: role, fromLastComp: 0, previousScore: 0
+          };
           list[key].points += point * accuracy;
           list[key].accuracy += accuracy;
           if (plm === myPlacement) {
             list[key].accuracy += 999;
+          }
+          if (this.danceEvents[i].date === lastCompDate) {
+            list[key].fromLastComp += point * accuracy;
+          } else {
+            list[key].previousScore = list[key].points;
           }
           list[key].role = list[key].role === role ? role : RoleType.Mixed;
         };
@@ -95,7 +142,8 @@ export class CompetitorsPanelComponent implements OnChanges {
         dancer: Dancer.getName(key),
         score: list[key].points,
         accuracy: list[key].accuracy,
-        role: list[key].role
+        role: list[key].role,
+        gotBetter: list[key].fromLastComp < 0 && list[key].previousScore > 0
       };
     }).sort((a, b) => {
       return b.accuracy - a.accuracy;
@@ -105,8 +153,6 @@ export class CompetitorsPanelComponent implements OnChanges {
         this.roleFilter === RoleType.Mixed ||
         Dancer.equals(r.dancer, me));
 
-    this.min.accuracy = this.rankings[this.rankings.length - 1].accuracy;
-    this.max.accuracy = this.rankings[0].accuracy;
 
     this.rankings = this.rankings.sort((a, b) => {
       if (b.score === a.score) {
@@ -134,6 +180,8 @@ export class CompetitorsPanelComponent implements OnChanges {
       }
     }
 
+    this.gotBetterCount = this.rankings.filter(r => r.gotBetter === true).length;
+
   }
 
   url(dancer: DancerName) {
@@ -147,6 +195,7 @@ export class CompetitorsPanelComponent implements OnChanges {
 
   toggleExpand(event) {
     this.expand = !this.expand;
+    this.updateRenderBounderies();
     event.stopPropagation();
   }
 
@@ -179,19 +228,19 @@ export class CompetitorsPanelComponent implements OnChanges {
   }
 
   isBetter2(score: number) {
-    return score > this.max.scoreDiff * 0.5 && score <= this.max.scoreDiff * 0.75;
+    return score > this.max.scoreDiff * 0.4 && score <= this.max.scoreDiff * 0.75;
   }
 
   isBetter1(score: number) {
-    return score > this.max.scoreDiff * 0.25 && score <= this.max.scoreDiff * 0.5;
+    return score > this.max.scoreDiff * 0.15 && score <= this.max.scoreDiff * 0.4;
   }
 
   isTheSame(score: number) {
-    return score < this.max.scoreDiff * 0.25 && score > -this.max.scoreDiff * 0.25;
+    return score < this.max.scoreDiff * 0.15 && score > -this.max.scoreDiff * 0.15;
   }
 
   isWorst(score: number) {
-    return score < -this.max.scoreDiff * 0.25;
+    return score < -this.max.scoreDiff * 0.15;
   }
 
   placementDescription(): string {

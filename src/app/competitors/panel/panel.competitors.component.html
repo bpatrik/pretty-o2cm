@@ -1,16 +1,16 @@
 <div class="card">
   <div class="card-header  text-center">
     {{panelName}}
-    <div class="float-right"  *ngIf="myRank<rankings.length*0.5">
+    <div class="float-right" *ngIf="myRank<rankings.length*0.5">
       <button
-              [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
-              (click)="toggleExpand($event)">
+        [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
+        (click)="toggleExpand($event)">
         <span *ngIf="!expand" class="oi oi-chevron-right"></span>
         <span *ngIf="expand" class="oi oi-chevron-bottom"></span>
       </button>
     </div>
   </div>
-  <div class="card-body" *ngIf="myRank<rankings.length*0.7">
+  <div class="card-body" *ngIf="myRank<rankings.length*0.5">
     <div>
       <ng-template #leaderPop>
         Leader
@@ -22,6 +22,11 @@
         Follower and Leader
       </ng-template>
 
+      <div class="row" *ngIf="renderSections.openTop">
+        <div class="col-12 text-center">
+          <span class="oi oi-ellipses"></span>
+        </div>
+      </div>
       <ng-container *ngFor="let rank of rankings; let i = index">
         <ng-template #rankPop>
           <ng-container *ngIf="isBetter2(rank.score) || isBetter3(rank.score)">
@@ -37,7 +42,8 @@
             No worries.
           </ng-container>
         </ng-template>
-        <div *ngIf="i<maxRender || (i> myRank-maxRender/2 && i<myRank+maxRender/2) || expand">
+        <div *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ||
+                    (i>=renderSections.second.start && i<renderSections.second.end)">
           <a [ngClass]="{'me':i == myRank}"
              [href]="url(rank.dancer)"
              class="dancer row"
@@ -58,7 +64,8 @@
                     *ngIf="isBetter1(rank.score)"></span>
               <span class="oi oi-minus" [tooltip]="rankPop" container="body" [style.color]="color(rank.score)"
                     *ngIf="isTheSame(rank.score)"></span>
-              <span class="circle" [style.background]="color(rank.score)" [tooltip]="rankPop" container="body"
+              <span class="oi oi-chevron-bottom" [style.color]="color(rank.score)"
+                    [tooltip]="rankPop" container="body"
                     *ngIf="isWorst(rank.score)"></span>
             </div>
             <div class="col">
@@ -73,31 +80,33 @@
             </div>
             <div class="col3 text-right">
               <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
+              <span *ngIf="rank.gotBetter" class="oi oi-graph"> </span>
             </div>
           </a>
         </div>
-        <div class="row" *ngIf="i==maxRender && (myRank-maxRender/2>maxRender) && !expand">
-          <div class="col-12 text-center">
-            <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
-          </div>
-        </div>
-        <div class="row" *ngIf="i==myRank+maxRender/2 && !expand">
+        <div class="row"
+             *ngIf="renderSections.skippedMiddle && i==renderSections.first.end">
           <div class="col-12 text-center">
             <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
           </div>
         </div>
 
         <div class="row"
-             *ngIf="!(myRank<rankings.length-maxRender/2 && !expand) && i==rankings.length-1">
+             *ngIf="i==rankings.length-1 && !(renderSections.skippedMiddle && i==renderSections.first.end)">
           <div class="col-12 text-center">
             <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
           </div>
         </div>
       </ng-container>
     </div>
+    <div class="card-body text-center" *ngIf="gotBetterCount > 0">
+      <span class="oi oi-graph"> </span>:
+      You outperformed <strong>{{gotBetterCount}}</strong> of your competitors on your last competition
+      comparing to their past performance.
+    </div>
   </div>
 
-  <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">
+  <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.5">
     Not enough data to show :(
   </div>
 </div>
