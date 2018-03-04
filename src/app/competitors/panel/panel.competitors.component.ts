@@ -71,7 +71,7 @@ export class CompetitorsPanelComponent implements OnChanges {
     if (this.expand) {
       this.renderSections.first.start = Math.floor(Math.max(0, this.myRank - this.maxRender.expanded / 2));
       this.renderSections.first.end = Math.floor(Math.min(this.rankings.length - 1,
-        Math.max(this.myRank + this.maxRender.expanded / 2, this.renderSections.first.start + this.maxRender.expanded )));
+        Math.max(this.myRank + this.maxRender.expanded / 2, this.renderSections.first.start + this.maxRender.expanded)));
     } else {
       this.renderSections.first.start = Math.max(0, this.myRank - this.maxRender.compact / 2);
       this.renderSections.first.end = Math.min(this.rankings.length - 1, this.myRank + this.maxRender.compact / 2);
@@ -88,17 +88,21 @@ export class CompetitorsPanelComponent implements OnChanges {
       }
     } = {};
     const me = this.dataService.data.getValue().dancerName;
-
     this.danceEvents.sort((a, b) => a.date - b.date);
     const lastCompDate = this.danceEvents[this.danceEvents.length - 1].date;
+
+    const round = (a) => {
+      return Math.round(a * 100000) / 100000;
+    };
     for (let i = 0; i < this.danceEvents.length; i++) {
       const myPlacement = DanceEvent.getPlacement(this.danceEvents[i], me);
 
       for (let j = 0; j < this.danceEvents[i].placements.length; j++) {
         const plm = this.danceEvents[i].placements[j];
-        const point = (myPlacement.placement - this.danceEvents[i].placements[j].placement) / this.danceEvents[i].placements.length;
+        const point = round((myPlacement.placement - this.danceEvents[i].placements[j].placement) / this.danceEvents[i].placements.length);
         const base = 1 - ((Date.now() - this.danceEvents[i].date) / CompetitorsPanelComponent.tenPercentDivider);
-        const accuracy = base * base;
+        const accuracy = round(base * base);
+        const pA = point * accuracy;
 
         const addPoint = (dancer: DancerName, role: RoleType) => {
           const key = (dancer.firstName + ' ' + dancer.lastName).trim();
@@ -106,13 +110,13 @@ export class CompetitorsPanelComponent implements OnChanges {
             points: 0, accuracy: 0,
             role: role, fromLastComp: 0, previousScore: 0
           };
-          list[key].points += point * accuracy;
+          list[key].points += pA;
           list[key].accuracy += accuracy;
           if (plm === myPlacement) {
             list[key].accuracy += 999;
           }
           if (this.danceEvents[i].date === lastCompDate) {
-            list[key].fromLastComp += point * accuracy;
+            list[key].fromLastComp += pA;
           } else {
             list[key].previousScore = list[key].points;
           }
@@ -138,6 +142,9 @@ export class CompetitorsPanelComponent implements OnChanges {
         gotBetter: list[key].fromLastComp < 0 && list[key].previousScore > 0
       };
     }).sort((a, b) => {
+      if (b.accuracy === a.accuracy) {
+        return Dancer.compare(a.dancer, b.dancer);
+      }
       return b.accuracy - a.accuracy;
     }).slice(0, Math.min(Math.max(rankings.length * 0.5, 150), 500))
       .filter((r) => r.role === this.roleFilter ||
@@ -148,13 +155,7 @@ export class CompetitorsPanelComponent implements OnChanges {
 
     this.rankings = this.rankings.sort((a, b) => {
       if (b.score === a.score) {
-        if (a.dancer.lastName < b.dancer.lastName) {
-          return -1;
-        }
-        if (a.dancer.lastName > b.dancer.lastName) {
-          return 1;
-        }
-        return a.dancer.firstName < b.dancer.firstName ? -1 : 1;
+        return Dancer.compare(a.dancer, b.dancer);
       }
       return b.score - a.score;
     });

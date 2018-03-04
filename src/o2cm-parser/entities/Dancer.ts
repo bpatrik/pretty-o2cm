@@ -15,6 +15,7 @@ export class Dancer implements DancerName {
   static isTBA(dancer: DancerName): boolean {
     return dancer.firstName.toLowerCase() === 'tba' && dancer.lastName.toLowerCase() === 'tba';
   }
+
   public static getName(name: string): DancerName {
     name = name.trim();
 
@@ -33,6 +34,23 @@ export class Dancer implements DancerName {
 
   public static equals(that: DancerName, other: DancerName): boolean {
     return that.firstName.toLowerCase() === other.firstName.toLowerCase() && that.lastName.toLowerCase() === other.lastName.toLowerCase();
+  }
+
+  public static compare(that: DancerName, other: DancerName) {
+    if (that.lastName < other.lastName) {
+      return -1;
+    }
+    if (that.lastName > other.lastName) {
+      return 1;
+    }
+
+    if (that.firstName < other.firstName) {
+      return -1;
+    }
+    if (that.firstName > other.firstName) {
+      return 1;
+    }
+    return 0;
   }
 
   equals(other: DancerName): boolean {

@@ -3,29 +3,43 @@
     <div class="card">
       <div class="card-header">
         Info
-        <button type="button" class="close float-right" aria-label="Close" (click)="showInfo=false">
+        <button type="button" class="close float-right" aria-label="Close" (click)="setShowInfo(false)">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="card-body">
-        These dancers have similar performance on competitions like you. <br/>
+        These dancers performed similarly to you on your competitions. <br/>
         <div class="text-center">
           Legend:
           <span class="oi oi-chevron-top text-warning"></span> - Better dancers;
           <span class="oi oi-minus text-primary"></span> - Like you;
           <span class="oi oi-chevron-bottom text-success"> </span> - Weaker dancers.
         </div>
+        <div class="text-center">
+          <button class="btn btn-link" (click)="showExtendedInfo=true" *ngIf="!showExtendedInfo">Read more... <br/>
+            <span class="oi oi-chevron-bottom"></span></button>
 
+        </div>
+        <div *ngIf="showExtendedInfo" style="margin-top: 10px">
+          The page creates a personalized ranking based on yor performance, comparing to other dancers you have competed
+          with.
+          Your scores are always 0, if someone performs better than you at a given event, gets positive score, if worst
+          negative score.
+          The scores are weighted with the time passed since that competition.
+          The page also maintains an accuracy score to each dancer.
+          Accuracy score is lower if you haven't competed with the given dancer since a while.
+          Dancers with the lowest accuracy score are filtered out.
+        </div>
       </div>
     </div>
   </div>
   <div class="col-md-12">
     <div class="card">
       <div
-        [ngClass]="{'bg-primary text-white' : groupByFilter!=-1 || roleFilter!=RoleType.Mixed || dateFilter!=now}"
+        [ngClass]="{'bg-primary text-white' : groupByFilter!=-1 || roleFilter!=RoleType.Mixed || dateStartFilter!=0 || dateEndFilter!=now}"
         class="card-header">
         Filters
-        <button class="btn btn-light float-right" style="margin: -7px;" (click)="showInfo=!showInfo"><span
+        <button class="btn btn-light float-right" style="margin: -7px;" (click)="setShowInfo(!showInfo)"><span
           class="oi oi-info"></span></button>
       </div>
       <div class="card-body">
@@ -47,12 +61,25 @@
             </select>
           </div>
           <div class="col-md-3">
-            <select [ngClass]="{'bg-primary text-white' : dateFilter!=now}"
-                    class="form-control" id="dateFilter" [(ngModel)]="dateFilter"  (change)="updateFiltered()">
+            <select [ngClass]="{'bg-primary text-white' : dateStartFilter!=0}"
+                    class="form-control" id="dateStartFilter" [(ngModel)]="dateStartFilter" (change)="updateFiltered()">
+              <option [value]="0">Since forever</option>
+              <ng-container *ngFor="let comp of dataService.data.getValue().competitions">
+                <option *ngIf="comp.competition.date <= dateEndFilter" [value]="comp.competition.date">
+                  Since {{comp.competition.date | date}}, {{comp.competition.name}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select [ngClass]="{'bg-primary text-white' : dateEndFilter!=now}"
+                    class="form-control" id="dateEndFilter" [(ngModel)]="dateEndFilter" (change)="updateFiltered()">
               <option [value]="now">Until today</option>
-              <option *ngFor="let comp of dataService.data.getValue().competitions" [value]="comp.competition.date">
-               Until {{comp.competition.date | date}}, {{comp.competition.name}}
-              </option>
+              <ng-container *ngFor="let comp of dataService.data.getValue().competitions">
+                <option *ngIf="comp.competition.date >= dateStartFilter" [value]="comp.competition.date">
+                  Until {{comp.competition.date | date}}, {{comp.competition.name}}
+                </option>
+              </ng-container>
             </select>
           </div>
         </div>

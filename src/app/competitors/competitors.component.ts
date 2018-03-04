@@ -5,6 +5,7 @@ import {DanceTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
 import {IDatedDanceEvent} from './panel/IDatedDanceEvent';
 import {RoleType} from './RoleType';
 import {Dancer} from '../../o2cm-parser/entities/Dancer';
+import {Cookie} from 'ng2-cookies';
 
 
 @Component({
@@ -20,16 +21,18 @@ export class CompetitorsComponent {
   public allDance: IDatedDanceEvent[] = null;
   public groupByFilter = 0;
   public roleFilter: RoleType = 0;
-  public dateFilter = Date.now();
+  public dateStartFilter = 0;
+  public dateEndFilter = Date.now();
   public StyleTypes = StyleTypes;
   public DanceTypes = DanceTypes;
   public RoleType = RoleType;
   showInfo = true;
+  showExtendedInfo = false;
   now = 0;
 
   constructor(public dataService: DataService) {
     this.now = Date.now();
-    this.dateFilter = this.now;
+    this.dateEndFilter = this.now;
     this.dataService.data.subscribe(() => {
       this.setPotentialRole();
       this.allDance = null;
@@ -38,10 +41,22 @@ export class CompetitorsComponent {
       // this.setPotentialRole();
     });
     this.setPotentialRole();
+    this.showInfo = !Cookie.get('hideInfo');
   }
 
 
+  setShowInfo(value: boolean) {
+    this.showInfo = value;
+    if (this.showInfo === false) {
+      Cookie.set('hideInfo', 'true');
+    }
+  }
+
   updateFiltered() {
+    if (this.dateEndFilter < this.dateStartFilter) {
+      this.dateEndFilter = this.dateStartFilter;
+    }
+
     this.allDance = null;
     this.perStyles = null;
     this.perDance = null;
@@ -70,7 +85,8 @@ export class CompetitorsComponent {
 
   generateEventsPerStyle() {
     const projection = this.dataService.data.getValue().competitions
-      .filter(c => c.competition.date <= this.dateFilter)
+      .filter(c => c.competition.date <= this.dateEndFilter &&
+        c.competition.date >= this.dateStartFilter)
       .reduce((p, c) => p.concat(c.competition.dancedEvents
         .map((d: IDatedDanceEvent) => {
           d.date = c.competition.date;
@@ -89,7 +105,8 @@ export class CompetitorsComponent {
 
   generateEventsPerDance() {
     const projection = this.dataService.data.getValue().competitions
-      .filter(c => c.competition.date <= this.dateFilter)
+      .filter(c => c.competition.date <= this.dateEndFilter &&
+        c.competition.date >= this.dateStartFilter)
       .reduce((p, c) => p.concat(c.competition.dancedEvents
         .map((d: IDatedDanceEvent) => {
           d.date = c.competition.date;
@@ -142,7 +159,8 @@ export class CompetitorsComponent {
 
   private generateAllDance() {
     this.allDance = this.dataService.data.getValue().competitions
-      .filter(c => c.competition.date <= this.dateFilter)
+      .filter(c => c.competition.date <= this.dateEndFilter &&
+        c.competition.date >= this.dateStartFilter)
       .reduce((p, c) => p.concat(c.competition.dancedEvents.map((d: IDatedDanceEvent) => {
         d.date = c.competition.date;
         return d;
