@@ -29,6 +29,14 @@ export class Placement implements IPlacement {
       (that.follower && Dancer.equals(that.follower, other));
   }
 
+  public static getPartner(that: IPlacement, dancer: DancerName): DancerName {
+    if (Dancer.equals(that.leader, dancer)) {
+      return that.follower || Dancer.getName('Unknown Partner');
+    } else {
+      return that.leader || Dancer.getName('Unknown Partner');
+    }
+  }
+
   set Leader(dancer: Dancer) {
     this.leader = dancer;
   }

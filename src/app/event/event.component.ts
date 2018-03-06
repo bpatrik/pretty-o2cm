@@ -41,8 +41,8 @@ export class EventComponent {
   getDanceEvent() {
     this.competition = null;
     for (let i = 0; i < this.dataService.data.getValue().competitions.length; i++) {
-      if (this.dataService.data.getValue().competitions[i].competition.linkCode === this.eventFilter.compCode) {
-        this.competition = this.dataService.data.getValue().competitions[i].competition;
+      if (this.dataService.data.getValue().competitions[i].linkCode === this.eventFilter.compCode) {
+        this.competition = this.dataService.data.getValue().competitions[i];
         break;
       }
     }

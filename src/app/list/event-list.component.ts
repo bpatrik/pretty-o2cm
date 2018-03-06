@@ -2,10 +2,11 @@ import {Component} from '@angular/core';
 import {DataService} from '../services/data.service';
 import {DanceTypes, PointSkillTypes, StyleTypes} from '../../o2cm-parser/entities/Types';
 import {Utils} from '../../Utils';
-import {ICompetition} from '../../o2cm-parser/entities/Competition';
+import {Competition, ICompetition} from '../../o2cm-parser/entities/Competition';
 import {ActivatedRoute} from '@angular/router';
 import {Params} from '@angular/router/src/shared';
 import {ICompetitionList} from '../services/IData';
+import {DanceEvent} from '../../o2cm-parser/entities/DanceEvent';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class EventListComponent {
   styleFilter = -1;
   skillFilter = -1;
   isFinalsFilter = -1;
-  filteredComps: ICompetitionList[];
+  filteredComps: ICompetition[];
 
   constructor(public dataService: DataService,
               private route: ActivatedRoute) {
@@ -64,26 +65,34 @@ export class EventListComponent {
     this.styleFilter = parseInt(this.styleFilter + '', 10);
     this.skillFilter = parseInt(this.skillFilter + '', 10);
     this.isFinalsFilter = parseInt(this.isFinalsFilter + '', 10);
-    this.filteredComps = this.dataService.data.value.competitions.map((cl) => {
-      return {
-        dances: cl.dances.filter((d) => {
-          if (this.danceFilter !== -1 && d.dances.indexOf(this.danceFilter) === -1) {
-            return false;
-          }
-          if (this.styleFilter !== -1 && d.style !== this.styleFilter) {
-            return false;
-          }
-          if (this.skillFilter !== -1 && d.pointSkill !== this.skillFilter) {
-            return false;
-          }
-          if (this.isFinalsFilter !== -1 && d.isFinal !== (this.isFinalsFilter === 0)) {
-            return false;
-          }
-          return true;
-        }),
-        competition: cl.competition
+    this.filteredComps = this.dataService.data.value.competitions.map((c) => {
+      const cClone: ICompetition = {
+        rawName: c.rawName,
+        dancedEvents: [],
+        name: c.name,
+        linkCode: c.linkCode,
+        date: c.date
       };
-    }).filter((cl) => cl.dances.length > 0);
+      cClone.dancedEvents = c.dancedEvents.filter((d) => {
+        if (this.danceFilter !== -1 && d.dances.indexOf(this.danceFilter) === -1) {
+          return false;
+        }
+        if (this.styleFilter !== -1 && d.style !== this.styleFilter) {
+          return false;
+        }
+        if (this.skillFilter !== -1 && d.pointSkill !== this.skillFilter) {
+          return false;
+        }
+        const plm = DanceEvent.getPlacement(d, this.dataService.data.getValue().dancerName);
+        if (this.isFinalsFilter !== -1 &&
+          plm &&
+          plm.isFinal !== (this.isFinalsFilter === 0)) {
+          return false;
+        }
+        return true;
+      }).sort((a, b) => a.style - b.style);
+      return cClone;
+    }).filter((cl) => cl.dancedEvents.length > 0).sort((a, b) => b.date - a.date);
   }
 }
 

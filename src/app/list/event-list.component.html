@@ -41,7 +41,9 @@
     <div class="competition-event-container" *ngFor="let comp of filteredComps">
       <app-competition-event-list
         [showPercentage]="showPercentage"
-        (pointPresentation)="onPointPresentatoinChange()" [competition]="comp"></app-competition-event-list>
+        [dancer]="dataService.data.value.dancerName"
+        (pointPresentation)="onPointPresentatoinChange()"
+        [competition]="comp"></app-competition-event-list>
     </div>
   </div>
 </app-frame>

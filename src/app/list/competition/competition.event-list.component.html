@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header">
-    <a href="http://results.o2cm.com/event3.asp?event={{competition.competition.linkCode}}">
-      {{competition.competition.rawName}}
+    <a href="http://results.o2cm.com/event3.asp?event={{competition.linkCode}}">
+      {{competition.rawName}}
     </a>
     <div class="float-right">
       <span class="badge bg-{{p.color}}" *ngFor="let p of getNewPoints()"
@@ -9,12 +9,14 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="competition-event-container" *ngFor="let event of competition.dances">
+    <div class="competition-event-container" *ngFor="let event of competition.dancedEvents">
       <app-competition-event
         [showPercentage]="showPercentage"
         (pointPresentation)="pointPresentation.emit()"
         [noPointReason]="noPointReason()"
-        [dance]="event"></app-competition-event>
+        [competition]="competition"
+        [Dance]="event"
+        [Dancer]="dancer"></app-competition-event>
     </div>
   </div>
 </div>

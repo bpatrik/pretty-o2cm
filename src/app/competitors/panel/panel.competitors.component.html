@@ -61,12 +61,10 @@
               <img [tooltip]="mixedPop" container="body" class="role" src="assets/couple.svg"
                    *ngIf="rank.role == RoleType.Mixed"/>
 
-              {{rank.dancer.firstName}} {{rank.dancer.lastName}}
+              {{rank.dancer.firstName}} {{rank.dancer.lastName}} {{rank.score | number}} {{rank.accuracy | number}}
             </div>
             <div class="col3 text-right">
               <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
-              <span *ngIf="rank.gotBetter">up</span>
-              <span *ngIf="rank.getWorst">down</span>
             </div>
           </a>
         </div>
@@ -81,11 +79,9 @@
     </div>
   </div>
 
-  <div class="card-footer" *ngIf="gotBetterCount > 0">
+  <div class="card-footer" *ngIf="gotBetterCount > 0 && myRank<rankings.length*0.7">
     You outperformed <span class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
     who usually perform better than you on your last competition.
-
-    You were outperformed by <span class="badge badge-warning"><strong>{{gotWorstCount}}</strong></span>
   </div>
 
   <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">

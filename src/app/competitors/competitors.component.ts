@@ -85,11 +85,11 @@ export class CompetitorsComponent {
 
   generateEventsPerStyle() {
     const projection = this.dataService.data.getValue().competitions
-      .filter(c => c.competition.date <= this.dateEndFilter &&
-        c.competition.date >= this.dateStartFilter)
-      .reduce((p, c) => p.concat(c.competition.dancedEvents
+      .filter(c => c.date <= this.dateEndFilter &&
+        c.date >= this.dateStartFilter)
+      .reduce((p, c) => p.concat(c.dancedEvents
         .map((d: IDatedDanceEvent) => {
-          d.date = c.competition.date;
+          d.date = c.date;
           return d;
         })), [])
       .reduce((p, d: IDanceEvent) => {
@@ -105,11 +105,11 @@ export class CompetitorsComponent {
 
   generateEventsPerDance() {
     const projection = this.dataService.data.getValue().competitions
-      .filter(c => c.competition.date <= this.dateEndFilter &&
-        c.competition.date >= this.dateStartFilter)
-      .reduce((p, c) => p.concat(c.competition.dancedEvents
+      .filter(c => c.date <= this.dateEndFilter &&
+        c.date >= this.dateStartFilter)
+      .reduce((p, c) => p.concat(c.dancedEvents
         .map((d: IDatedDanceEvent) => {
-          d.date = c.competition.date;
+          d.date = c.date;
           return d;
         })), [])
       .reduce((p, d: IDanceEvent) => {
@@ -130,7 +130,7 @@ export class CompetitorsComponent {
   setPotentialRole() {
     const me = this.dataService.data.getValue().dancerName;
     const placements = this.dataService.data.getValue()
-      .competitions.map(c => c.competition.dancedEvents
+      .competitions.map(c => c.dancedEvents
         .map(d => DanceEvent.getPlacement(d, me))).reduce((p, c) => p.concat(c), []);
     let role: RoleType = null;
 
@@ -159,10 +159,10 @@ export class CompetitorsComponent {
 
   private generateAllDance() {
     this.allDance = this.dataService.data.getValue().competitions
-      .filter(c => c.competition.date <= this.dateEndFilter &&
-        c.competition.date >= this.dateStartFilter)
-      .reduce((p, c) => p.concat(c.competition.dancedEvents.map((d: IDatedDanceEvent) => {
-        d.date = c.competition.date;
+      .filter(c => c.date <= this.dateEndFilter &&
+        c.date >= this.dateStartFilter)
+      .reduce((p, c) => p.concat(c.dancedEvents.map((d: IDatedDanceEvent) => {
+        d.date = c.date;
         return d;
       })), []);
   }

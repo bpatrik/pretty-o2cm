@@ -129,38 +129,7 @@ export class DataService {
           ]
 
         }
-      }, competitions: [
-        {
-          competition: comp,
-          dances: [
-            {
-              pointSkill: PointSkillTypes.Bronze,
-              eventSkill: EventSkillTypes.Bronze,
-              dances: [DanceTypes.Waltz],
-              style: StyleTypes.Smooth,
-              placement: 2,
-              coupleCount: 20,
-              isFinal: true,
-              point: {value: 2, warning: null},
-              partner: {firstName: 'Test', lastName: 'John'},
-              compCode: '',
-              heatid: ''
-            },
-            {
-              pointSkill: PointSkillTypes.Bronze,
-              eventSkill: EventSkillTypes.Bronze,
-              dances: [DanceTypes.Tango],
-              style: StyleTypes.Smooth,
-              placement: 12,
-              coupleCount: 20,
-              isFinal: false,
-              point: {value: 2, warning: null},
-              partner: {firstName: 'Test', lastName: 'John'},
-              compCode: '',
-              heatid: ''
-            }
-          ]
-        }
+      }, competitions: [comp
       ]
     });
 
@@ -187,7 +156,7 @@ export class DataService {
             this.loading.next(loading);
           }
         },
-        cache.competitions.map(c => c.competition));
+        cache.competitions);
       const partialData = this.dataParser.parseDancer(person);
       this.data.next(this.dataParser.mergeDate(cache, partialData));
       this.cacheService.put(this.data.getValue());

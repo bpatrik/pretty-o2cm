@@ -31,7 +31,7 @@ export interface DancerName {
 export interface IData {
   dancerName: DancerName;
   summary: ISummary;
-  competitions: ICompetitionList[];
+  competitions: ICompetition[];
 }
 
 

@@ -18,7 +18,7 @@ export class DataParserService {
 
   public mergeDate(base: IData, extend: IData): IData {
     base.competitions = base.competitions.concat(extend.competitions);
-    base.competitions = base.competitions.sort((a, b) => b.competition.date - a.competition.date);
+    base.competitions = base.competitions.sort((a, b) => b.date - a.date);
 
     for (const style in extend.summary) {
       if (!extend.summary.hasOwnProperty(style)) {
@@ -90,11 +90,10 @@ export class DataParserService {
 
   public parseDancer(person: Individual): IData {
     const summary = this.getSummary(person);
-    const comps = this.getCompetitions(person);
     return <IData>{
       dancerName: person.dancer,
       summary: summary,
-      competitions: comps
+      competitions: person.Competitions.map(c => c.toJSONable())
     };
   }
 

@@ -65,8 +65,8 @@
                     class="form-control" id="dateStartFilter" [(ngModel)]="dateStartFilter" (change)="updateFiltered()">
               <option [value]="0">Since forever</option>
               <ng-container *ngFor="let comp of dataService.data.getValue().competitions">
-                <option *ngIf="comp.competition.date <= dateEndFilter" [value]="comp.competition.date">
-                  Since {{comp.competition.date | date}}, {{comp.competition.name}}
+                <option *ngIf="comp.date <= dateEndFilter" [value]="comp.date">
+                  Since {{comp.date | date}}, {{comp.name}}
                 </option>
               </ng-container>
             </select>
@@ -76,8 +76,8 @@
                     class="form-control" id="dateEndFilter" [(ngModel)]="dateEndFilter" (change)="updateFiltered()">
               <option [value]="now">Until today</option>
               <ng-container *ngFor="let comp of dataService.data.getValue().competitions">
-                <option *ngIf="comp.competition.date >= dateStartFilter" [value]="comp.competition.date">
-                  Until {{comp.competition.date | date}}, {{comp.competition.name}}
+                <option *ngIf="comp.date >= dateStartFilter" [value]="comp.date">
+                  Until {{comp.date | date}}, {{comp.name}}
                 </option>
               </ng-container>
             </select>

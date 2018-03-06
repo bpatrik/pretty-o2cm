@@ -13,7 +13,6 @@ export interface IRank {
   accuracy: number;
   role: RoleType;
   gotBetter: boolean;
-  getWorst: boolean;
 }
 
 @Component({
@@ -110,8 +109,17 @@ export class CompetitorsPanelComponent implements OnChanges {
       for (let j = 0; j < this.danceEvents[i].placements.length; j++) {
         const plm = this.danceEvents[i].placements[j];
         const point = round((myPlacement.placement - this.danceEvents[i].placements[j].placement) / this.danceEvents[i].placements.length);
-        const base = 1 - ((Date.now() - this.danceEvents[i].date) / CompetitorsPanelComponent.tenPercentDivider);
-        const accuracy = round(base * base);
+        const f = (x) => (x / Date.now()) * (x / Date.now());
+        const a = f(this.danceEvents[i].date);
+        const H = (1000 * 60 * 60 * 24 * 182);
+        const accuracy = (f(this.danceEvents[i].date) - 1) * (0.1 / f(Date.now() - H)) + 1;
+        const base = 1 - ((Date.now() - this.danceEvents[i].date) / Date.now() / CompetitorsPanelComponent.tenPercentDivider);
+        // console.log(base);
+        //  const accuracy = base * base;
+        if (accuracy > 1 || accuracy < 0) {
+          console.error('accuracy error');
+          console.log(accuracy, base, lastCompDate, this.danceEvents[i].date, CompetitorsPanelComponent.tenPercentDivider, plm);
+        }
         const pA = point * accuracy;
 
         const addPoint = (dancer: DancerName, role: RoleType) => {
@@ -122,7 +130,7 @@ export class CompetitorsPanelComponent implements OnChanges {
           };
           list[key].points += pA;
           list[key].accuracy += accuracy;
-          if (plm === myPlacement) {
+          if (plm === myPlacement && Dancer.equals(dancer, me)) {
             list[key].accuracy += 999;
           }
           if (this.danceEvents[i].date === lastCompDate) {
@@ -149,15 +157,14 @@ export class CompetitorsPanelComponent implements OnChanges {
         score: list[key].points,
         accuracy: list[key].accuracy,
         role: list[key].role,
-        gotBetter: list[key].fromLastComp < 0 && list[key].previousScore > 0,
-        getWorst: list[key].previousScore < 0 && list[key].fromLastComp > 0
+        gotBetter: list[key].fromLastComp < 0 && list[key].previousScore > 0
       };
     }).sort((a, b) => {
       if (b.accuracy === a.accuracy) {
         return Dancer.compare(a.dancer, b.dancer);
       }
       return b.accuracy - a.accuracy;
-    }).slice(0, Math.min(Math.max(rankings.length * 0.5, 150), 500))
+    }).slice(0, Math.min(Math.max(rankings.length * 0.5, 100), 300))
       .filter((r) => r.role === this.roleFilter ||
         r.role === RoleType.Mixed ||
         this.roleFilter === RoleType.Mixed ||
@@ -185,7 +192,6 @@ export class CompetitorsPanelComponent implements OnChanges {
     }
 
     this.gotBetterCount = this.rankings.filter(r => r.gotBetter === true).length;
-    this.gotWorstCount = this.rankings.filter(r => r.getWorst === true).length;
 
   }
 
