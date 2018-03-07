@@ -42,7 +42,7 @@ export class CompareComponent {
       const cClone: ICompetition = Competition.shallowCopy(c);
       cClone.dancedEvents = cClone.dancedEvents.filter(d => DanceEvent.hasDancer(d, this.competitor));
       return cClone;
-    }).filter(c => c.dancedEvents.length > 0);
+    }).filter(c => c.dancedEvents.length > 0).sort((a, b) => b.date - a.date);
   }
 
   onPointPresentatoinChange() {
