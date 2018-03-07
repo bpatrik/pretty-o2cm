@@ -64,3 +64,13 @@
 .tooltip-inner {
   max-width: none;
 }
+
+.entry .compare-link{
+  color: #e3e3e3;
+}
+.entry:hover .compare-link{
+  color: #6c757d;
+}
+.entry:hover  .compare-link:hover{
+  color: #212529;
+}

@@ -24,30 +24,19 @@
 
       <div class="row" *ngIf="renderSections.openTop" (click)="toggleExpand()">
         <div class="col-12 text-center">
-          <span  [ngClass]="expand ? 'oi-ellipses': 'oi-chevron-top'"  class="oi expand-icon"></span>
+          <span [ngClass]="expand ? 'oi-ellipses': 'oi-chevron-top'" class="oi expand-icon"></span>
         </div>
       </div>
       <ng-container *ngFor="let rank of rankings; let i = index">
-        <ng-template #rankPop>
-          <ng-container *ngIf="isBetter(rank.score)">
-            Watch out, a good dancer!
-          </ng-container>
-          <ng-container *ngIf="isTheSame(rank.score)">
-            A dancer with similar skills to yours.
-          </ng-container>
-          <ng-container *ngIf="isWorst(rank.score)">
-            No worries.
-          </ng-container>
-        </ng-template>
-        <div class="row" *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
+
+        <div class="row entry" *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
 
           <div class="col-1 offset-lg-3">
-              <span [tooltip]="rankPop" container="body" class="oi oi-chevron-top" [style.color]="color(rank.score)"
-                    *ngIf="isBetter(rank.score)"></span>
-            <span class="oi oi-minus" [tooltip]="rankPop" container="body" [style.color]="color(rank.score)"
+            <span class="oi oi-chevron-top" [style.color]="color(rank.score)"
+                  *ngIf="isBetter(rank.score)"></span>
+            <span class="oi oi-minus" [style.color]="color(rank.score)"
                   *ngIf="isTheSame(rank.score)"></span>
             <span class="oi oi-chevron-bottom" [style.color]="color(rank.score)"
-                  [tooltip]="rankPop" container="body"
                   *ngIf="isWorst(rank.score)"></span>
           </div>
           <div class="col-7 col-lg-5">
@@ -84,7 +73,8 @@
           </div>
           <div class="col-3  text-right">
             <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
-            <a *ngIf="i != myRank"
+            <a title="compare"
+               *ngIf="i != myRank"
                href="#"
                class="compare-link"
                [routerLink]="['/compare']"
@@ -92,7 +82,7 @@
                                       lastName:dataService.data.value.dancerName.lastName,
                                       cfirstName:rank.dancer.firstName,
                                       clastName:rank.dancer.lastName}">
-              <span class="oi oi-list"></span></a>
+              <span class="oi oi-chevron-right"></span></a>
           </div>
         </div>
 
