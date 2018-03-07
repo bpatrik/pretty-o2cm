@@ -33,7 +33,8 @@ export class Dancer implements DancerName {
   }
 
   public static equals(that: DancerName, other: DancerName): boolean {
-    return that.firstName.toLowerCase() === other.firstName.toLowerCase() && that.lastName.toLowerCase() === other.lastName.toLowerCase();
+    return that.firstName.toLowerCase() === other.firstName.toLowerCase()
+      && that.lastName.toLowerCase() === other.lastName.toLowerCase();
   }
 
   public static compare(that: DancerName, other: DancerName) {

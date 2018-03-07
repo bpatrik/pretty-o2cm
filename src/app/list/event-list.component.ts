@@ -56,7 +56,6 @@ export class EventListComponent {
   showPercentage = false;
 
   onPointPresentatoinChange() {
-    console.log('change', this.showPercentage);
     this.showPercentage = !this.showPercentage;
   }
 
@@ -66,13 +65,7 @@ export class EventListComponent {
     this.skillFilter = parseInt(this.skillFilter + '', 10);
     this.isFinalsFilter = parseInt(this.isFinalsFilter + '', 10);
     this.filteredComps = this.dataService.data.value.competitions.map((c) => {
-      const cClone: ICompetition = {
-        rawName: c.rawName,
-        dancedEvents: [],
-        name: c.name,
-        linkCode: c.linkCode,
-        date: c.date
-      };
+      const cClone: ICompetition = Competition.shallowCopy(c);
       cClone.dancedEvents = c.dancedEvents.filter((d) => {
         if (this.danceFilter !== -1 && d.dances.indexOf(this.danceFilter) === -1) {
           return false;

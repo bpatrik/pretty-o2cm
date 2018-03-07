@@ -39,38 +39,61 @@
             No worries.
           </ng-container>
         </ng-template>
-        <div *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
-          <a [ngClass]="{'me':i == myRank}"
-             [href]="url(rank.dancer)"
-             class="dancer row"
-             style="white-space: nowrap">
-            <div class="col-1 offset-sm-2">
+        <div class="row" *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
+
+          <div class="col-1 offset-lg-3">
               <span [tooltip]="rankPop" container="body" class="oi oi-chevron-top" [style.color]="color(rank.score)"
                     *ngIf="isBetter(rank.score)"></span>
-              <span class="oi oi-minus" [tooltip]="rankPop" container="body" [style.color]="color(rank.score)"
-                    *ngIf="isTheSame(rank.score)"></span>
-              <span class="oi oi-chevron-bottom" [style.color]="color(rank.score)"
-                    [tooltip]="rankPop" container="body"
-                    *ngIf="isWorst(rank.score)"></span>
-            </div>
-            <div class="col">
+            <span class="oi oi-minus" [tooltip]="rankPop" container="body" [style.color]="color(rank.score)"
+                  *ngIf="isTheSame(rank.score)"></span>
+            <span class="oi oi-chevron-bottom" [style.color]="color(rank.score)"
+                  [tooltip]="rankPop" container="body"
+                  *ngIf="isWorst(rank.score)"></span>
+          </div>
+          <div class="col-7 col-lg-5">
+            <a
+              [ngClass]="{'me':i == myRank}"
+              [href]="url(rank.dancer)"
+              class="dancer"
+              style="white-space: nowrap">
               <img [tooltip]="leaderPop" container="body" class="role" src="assets/leader.svg"
                    *ngIf="rank.role == RoleType.Lead"/>
               <img [tooltip]="followerPop" container="body" class="role" src="assets/follower.svg"
                    *ngIf="rank.role == RoleType.Follow"/>
               <img [tooltip]="mixedPop" container="body" class="role" src="assets/couple.svg"
                    *ngIf="rank.role == RoleType.Mixed"/>
+              {{rank.dancer.firstName}} {{rank.dancer.lastName}}
 
-              {{rank.dancer.firstName}} {{rank.dancer.lastName}} {{rank.score | number}} {{rank.accuracy | number}}
-            </div>
-            <div class="col3 text-right">
-              <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
-            </div>
-          </a>
+
+              <ng-container *ngIf="rank.details">
+                <ng-template #detailsPop>
+                  Scores:
+                  <div *ngFor="let a of rank.details.score" style="white-space: nowrap">{{a.score| number}}: {{a.from}}</div>
+                  Accuracy:
+                  <div *ngFor="let a of rank.details.accuracy" style="white-space: nowrap">{{a.accuracy | number}}: {{a.from}}</div>
+                </ng-template>
+                <span [tooltip]="detailsPop"
+                      container="body">
+               S:{{rank.score | number}} A:{{rank.accuracy | number}}</span>
+              </ng-container>
+            </a>
+          </div>
+          <div class="col-3  text-right">
+            <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
+            <a *ngIf="i != myRank"
+               href="#"
+               class="compare-link"
+               [routerLink]="['/compare']"
+               [queryParams]="{firstName:dataService.data.value.dancerName.firstName,
+                                      lastName:dataService.data.value.dancerName.lastName,
+                                      cfirstName:rank.dancer.firstName,
+                                      clastName:rank.dancer.lastName}">
+              <span class="oi oi-list"></span></a>
+          </div>
         </div>
 
         <div class="row"
-             *ngIf="i==rankings.length-1 && !(i==renderSections.first.end)">
+             *ngIf="i==rankings.length-1">
           <div class="col-12 text-center">
             <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
           </div>
@@ -80,8 +103,8 @@
   </div>
 
   <div class="card-footer" *ngIf="gotBetterCount > 0 && myRank<rankings.length*0.7">
-    You outperformed <span class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
-    who usually perform better than you on your last competition.
+    On your last competition, you outperformed <span class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
+    who usually perform better than you.
   </div>
 
   <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">

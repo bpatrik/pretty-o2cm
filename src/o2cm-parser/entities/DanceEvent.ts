@@ -69,10 +69,18 @@ export class DanceEvent implements IDanceEvent {
     return null;
   }
 
-  static calcPoint(that: IDanceEvent,
-                   dancer: DancerName,
-                   skill: PointSkillTypes = that.pointSkill): { value: number, warning: PointWarning } {
-    const placement = DanceEvent.getPlacement(that, dancer);
+  public static hasDancer(that: IDanceEvent, dancer: DancerName): boolean {
+    for (let i = 0; i < that.placements.length; i++) {
+      if (Placement.hasDancer(that.placements[i], dancer)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static calcPointForPlacement(that: IDanceEvent,
+                               placement: IPlacement,
+                               skill: PointSkillTypes = that.pointSkill): { value: number, warning: PointWarning } {
     let warning: PointWarning = null;
     let point = 0;
     if (!placement.isFinal || skill > that.pointSkill) {
@@ -103,6 +111,14 @@ export class DanceEvent implements IDanceEvent {
     return {value: point, warning: warning};
   }
 
+
+  static calcPoint(that: IDanceEvent,
+                   dancer: DancerName,
+                   skill: PointSkillTypes = that.pointSkill): { value: number, warning: PointWarning } {
+    const placement = DanceEvent.getPlacement(that, dancer);
+    return DanceEvent.calcPointForPlacement(that, placement, skill);
+  }
+
   toString() {
     return {
       raw: this.raw,
@@ -115,12 +131,7 @@ export class DanceEvent implements IDanceEvent {
   }
 
   hasDancer(dancer: Dancer): boolean {
-    for (let i = 0; i < this.placements.length; i++) {
-      if (this.placements[i].hasDancer(dancer)) {
-        return true;
-      }
-    }
-    return false;
+    return DanceEvent.hasDancer(this, dancer);
   }
 
   addPlacement(placement: Placement) {

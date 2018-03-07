@@ -25,6 +25,16 @@ export class Competition implements ICompetition {
     this.linkCode = core.linkCode;
   }
 
+  public static shallowCopy(that: ICompetition): ICompetition {
+    return {
+      rawName: that.rawName,
+      name: that.name,
+      date: that.date,
+      linkCode: that.linkCode,
+      dancedEvents: that.dancedEvents
+    };
+  }
+
   get DanceEvents(): DanceEvent[] {
     return this.dancedEvents;
   }

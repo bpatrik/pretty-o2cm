@@ -14,6 +14,7 @@ import {DanceEvent} from '../../o2cm-parser/entities/DanceEvent';
 import {CacheService} from './cache.service';
 import {DataParserService} from './data-loader.service';
 import {IData, ILoading} from './IData';
+import {QueryParams} from '../QueryParams';
 
 @Injectable()
 export class DataService {
@@ -23,10 +24,7 @@ export class DataService {
   public loading: BehaviorSubject<ILoading>;
   private proxyHTTP: IHTTP;
 
-  queryParams = {
-    heatid: '',
-    compCode: ''
-  };
+  queryParams = {};
 
 
   constructor(private http: HttpClient,
@@ -56,26 +54,26 @@ export class DataService {
     this.loading = new BehaviorSubject<ILoading>(null);
 
     route.queryParams.subscribe((value: Params) => {
-      if (value['firstName'] && value['lastName'] &&
-        value['firstName'] !== this.data.getValue().dancerName.firstName &&
-        value['lastName'] !== this.data.getValue().dancerName.lastName) {
-        this.loadDancer(value['firstName'], value['lastName']);
+      if (value[QueryParams.name.fistName] && value[QueryParams.name.lastName] &&
+        value[QueryParams.name.fistName] !== this.data.getValue().dancerName.firstName &&
+        value[QueryParams.name.lastName] !== this.data.getValue().dancerName.lastName) {
+        this.loadDancer(value[QueryParams.name.fistName], value[QueryParams.name.lastName]);
       }
-      this.queryParams.compCode = value['compCode'];
-      this.queryParams.heatid = value['heatid'];
+      this.queryParams[QueryParams.heatid] = value[QueryParams.heatid];
+      this.queryParams[QueryParams.compCode] = value[QueryParams.compCode];
+      this.queryParams[QueryParams.competitor.lastName] = value[QueryParams.competitor.lastName];
+      this.queryParams[QueryParams.competitor.fistName] = value[QueryParams.competitor.fistName];
     });
 
     this.data.subscribe((value) => {
       if (value.dancerName.firstName === '' || value.dancerName.lastName === '') {
         return;
       }
+      const queryParams = this.queryParams;
+      queryParams[QueryParams.name.fistName] = value.dancerName.firstName;
+      queryParams[QueryParams.name.lastName] = value.dancerName.lastName;
       this.router.navigate([], {
-        queryParams: {
-          firstName: value.dancerName.firstName,
-          lastName: value.dancerName.lastName,
-          compCode: this.queryParams.compCode,
-          heatid: this.queryParams.heatid,
-        }
+        queryParams: queryParams
       });
     });
     // this.loadData();

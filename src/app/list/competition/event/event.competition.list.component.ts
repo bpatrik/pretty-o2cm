@@ -29,6 +29,7 @@ export class CompetitionEventComponent {
   public myPartner: DancerName;
   public myPoint: { value: number, warning: PointWarning };
   @Input() noPointReason: string;
+  @Input() compactLayout;
 
   @Input() set Dance(dance: IDanceEvent) {
     this.dance = dance;
@@ -65,7 +66,7 @@ export class CompetitionEventComponent {
 
     this.myPlacement = DanceEvent.getPlacement(this.dance, this.dancer);
     this.myPartner = Placement.getPartner(this.myPlacement, this.dancer);
-    this.myPoint = DanceEvent.calcPoint(this.dance, this.dancer);
+    this.myPoint = DanceEvent.calcPointForPlacement(this.dance, this.myPlacement);
   }
 
   color() {

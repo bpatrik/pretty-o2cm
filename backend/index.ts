@@ -114,7 +114,7 @@ app.get('/proxy/:url', (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use(['/'], _express.static(_path.join(__dirname, '../dist')));
-app.use(['/list*', '/summary*', '/competitors*', '/event*'], (req: Request, res: Response, next: NextFunction) => {
+app.use(['/list*', '/summary*', '/competitors*', '/event*', '/compare*'], (req: Request, res: Response, next: NextFunction) => {
   res.sendFile(_path.join(__dirname, '../dist', 'index.html'), {maxAge: 31536000});
 
 });

@@ -1,6 +1,6 @@
 <div [ngClass]="{'finalist' : myPlacement.isFinal}"
      class="row border-{{color()}}">
-  <div class="col col-sm-12 col-lg-5">
+  <div [ngClass]="{'col-12  col-lg-12':compactLayout}" class="col col-sm-12 col-lg-5">
     <div class="row">
       <ng-template #placementPop>
         Placement: <strong>{{myPlacement.placement}}</strong> out of <strong>{{Dance.placements.length}}</strong>
@@ -37,7 +37,8 @@
       </div>
     </div>
   </div>
-  <div class="col col-sm-12 col-lg-5 text-center" style="white-space: nowrap"
+  <div [ngClass]="{'col-12 col-lg-12':compactLayout}"
+       class="col col-sm-12 col-lg-5 text-center" style="white-space: nowrap"
        [routerLink]="['/event']"
        [queryParams]="{
         compCode:competition.linkCode,
@@ -51,10 +52,10 @@
     </ng-container>
   </div>
 
-  <div class="col  col-lg-1 text-center " style="white-space: nowrap">
+  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col  col-lg-1 text-center " style="white-space: nowrap">
     <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{myPartner.firstName}}</a>
   </div>
-  <div class="col  col-lg-1 text-right" style="white-space: nowrap">
+  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col  col-lg-1 text-right" style="white-space: nowrap">
     <ng-container *ngIf="myPoint.value>0">
       <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{myPoint.value}}</span>
 

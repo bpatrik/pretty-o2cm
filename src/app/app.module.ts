@@ -22,6 +22,7 @@ import {DataParserService} from './services/data-loader.service';
 import {CompetitorsComponent} from './competitors/competitors.component';
 import {CompetitorsPanelComponent} from './competitors/panel/panel.competitors.component';
 import {EventComponent} from './event/event.component';
+import {CompareComponent} from './compare/compare.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {EventComponent} from './event/event.component';
     LoadingFrameComponent,
     CompetitorsComponent,
     CompetitorsPanelComponent,
-    EventComponent
+    EventComponent,
+    CompareComponent
   ],
   imports: [
     BrowserModule,

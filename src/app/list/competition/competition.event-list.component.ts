@@ -18,6 +18,7 @@ export class CompetitionEventListComponent {
   @Input() showPercentage: boolean;
   @Input() competition: ICompetition;
   @Input() dancer: DancerName;
+  @Input() compactLayout = false;
   PointSkillTypes = PointSkillTypes;
 
 

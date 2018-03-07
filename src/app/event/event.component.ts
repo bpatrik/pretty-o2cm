@@ -7,6 +7,7 @@ import {ICompetition} from '../../o2cm-parser/entities/Competition';
 import {Dancer} from '../../o2cm-parser/entities/Dancer';
 import {PointSkillTypes} from '../../o2cm-parser/entities/Types';
 import {Rules} from '../services/Rules';
+import {QueryParams} from '../QueryParams';
 
 
 @Component({
@@ -28,8 +29,8 @@ export class EventComponent {
   constructor(public dataService: DataService,
               private route: ActivatedRoute) {
     route.queryParams.subscribe((value: Params) => {
-      this.eventFilter.compCode = value['compCode'];
-      this.eventFilter.heatid = value['heatid'];
+      this.eventFilter.compCode = value[QueryParams.compCode];
+      this.eventFilter.heatid = value[QueryParams.heatid];
       this.getDanceEvent();
     });
     this.dataService.data.subscribe(() => {
@@ -51,8 +52,6 @@ export class EventComponent {
     }
     this.dance = null;
     for (let i = 0; i < this.competition.dancedEvents.length; i++) {
-      console.log(this.competition.dancedEvents[i].heatid,
-        this.eventFilter.heatid, this.competition.dancedEvents[i].heatid === this.eventFilter.heatid);
       if (this.competition.dancedEvents[i].heatid === this.eventFilter.heatid) {
         this.dance = this.competition.dancedEvents[i];
         break;

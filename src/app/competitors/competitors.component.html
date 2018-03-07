@@ -91,6 +91,7 @@
       <app-competitors-panel-component
         [panelName]="'All'"
         [danceEvents]="AllDances"
+        [comparingDate]="dateEndFilter"
         [roleFilter]="roleFilter">
       </app-competitors-panel-component>
     </div>
@@ -101,6 +102,7 @@
         <app-competitors-panel-component
           [panelName]="StyleTypes[styles.style]"
           [danceEvents]="styles.dances"
+          [comparingDate]="dateEndFilter"
           [roleFilter]="roleFilter">
         </app-competitors-panel-component>
       </div>
@@ -113,6 +115,7 @@
           [panelName]="StyleTypes[dance.style]+': '+DanceTypes[dance.dance]"
           [danceEvents]="dance.dances"
           [short]="true"
+          [comparingDate]="dateEndFilter"
           [roleFilter]="roleFilter">
         </app-competitors-panel-component>
       </div>

@@ -36,10 +36,22 @@
   color: #6c757d;
 }
 
+.compare-link{
+  color: #6c757d;
+}
+.compare-link:hover{
+  color: #212529;
+}
+
+
 .rank-icon .oi-chevron-top {
   position: absolute;
 }
 
 .role{
   height: 20px;
+}
+
+.tooltip-inner{
+  max-width: none;
 }
