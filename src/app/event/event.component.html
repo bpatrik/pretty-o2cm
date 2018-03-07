@@ -2,23 +2,27 @@
   <ng-container *ngIf="competition && dance">
     <div class="card" style="width: 100%">
       <div class="card-header">
-        {{competition.rawName}}: {{dance.raw}}
+        {{competition.rawName}}: <strong>{{dance.raw}}</strong>
       </div>
       <div class="card-body">
         <div [ngClass]="{'me':this.myPlacementIndex ==i}" class="row"
              *ngFor="let plm of dance.placements;let i = index">
-          <div class="col-2" style="white-space: nowrap">
+          <div class="col-2 col-lg-1 offset-lg-2" style="white-space: nowrap">
             {{plm.placement}} / {{dance.placements.length}}
           </div>
-          <div class="col-3" style="white-space: nowrap">
-            ({{plm.leaderNumber}}) {{plm.leader.firstName}} {{plm.leader.lastName}}
+          <div class="col-3 col-lg-3" style="white-space: nowrap">
+            <a  class="dancer" [href]="url(plm.leader)">
+              ({{plm.leaderNumber}}) {{plm.leader.firstName}} {{plm.leader.lastName}}
+            </a>
           </div>
 
-          <div class="col-3" style="white-space: nowrap">
-            {{plm.follower.firstName}} {{plm.follower.lastName}}
+          <div class="col-3 col-lg-2" style="white-space: nowrap">
+            <a class="dancer" [href]="url(plm.follower)">
+              {{plm.follower.firstName}} {{plm.follower.lastName}}
+            </a>
           </div>
 
-          <div class="col  col-lg-1 text-right" style="white-space: nowrap">
+          <div class="col col-lg-1 text-right" style="white-space: nowrap">
             <ng-container *ngIf="points[i].value>0">
               <span class="badge bg-{{color()}}" *ngIf="!noPointReason()" title="points">+{{points[i].value}}</span>
             </ng-container>

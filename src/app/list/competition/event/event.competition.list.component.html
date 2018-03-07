@@ -38,24 +38,17 @@
     </div>
   </div>
   <div [ngClass]="{'col-12 col-lg-12':compactLayout}"
-       class="col col-sm-12 col-lg-5 text-center" style="white-space: nowrap"
-       [routerLink]="['/event']"
-       [queryParams]="{
-        compCode:competition.linkCode,
-        heatid:dance.heatid,
-        firstName:dataService.data.value.dancerName.firstName,
-        lastName:dataService.data.value.dancerName.lastName}"
-  >
+       class="col col-sm-12 col-lg-4 text-center" style="white-space: nowrap">
     <ng-container *ngFor="let d of Dance.dances; let i=index">
       <ng-container *ngIf="i>0">/</ng-container>
       {{DanceTypes[d]}}
     </ng-container>
   </div>
 
-  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col  col-lg-1 text-center " style="white-space: nowrap">
+  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col col-lg-2 text-center " style="white-space: nowrap">
     <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{myPartner.firstName}}</a>
   </div>
-  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col  col-lg-1 text-right" style="white-space: nowrap">
+  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col col-lg-1 text-right last-col" style="white-space: nowrap">
     <ng-container *ngIf="myPoint.value>0">
       <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{myPoint.value}}</span>
 
@@ -74,5 +67,14 @@
           container="body"></span>
 
     <span *ngIf="myPlacement.isFinal" title="being in finals" class="oi oi-badge  text-{{color()}}"></span>
+
+    <button *ngIf="!compactLayout" class="btn btn-light btn-sm"
+            [routerLink]="['/event']"
+            [queryParams]="{
+        compCode:competition.linkCode,
+        heatid:dance.heatid,
+        firstName:dataService.data.value.dancerName.firstName,
+        lastName:dataService.data.value.dancerName.lastName}"><span
+      class="oi oi-chevron-right"></span></button>
   </div>
 </div>

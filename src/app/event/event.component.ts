@@ -8,6 +8,7 @@ import {Dancer} from '../../o2cm-parser/entities/Dancer';
 import {PointSkillTypes} from '../../o2cm-parser/entities/Types';
 import {Rules} from '../services/Rules';
 import {QueryParams} from '../QueryParams';
+import {DancerName} from '../services/IData';
 
 
 @Component({
@@ -79,6 +80,16 @@ export class EventComponent {
       }
     }
     return null;
+  }
+
+
+  url(dancer: DancerName) {
+    return window.location.origin +
+      window.location.pathname +
+      '?firstName=' +
+      dancer.firstName +
+      '&lastName=' +
+      dancer.lastName;
   }
 
 
