@@ -2,7 +2,7 @@
   font-weight: bold;
 }
 
-.card{
+.card {
   margin-top: 15px;
   margin-bottom: 15px;
 }
@@ -31,27 +31,36 @@
   bottom: 7px;
 }
 
-.placement-section{
+.placement-section {
   font-weight: normal;
   color: #6c757d;
 }
 
-.compare-link{
+.compare-link {
   color: #6c757d;
 }
-.compare-link:hover{
+
+.compare-link:hover {
   color: #212529;
 }
 
+.expand-icon.oi-chevron-bottom, .expand-icon.oi-chevron-top {
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.expand-icon.oi-chevron-bottom:hover, .expand-icon.oi-chevron-top:hover {
+  color: #212529;
+}
 
 .rank-icon .oi-chevron-top {
   position: absolute;
 }
 
-.role{
+.role {
   height: 20px;
 }
 
-.tooltip-inner{
+.tooltip-inner {
   max-width: none;
 }

@@ -1,16 +1,16 @@
 <div class="card">
   <div class="card-header  text-center">
     {{panelName}}
-    <div class="float-right" *ngIf="myRank<rankings.length*0.7">
+    <div class="float-right" *ngIf="showRanking() == true">
       <button
         [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
-        (click)="toggleExpand($event)">
+        (click)="toggleExpand()">
         <span *ngIf="!expand" class="oi oi-chevron-right"></span>
         <span *ngIf="expand" class="oi oi-chevron-bottom"></span>
       </button>
     </div>
   </div>
-  <div class="card-body" *ngIf="myRank<rankings.length*0.7">
+  <div class="card-body" *ngIf="showRanking() == true">
     <div>
       <ng-template #leaderPop>
         Leader
@@ -24,7 +24,7 @@
 
       <div class="row" *ngIf="renderSections.openTop" (click)="toggleExpand()">
         <div class="col-12 text-center">
-          <span class="oi oi-ellipses"></span>
+          <span  [ngClass]="expand ? 'oi-ellipses': 'oi-chevron-top'"  class="oi expand-icon"></span>
         </div>
       </div>
       <ng-container *ngFor="let rank of rankings; let i = index">
@@ -68,9 +68,13 @@
               <ng-container *ngIf="rank.details">
                 <ng-template #detailsPop>
                   Scores:
-                  <div *ngFor="let a of rank.details.score" style="white-space: nowrap">{{a.score| number}}: {{a.from}}</div>
+                  <div *ngFor="let a of rank.details.score" style="white-space: nowrap">{{a.score| number}}:
+                    {{a.from}}
+                  </div>
                   Accuracy:
-                  <div *ngFor="let a of rank.details.accuracy" style="white-space: nowrap">{{a.accuracy | number}}: {{a.from}}</div>
+                  <div *ngFor="let a of rank.details.accuracy" style="white-space: nowrap">{{a.accuracy | number}}:
+                    {{a.from}}
+                  </div>
                 </ng-template>
                 <span [tooltip]="detailsPop"
                       container="body">
@@ -95,19 +99,21 @@
         <div class="row"
              *ngIf="i==rankings.length-1">
           <div class="col-12 text-center">
-            <span class="oi oi-ellipses" (click)="toggleExpand($event)"></span>
+            <span [ngClass]="expand ? 'oi-ellipses': 'oi-chevron-bottom'" class="oi expand-icon"
+                  (click)="toggleExpand()"></span>
           </div>
         </div>
       </ng-container>
     </div>
   </div>
 
-  <div class="card-footer" *ngIf="gotBetterCount > 0 && myRank<rankings.length*0.7">
-    On your last competition, you outperformed <span class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
+  <div class="card-footer" *ngIf="gotBetterCount > 0 && showRanking() == true">
+    On your last competition, you outperformed <span
+    class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
     who usually perform better than you.
   </div>
 
-  <div class="card-body text-center" *ngIf="myRank>=rankings.length*0.7">
+  <div class="card-body text-center" *ngIf="showRanking() == false">
     Not enough data to show :(
   </div>
 </div>

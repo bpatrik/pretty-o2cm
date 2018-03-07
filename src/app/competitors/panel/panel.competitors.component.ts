@@ -98,6 +98,8 @@ export class CompetitorsPanelComponent implements OnChanges {
       this.renderSections.first.end = Math.min(this.rankings.length - 1, this.myRank + this.maxRender.compact / 2);
     }
     this.renderSections.openTop = this.renderSections.first.start > 0;
+
+    console.log(this.panelName, this.renderSections);
   }
 
   private calcRanks() {
@@ -191,16 +193,17 @@ export class CompetitorsPanelComponent implements OnChanges {
       return b.accuracy - a.accuracy;
     });
 
-    //const avgAcc = this.rankings.reduce((p, c, i) => (i === 0 ? 0 : p + c.accuracy), 0) / (this.rankings.length - 1);
     let endIndex = this.rankings.findIndex(r => (r.accuracy < this.rankings[1].accuracy * 0.3)); // first one is 'me'
     endIndex = Math.min(endIndex, rankings.length * 0.5, 300);
     endIndex = Math.max(endIndex, this.maxRender.expanded);
+    console.log(this.panelName, endIndex, this.maxRender.expanded, this.rankings.length);
 
 //    console.log(this.panelName, avgAcc, this.rankings[1].accuracy);
 
     if (this.rankings[Math.floor(this.rankings.length / 3)].accuracy === this.rankings[this.rankings.length - 1].accuracy) {
       endIndex = this.rankings.length - 1;
     }
+    console.log(this.panelName, endIndex, this.maxRender.expanded, this.rankings.length);
 
     this.rankings = this.rankings.slice(0, endIndex)
       .filter((r) => r.role === this.roleFilter ||
@@ -243,10 +246,9 @@ export class CompetitorsPanelComponent implements OnChanges {
       dancer.lastName;
   }
 
-  toggleExpand(event) {
+  toggleExpand() {
     this.expand = !this.expand;
     this.updateRenderBoundaries();
-    event.stopPropagation();
   }
 
   componentToHex(c) {
@@ -294,6 +296,11 @@ export class CompetitorsPanelComponent implements OnChanges {
       }
     }
     return '';
+  }
+
+  showRanking(): boolean {
+    return this.renderSections.openTop === false ||
+      this.myRank < this.rankings.length - this.maxRender.expanded / 3;
   }
 
 }
