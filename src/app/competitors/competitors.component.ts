@@ -6,6 +6,7 @@ import {IDatedDanceEvent} from './panel/IDatedDanceEvent';
 import {RoleType} from './RoleType';
 import {Dancer} from '../../o2cm-parser/entities/Dancer';
 import {Cookie} from 'ng2-cookies';
+import {ICompetition} from '../../o2cm-parser/entities/Competition';
 
 
 @Component({
@@ -81,6 +82,14 @@ export class CompetitorsComponent {
       this.generateEventsPerDance();
     }
     return this.perDance;
+  }
+
+  get ascComps(): ICompetition[] {
+    return this.dataService.data.getValue().competitions.sort((a, b) => a.date - b.date);
+  }
+
+  get descComps(): ICompetition[]  {
+    return this.dataService.data.getValue().competitions.sort((a, b) => b.date - a.date);
   }
 
   generateEventsPerStyle() {

@@ -57,11 +57,15 @@ export class CompetitionEventComponent {
 
 
   constructor(public dataService: DataService) {
+
   }
 
   onUpdate() {
     if (!this.dance || !this.dancer) {
       return;
+    }
+    if (window.screen.width < 576) {
+      this.compactLayout = true;
     }
 
     this.myPlacement = DanceEvent.getPlacement(this.dance, this.dancer);
@@ -95,6 +99,26 @@ export class CompetitionEventComponent {
     }
     return '';
 
+  }
+
+  renderDances(): string {
+    let txt = '';
+    for (let i = 0; i < this.dance.dances.length; i++) {
+      txt += DanceTypes[this.dance.dances[i]];
+      if (i < this.dance.dances.length - 1) {
+        txt += ' / ';
+      }
+    }
+    if (txt.length > 10 && this.compactLayout === true) {
+      txt = '';
+      for (let i = 0; i < this.dance.dances.length; i++) {
+        txt += DanceTypes.toLetter[this.dance.dances[i]];
+        if (i < this.dance.dances.length - 1) {
+          txt += '/';
+        }
+      }
+    }
+    return txt;
   }
 
 

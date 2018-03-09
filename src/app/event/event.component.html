@@ -1,40 +1,48 @@
 <app-frame>
-  <ng-container *ngIf="competition && dance">
-    <div class="card" style="width: 100%">
-      <div class="card-header">
-        {{competition.rawName}}: <strong>{{dance.raw}}</strong>
-      </div>
-      <div class="card-body">
-        <div [ngClass]="{'me':this.myPlacementIndex ==i}" class="row"
-             *ngFor="let plm of dance.placements;let i = index">
-          <div class="col-2 col-lg-1 offset-lg-2" style="white-space: nowrap">
-            {{plm.placement}} / {{dance.placements.length}}
-          </div>
-          <div class="col-3 col-lg-3" style="white-space: nowrap">
-            <a  class="dancer" [href]="url(plm.leader)">
-              ({{plm.leaderNumber}}) {{plm.leader.firstName}} {{plm.leader.lastName}}
-            </a>
-          </div>
+  <div class="col-12 col-lg-8">
+    <ng-container *ngIf="competition && dance">
+      <div class="card" style="width: 100%">
+        <div class="card-header">
+          {{competition.rawName}}: <br/>
+          <strong>{{dance.raw}}</strong>
+        </div>
+        <div class="card-body">
+          <div [ngClass]="{'me':this.myPlacementIndex ==i}" class="row placement"
+               *ngFor="let plm of dance.placements;let i = index">
+            <div class="col-2 col-sm-2" style="white-space: nowrap">
+              {{plm.placement}} / {{dance.placements.length}}
+            </div>
+            <div class="col-10 col-sm-5 row" style="white-space: nowrap">
+                <div class="col-2 text-right">
+                  ({{plm.leaderNumber}})&nbsp;
+                </div>
+                <div class="col-10">
+                  <a class="dancer" [href]="url(plm.leader)">
+                    <img class="role" src="assets/leader.svg"/>{{plm.leader.firstName}} {{plm.leader.lastName}}
+                  </a>
+                </div>
+            </div>
 
-          <div class="col-3 col-lg-2" style="white-space: nowrap">
-            <a class="dancer" [href]="url(plm.follower)">
-              {{plm.follower.firstName}} {{plm.follower.lastName}}
-            </a>
-          </div>
+            <div class="col-6 offset-3 col-sm-3 offset-sm-0" style="white-space: nowrap">
+              <a class="dancer" [href]="url(plm.follower)">
+                <img class="role" src="assets/follower.svg"/>{{plm.follower.firstName}} {{plm.follower.lastName}}
+              </a>
+            </div>
 
-          <div class="col col-lg-1 text-right" style="white-space: nowrap">
-            <ng-container *ngIf="points[i].value>0">
-              <span class="badge bg-{{color()}}" *ngIf="!noPointReason()" title="points">+{{points[i].value}}</span>
-            </ng-container>
-            <span *ngIf="plm.isFinal" title="being in finals" class="oi oi-badge  text-{{color()}}"></span>
+            <div class="col-3 col-sm-2 text-right" style="white-space: nowrap">
+              <ng-container *ngIf="points[i].value>0">
+                <span class="badge bg-{{color()}}" *ngIf="!noPointReason()" title="points">+{{points[i].value}}</span>
+              </ng-container>
+              <span *ngIf="plm.isFinal" title="being in finals" class="oi oi-badge  text-{{color()}}"></span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-  </ng-container>
+    </ng-container>
 
-  <ng-container *ngIf="!competition || !dance">
-    No event to show :(
-  </ng-container>
+    <ng-container *ngIf="!competition || !dance">
+      No event to show :(
+    </ng-container>
+  </div>
 </app-frame>

@@ -58,6 +58,7 @@ export class CompetitorsPanelComponent implements OnChanges {
   gotBetterCount = 0;
   renderSections = {
     openTop: false,
+    expandedOpenTop: false,
     first: {
       start: 0,
       end: 0
@@ -85,6 +86,7 @@ export class CompetitorsPanelComponent implements OnChanges {
   }
 
   private updateRenderBoundaries() {
+    this.renderSections.expandedOpenTop = Math.floor(Math.max(0, this.myRank - this.maxRender.expanded / 2)) > 0;
     if (this.expand) {
       this.renderSections.first.start = Math.floor(Math.max(0, this.myRank - this.maxRender.expanded / 2));
       this.renderSections.first.end = Math.floor(Math.min(this.rankings.length - 1,
@@ -99,7 +101,6 @@ export class CompetitorsPanelComponent implements OnChanges {
     }
     this.renderSections.openTop = this.renderSections.first.start > 0;
 
-    console.log(this.panelName, this.renderSections);
   }
 
   private calcRanks() {
@@ -196,14 +197,12 @@ export class CompetitorsPanelComponent implements OnChanges {
     let endIndex = this.rankings.findIndex(r => (r.accuracy < this.rankings[1].accuracy * 0.3)); // first one is 'me'
     endIndex = Math.min(endIndex, rankings.length * 0.5, 300);
     endIndex = Math.max(endIndex, this.maxRender.expanded);
-    console.log(this.panelName, endIndex, this.maxRender.expanded, this.rankings.length);
 
 //    console.log(this.panelName, avgAcc, this.rankings[1].accuracy);
 
     if (this.rankings[Math.floor(this.rankings.length / 3)].accuracy === this.rankings[this.rankings.length - 1].accuracy) {
       endIndex = this.rankings.length - 1;
     }
-    console.log(this.panelName, endIndex, this.maxRender.expanded, this.rankings.length);
 
     this.rankings = this.rankings.slice(0, endIndex)
       .filter((r) => r.role === this.roleFilter ||
@@ -299,8 +298,8 @@ export class CompetitorsPanelComponent implements OnChanges {
   }
 
   showRanking(): boolean {
-    return this.renderSections.openTop === false ||
-      this.myRank < this.rankings.length - this.maxRender.expanded / 3;
+    return this.renderSections.expandedOpenTop === false ||
+      this.myRank <= this.rankings.length - this.maxRender.expanded / 6;
   }
 
 }

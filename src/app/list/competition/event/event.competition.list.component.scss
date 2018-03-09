@@ -28,10 +28,19 @@
   padding-right: 10px;
 }
 
+.row {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+button.btn-sm {
+  margin-top: -5px;
+  padding: 0 0.5rem;
+}
+
 .last-col {
   padding-right: 0;
 }
-
 
 .last-col .oi-badge {
   margin-right: 5px;

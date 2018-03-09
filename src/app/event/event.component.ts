@@ -59,7 +59,13 @@ export class EventComponent {
       }
     }
 
-    this.dance.placements.sort((a, b) => a.placement - b.placement);
+    this.dance.placements.sort((a, b) => {
+      if (a.placement === b.placement) {
+        return Dancer.compare(a.leader, b.leader);
+
+      }
+      return a.placement - b.placement;
+    });
     const me = this.dataService.data.getValue().dancerName;
     this.myPlacementIndex = this.dance.placements.findIndex((plm) => Dancer.equals(plm.leader, me) || Dancer.equals(plm.follower, me));
     this.points = [];

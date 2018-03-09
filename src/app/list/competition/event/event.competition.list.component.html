@@ -1,13 +1,13 @@
 <div [ngClass]="{'finalist' : myPlacement.isFinal}"
      class="row border-{{color()}}">
-  <div [ngClass]="{'col-12  col-lg-12':compactLayout}" class="col col-sm-12 col-lg-5">
+  <div [ngClass]="{' col-lg-12':compactLayout}" class="col-12 col-lg-5">
     <div class="row">
       <ng-template #placementPop>
         Placement: <strong>{{myPlacement.placement}}</strong> out of <strong>{{Dance.placements.length}}</strong>
         couples. <br/>
         This is better then <strong>{{percent()}}%</strong> of the couples.
       </ng-template>
-      <div class="col col-sm-4 col-md-4 text-center clickable"
+      <div [ngClass]="compactLayout?('border-bottom-'+color()):''" class="col col-sm-4 col-md-4 text-center clickable"
            (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
         <mwl-gauge
           class="mwl-gauge-{{color()}} {{color()}}"
@@ -28,27 +28,27 @@
       </div>
 
       <div
-        [ngClass]="[myPlacement.isFinal? 'bg-'+color():'border-side-'+color()]"
+        [ngClass]="[myPlacement.isFinal? 'bg-'+color():'border-side-'+color(), compactLayout?('border-bottom-'+color()):'']"
         class="col col-sm-4 col-md-4 text-center">
         {{EventSkillTypes[Dance.eventSkill.type]}}
       </div>
-      <div class="col col-sm-4 col-md-4 text-center">
+      <div
+        [ngClass]="compactLayout?('border-bottom-'+color()):''"
+        class="col col-sm-4 col-md-4 text-center">
         {{StyleTypes[Dance.style]}}
       </div>
     </div>
   </div>
-  <div [ngClass]="{'col-12 col-lg-12':compactLayout}"
+  <div [ngClass]="{'col-12 col-sm-4':compactLayout}"
        class="col col-sm-12 col-lg-4 text-center" style="white-space: nowrap">
-    <ng-container *ngFor="let d of Dance.dances; let i=index">
-      <ng-container *ngIf="i>0">/</ng-container>
-      {{DanceTypes[d]}}
-    </ng-container>
+    {{renderDances()}}
   </div>
 
-  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col col-lg-2 text-center " style="white-space: nowrap">
+  <div [ngClass]="{'col-6 col-sm-4 col-lg-4':compactLayout}" class="col col-lg-2 text-center " style="white-space: nowrap">
     <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{myPartner.firstName}}</a>
   </div>
-  <div [ngClass]="{'col-6 col-lg-6':compactLayout}" class="col col-lg-1 text-right last-col" style="white-space: nowrap">
+  <div [ngClass]="{'col-6 col-sm-4 col-lg-4':compactLayout}" class="col col-lg-1 text-right last-col"
+       style="white-space: nowrap">
     <ng-container *ngIf="myPoint.value>0">
       <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{myPoint.value}}</span>
 
