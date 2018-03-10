@@ -56,7 +56,27 @@ server.on('listening', () => {
 });
 
 const FiFoCache: { key: string, body: string }[] = [];
-const MAX_CACHE_SIZE = 100;
+const MAX_CACHE_SIZE = 120;
+const shapeBody = (body: string) => {
+  // remove dancers list
+  const index = body.indexOf('id=selEnt');
+  if (index !== -1) {
+    const a = body.lastIndexOf('<SELECT', index);
+    const b = body.lastIndexOf('<select', index);
+    const selIndex = Math.max(a, b);
+    if (selIndex !== -1) {
+      const ae1 = body.indexOf('</SELECT>', selIndex);
+      const ae2 = body.indexOf('</select>', selIndex);
+      if (ae1 !== -1 && ae1 > ae2) {
+        body = body.substring(0, selIndex) + body.substring(ae1 + 9);
+      } else if (ae2 !== -1) {
+        body = body.substring(0, selIndex) + body.substring(ae2 + 9);
+      }
+    }
+  }
+  return body;
+};
+
 app.get('/proxy/:url', (req: Request, res: Response, next: NextFunction) => {
   try {
     const key = req.params.url + '?body' + req.query.body;
@@ -77,8 +97,8 @@ app.get('/proxy/:url', (req: Request, res: Response, next: NextFunction) => {
       if (error) {
         return next(error);
       }
-
       if (response.statusCode === 200) {
+        body = shapeBody(body);
         FiFoCache.push({key: key, body: body});
         if (FiFoCache.length > MAX_CACHE_SIZE) {
           FiFoCache.shift();
@@ -94,7 +114,7 @@ app.get('/proxy/:url', (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use(['/'], _express.static(_path.join(__dirname, '../dist')));
-app.use(['/list*', '/summary*'], (req: Request, res: Response, next: NextFunction) => {
+app.use(['/list*', '/summary*', '/competitors*', '/event*', '/compare*'], (req: Request, res: Response, next: NextFunction) => {
   res.sendFile(_path.join(__dirname, '../dist', 'index.html'), {maxAge: 31536000});
 
 });

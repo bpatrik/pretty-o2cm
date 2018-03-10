@@ -1,0 +1,76 @@
+.me {
+  font-weight: bold;
+}
+
+.card {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.circle {
+  color: #ffc107;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dancer {
+  color: #212529;
+}
+
+.oi-ellipses {
+  font-size: x-large;
+}
+
+.rank-icon {
+  display: inline-block;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  bottom: 7px;
+}
+
+.placement-section {
+  font-weight: normal;
+  color: #6c757d;
+}
+
+.compare-link {
+  color: #6c757d;
+}
+
+.compare-link:hover {
+  color: #212529;
+}
+
+.expand-icon.oi-chevron-bottom, .expand-icon.oi-chevron-top {
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.expand-icon.oi-chevron-bottom:hover, .expand-icon.oi-chevron-top:hover {
+  color: #212529;
+}
+
+.rank-icon .oi-chevron-top {
+  position: absolute;
+}
+
+.role {
+  height: 20px;
+}
+
+.tooltip-inner {
+  max-width: none;
+}
+
+.entry .compare-link{
+  color: #e3e3e3;
+}
+.entry:hover .compare-link{
+  color: #6c757d;
+}
+.entry:hover  .compare-link:hover{
+  color: #212529;
+}

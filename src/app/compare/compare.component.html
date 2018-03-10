@@ -1,0 +1,41 @@
+<app-frame>
+  <div class="col-md-12 justify-content-center">
+    <div class="row">
+      <div class="col-6 order-1  col-md-4 order-md-0">
+        <div class="alert alert-primary" role="alert">
+          <h3>{{dataService.data.value.dancerName.firstName}} {{dataService.data.value.dancerName.lastName}}</h3>
+        </div>
+      </div>
+      <div class="col-12 order-0 col-md-4 order-md-1 text-center align-text-bottom align-middle">
+        <h3  class="align-self-center">Common competitions</h3>
+      </div>
+      <div class="col-6 order-2 col-md-4 order-md-2">
+        <div class="alert alert-secondary text-right" role="alert">
+          <h3>{{competitor.firstName}} {{competitor.lastName}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="competition-event-container" *ngFor="let comp of filteredCompetitions">
+          <app-competition-event-list
+            [showPercentage]="showPercentage"
+            [dancer]="dataService.data.value.dancerName"
+            [compactLayout]="true"
+            (pointPresentation)="onPointPresentatoinChange()"
+            [competition]="comp"></app-competition-event-list>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="competition-event-container" *ngFor="let comp of filteredCompetitions">
+          <app-competition-event-list
+            [showPercentage]="showPercentage"
+            [dancer]="competitor"
+            [compactLayout]="true"
+            (pointPresentation)="onPointPresentatoinChange()"
+            [competition]="comp"></app-competition-event-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-frame>

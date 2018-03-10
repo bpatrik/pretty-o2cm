@@ -1,7 +1,9 @@
 <app-frame>
   <div class="col-md-12 justify-content-center">
     <div class="card ">
-      <div class="card-header text-white bg-primary">
+      <div
+        [ngClass]="{'bg-primary text-white' : skillFilter!==-1 || styleFilter!==-1 || danceFilter!==-1 || isFinalsFilter!==-1}"
+        class="card-header">
         Filters
       </div>
       <div class="card-body">
@@ -39,7 +41,9 @@
     <div class="competition-event-container" *ngFor="let comp of filteredComps">
       <app-competition-event-list
         [showPercentage]="showPercentage"
-        (pointPresentation)="onPointPresentatoinChange()" [competition]="comp"></app-competition-event-list>
+        [dancer]="dataService.data.value.dancerName"
+        (pointPresentation)="onPointPresentatoinChange()"
+        [competition]="comp"></app-competition-event-list>
     </div>
   </div>
 </app-frame>

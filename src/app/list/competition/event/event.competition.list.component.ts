@@ -1,8 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {IDanceList} from '../../../services/IData';
+import {DancerName, IDanceList} from '../../../services/IData';
 import {Rules} from '../../../services/Rules';
 import {DanceTypes, EventSkillTypes, PointSkillTypes, StyleTypes} from '../../../../o2cm-parser/entities/Types';
-import {PointWarning} from '../../../../o2cm-parser/entities/DanceEvent';
+import {DanceEvent, IDanceEvent, PointWarning} from '../../../../o2cm-parser/entities/DanceEvent';
+import {DataService} from '../../../services/data.service';
+import {IPlacement, Placement} from '../../../../o2cm-parser/entities/Placement';
+import {ICompetition} from '../../../../o2cm-parser/entities/Competition';
+import {IPointSummary} from '../../../services/ISummary';
 
 
 @Component({
@@ -17,32 +21,77 @@ export class CompetitionEventComponent {
   PointSkillTypes = PointSkillTypes;
   EventSkillTypes = EventSkillTypes;
   Rules = Rules;
+  private dance: IDanceEvent;
+  private dancer: DancerName;
 
 
+  public myPlacement: IPlacement;
+  public myPartner: DancerName;
+  public myPoint: { value: number, warning: PointWarning };
   @Input() noPointReason: string;
-  @Input() dance: IDanceList;
+  @Input() compactLayout;
+
+  @Input() set Dance(dance: IDanceEvent) {
+    this.dance = dance;
+    this.onUpdate();
+  }
+
+  get Dance(): IDanceEvent {
+    return this.dance;
+  }
+
+  @Input() competition: ICompetition;
+
+
+  get Dancer(): DancerName {
+    return this.dancer;
+  }
+
+  @Input() set Dancer(value: DancerName) {
+    this.dancer = value;
+    this.onUpdate();
+  }
+
   @Input() showPercentage: boolean;
   @Output() pointPresentation = new EventEmitter();
+
+
+  constructor(public dataService: DataService) {
+
+  }
+
+  onUpdate() {
+    if (!this.dance || !this.dancer) {
+      return;
+    }
+    if (window.screen.width < 576) {
+      this.compactLayout = true;
+    }
+
+    this.myPlacement = DanceEvent.getPlacement(this.dance, this.dancer);
+    this.myPartner = Placement.getPartner(this.myPlacement, this.dancer);
+    this.myPoint = DanceEvent.calcPointForPlacement(this.dance, this.myPlacement);
+  }
 
   color() {
     return PointSkillTypes[this.dance.pointSkill].toLowerCase();
   }
 
   percent() {
-    return Math.round((this.dance.coupleCount - this.dance.placement) / this.dance.coupleCount * 100);
+    return Math.round((this.dance.placements.length - this.myPlacement.placement) / this.dance.placements.length * 100);
   }
 
   url() {
     return window.location.origin +
       window.location.pathname +
       '?firstName=' +
-      this.dance.partner.firstName +
+      this.myPartner.firstName +
       '&lastName=' +
-      this.dance.partner.lastName;
+      this.myPartner.lastName;
   }
 
   pointWarningStr(): string {
-    switch (this.dance.point.warning) {
+    switch (this.myPoint.warning) {
       case PointWarning.NOQF_W_MANY_COUPELS:
         return 'No quarter final detected, but more then 20 couples were competing';
       case PointWarning.QF_W_FEW_COUPLES:
@@ -50,6 +99,26 @@ export class CompetitionEventComponent {
     }
     return '';
 
+  }
+
+  renderDances(): string {
+    let txt = '';
+    for (let i = 0; i < this.dance.dances.length; i++) {
+      txt += DanceTypes[this.dance.dances[i]];
+      if (i < this.dance.dances.length - 1) {
+        txt += ' / ';
+      }
+    }
+    if (txt.length > 10 && this.compactLayout === true) {
+      txt = '';
+      for (let i = 0; i < this.dance.dances.length; i++) {
+        txt += DanceTypes.toLetter[this.dance.dances[i]];
+        if (i < this.dance.dances.length - 1) {
+          txt += '/';
+        }
+      }
+    }
+    return txt;
   }
 
 

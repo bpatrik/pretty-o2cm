@@ -3,8 +3,8 @@ export class Utils {
     key: number;
     value: string;
   }> {
-    let arr: Array<{ key: number; value: string; }> = [];
-    for (let enumMember in EnumType) {
+    const arr: Array<{ key: number; value: string; }> = [];
+    for (const enumMember in EnumType) {
       if (!EnumType.hasOwnProperty(enumMember)) {
         continue;
       }

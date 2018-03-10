@@ -1,8 +1,4 @@
-import {AgeTypes, DanceTypes, DivisionTypes, PointSkillTypes, StyleTypes} from './Types';
-import {ISkill} from './DanceEvent';
-import {IPlacement} from './Placement';
 import {DancerName} from '../../app/services/IData';
-import {ICompetition} from './Competition';
 
 
 export class Dancer implements DancerName {
@@ -14,6 +10,10 @@ export class Dancer implements DancerName {
     const n = Dancer.getName(name);
     this.firstName = n.firstName;
     this.lastName = n.lastName;
+  }
+
+  static isTBA(dancer: DancerName): boolean {
+    return dancer.firstName.toLowerCase() === 'tba' && dancer.lastName.toLowerCase() === 'tba';
   }
 
   public static getName(name: string): DancerName {
@@ -32,9 +32,37 @@ export class Dancer implements DancerName {
     };
   }
 
-  equals(other: DancerName) {
-    return this.firstName.toLowerCase() === other.firstName.toLowerCase() && this.lastName.toLowerCase() === other.lastName.toLowerCase();
+  public static equals(that: DancerName, other: DancerName): boolean {
+    return that.firstName.toLowerCase() === other.firstName.toLowerCase()
+      && that.lastName.toLowerCase() === other.lastName.toLowerCase();
   }
 
+  public static compare(that: DancerName, other: DancerName) {
+    if (that.lastName < other.lastName) {
+      return -1;
+    }
+    if (that.lastName > other.lastName) {
+      return 1;
+    }
+
+    if (that.firstName < other.firstName) {
+      return -1;
+    }
+    if (that.firstName > other.firstName) {
+      return 1;
+    }
+    return 0;
+  }
+
+  equals(other: DancerName): boolean {
+    return Dancer.equals(this, other);
+  }
+
+  toJSONable(): DancerName {
+    return {
+      firstName: this.firstName,
+      lastName: this.lastName
+    };
+  }
 
 }

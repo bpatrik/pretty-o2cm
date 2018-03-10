@@ -3,15 +3,16 @@ import {DancerName} from '../../app/services/IData';
 import {Dancer} from './Dancer';
 
 export interface IPlacement {
-  dancers: Dancer[];
+  leader: DancerName;
+  follower: DancerName;
   placement: number;
   leaderNumber: number;
   isFinal: boolean;
-  event: DanceEvent;
 }
 
 export class Placement implements IPlacement {
-  dancers: Dancer[] = [];
+  leader: Dancer;
+  follower: Dancer;
   placement: number;
   leaderNumber: number;
   isFinal: boolean;
@@ -23,11 +24,25 @@ export class Placement implements IPlacement {
     this.leaderNumber = leaderNumber;
   }
 
-  addDancer(dancer: Dancer) {
-    this.dancers.push(dancer);
-    if (this.dancers.length > 2) {
-      throw  new Error('too many dancers');
+  public static hasDancer(that: IPlacement, other: DancerName): boolean {
+    return (that.leader && Dancer.equals(that.leader, other)) ||
+      (that.follower && Dancer.equals(that.follower, other));
+  }
+
+  public static getPartner(that: IPlacement, dancer: DancerName): DancerName {
+    if (Dancer.equals(that.leader, dancer)) {
+      return that.follower || Dancer.getName('Unknown Partner');
+    } else {
+      return that.leader || Dancer.getName('Unknown Partner');
     }
+  }
+
+  set Leader(dancer: Dancer) {
+    this.leader = dancer;
+  }
+
+  set Follower(dancer: Dancer) {
+    this.follower = dancer;
   }
 
   setEvent(event: DanceEvent) {
@@ -38,18 +53,18 @@ export class Placement implements IPlacement {
     this.event.addPlacement(this);
   }
 
-  hasDancer(dancer: DancerName) {
-    return (this.dancers[0] && this.dancers[0].equals(dancer)) || (this.dancers[1] && this.dancers[1].equals(dancer));
+  hasDancer(dancer: DancerName): boolean {
+    return Placement.hasDancer(this, dancer);
   }
 
 
   toJSONable(): IPlacement {
     return {
-      dancers: this.dancers,
+      leader: this.leader ? this.leader.toJSONable() : null,
+      follower: this.follower ? this.follower.toJSONable() : null,
       placement: this.placement,
       leaderNumber: this.leaderNumber,
-      isFinal: this.isFinal,
-      event: null
+      isFinal: this.isFinal
     };
   }
 }

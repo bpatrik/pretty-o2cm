@@ -3,9 +3,10 @@ import {DancerRepository} from './DancerRepository';
 
 export class PlacementParser {
   static parse(rawName: string): Placement {
-    if (rawName.charAt(rawName.length - 4) === '-') {
+  /*  if (rawName.charAt(rawName.length - 4) === '-') {
       rawName = rawName.substring(0, rawName.length - 4);
-    }
+    }*/
+
 
     let placement: number = null;
     let number: number = null;
@@ -27,7 +28,7 @@ export class PlacementParser {
 
     const plcmnt = new Placement(placement, number);
     if (names.length > 0) {
-      plcmnt.addDancer(DancerRepository.Instance.createOrGet(names[0].trim()));
+      plcmnt.Leader = DancerRepository.Instance.createOrGet(names[0].trim());
     }
 
     if (names.length > 1) {
@@ -36,10 +37,8 @@ export class PlacementParser {
       if (stateIndex !== -1) {
         follow = names[1].substring(0, stateIndex);
       }
-      plcmnt.addDancer(DancerRepository.Instance.createOrGet(follow.trim()));
+      plcmnt.Follower = DancerRepository.Instance.createOrGet(follow.trim());
     }
-
-
     return plcmnt;
   }
 }

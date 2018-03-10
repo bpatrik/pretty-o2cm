@@ -9,7 +9,7 @@ import {ICompetitionList, IDanceList, IData} from './IData';
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.4';
+  public static VERSION = '1.7';
 
 
   constructor() {
@@ -18,7 +18,7 @@ export class DataParserService {
 
   public mergeDate(base: IData, extend: IData): IData {
     base.competitions = base.competitions.concat(extend.competitions);
-    base.competitions = base.competitions.sort((a, b) => b.competition.date - a.competition.date);
+    base.competitions = base.competitions.sort((a, b) => b.date - a.date);
 
     for (const style in extend.summary) {
       if (!extend.summary.hasOwnProperty(style)) {
@@ -90,12 +90,10 @@ export class DataParserService {
 
   public parseDancer(person: Individual): IData {
     const summary = this.getSummary(person);
-    const comps = this.getCompetitions(person);
-    console.log(summary);
     return <IData>{
-      dancerName: {firstName: person.dancer.firstName, lastName: person.dancer.lastName},
+      dancerName: person.dancer,
       summary: summary,
-      competitions: comps
+      competitions: person.Competitions.map(c => c.toJSONable())
     };
   }
 
@@ -115,7 +113,9 @@ export class DataParserService {
               eventSkill: d.eventSkill.type,
               placement: d.getPlacement(person.dancer).placement,
               dances: d.dances,
-              partner: d.getPartner(person.dancer)
+              partner: d.getPartner(person.dancer),
+              compCode: person.Competitions[i].linkCode,
+              heatid: d.heatid
             };
           })
       });
@@ -163,7 +163,7 @@ export class DataParserService {
             }
             const p = tmp[danceType][ds].reduce((prev, c) => {
               for (let i = 0; i < Rules.NoPointExceptions.length; i++) {
-                if (c.Competition.name.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
+                if (c.Competition.rawName.toLowerCase().indexOf(Rules.NoPointExceptions[i].name.toLowerCase()) !== -1) {
                   return prev;
                 }
               }
@@ -191,7 +191,7 @@ export class DataParserService {
           });
         }
         danceSummaries.push({
-          dance: <any>danceType,
+          dance: parseInt(danceType, 10),
           entries: entries
         });
       }

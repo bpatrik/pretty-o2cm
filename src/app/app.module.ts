@@ -19,6 +19,10 @@ import {LoadingFrameComponent} from './frame/loading/loading.frame.component';
 import {ProgressbarModule} from 'ngx-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {DataParserService} from './services/data-loader.service';
+import {CompetitorsComponent} from './competitors/competitors.component';
+import {CompetitorsPanelComponent} from './competitors/panel/panel.competitors.component';
+import {EventComponent} from './event/event.component';
+import {CompareComponent} from './compare/compare.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,11 @@ import {DataParserService} from './services/data-loader.service';
     CompetitionEventListComponent,
     CompetitionEventComponent,
     FrameComponent,
-    LoadingFrameComponent
+    LoadingFrameComponent,
+    CompetitorsComponent,
+    CompetitorsPanelComponent,
+    EventComponent,
+    CompareComponent
   ],
   imports: [
     BrowserModule,

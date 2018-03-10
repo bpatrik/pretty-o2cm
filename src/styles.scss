@@ -1,7 +1,6 @@
 @import "../node_modules/bootstrap/scss/functions", '../node_modules/bootstrap/scss/bootstrap';
 @import 'variables';
 
-
 @each $skill in $skill-list {
   $color: #{map-get($colors,$skill)};
   $color-light: #{map-get($colors-light,$skill)};
@@ -12,6 +11,9 @@
   .border-side-#{$skill} {
     border-right: solid 1px $color;
     border-left: solid 1px $color;
+  }
+  .border-bottom-#{$skill} {
+    border-bottom: solid 1px $color;
   }
   .bg-#{$skill} {
     background-color: $color;
@@ -27,9 +29,7 @@
 
 }
 
-
-
-mwl-gauge{
+mwl-gauge {
   height: 15px;
   width: 15px;
   display: inline-block;

@@ -14,6 +14,7 @@ import {DanceEvent} from '../../o2cm-parser/entities/DanceEvent';
 import {CacheService} from './cache.service';
 import {DataParserService} from './data-loader.service';
 import {IData, ILoading} from './IData';
+import {QueryParams} from '../QueryParams';
 
 @Injectable()
 export class DataService {
@@ -22,6 +23,8 @@ export class DataService {
   public data: BehaviorSubject<IData>;
   public loading: BehaviorSubject<ILoading>;
   private proxyHTTP: IHTTP;
+
+  queryParams = {};
 
 
   constructor(private http: HttpClient,
@@ -32,8 +35,6 @@ export class DataService {
               private dataParser: DataParserService) {
     this.proxyHTTP = {
       post: (url: string, body: any): Promise<string> => {
-        console.log(encodeURI(url));
-        console.log(encodeURIComponent(url));
         return this.http.get('/proxy/' + encodeURIComponent(url), {
           params: {
             body: body
@@ -53,19 +54,26 @@ export class DataService {
     this.loading = new BehaviorSubject<ILoading>(null);
 
     route.queryParams.subscribe((value: Params) => {
-      if (value['firstName'] && value['lastName'] &&
-        value['firstName'] !== this.data.getValue().dancerName.firstName &&
-        value['lastName'] !== this.data.getValue().dancerName.lastName) {
-        this.loadDancer(value['firstName'], value['lastName']);
+      if (value[QueryParams.name.fistName] && value[QueryParams.name.lastName] &&
+        value[QueryParams.name.fistName] !== this.data.getValue().dancerName.firstName &&
+        value[QueryParams.name.lastName] !== this.data.getValue().dancerName.lastName) {
+        this.loadDancer(value[QueryParams.name.fistName], value[QueryParams.name.lastName]);
       }
+      this.queryParams[QueryParams.heatid] = value[QueryParams.heatid];
+      this.queryParams[QueryParams.compCode] = value[QueryParams.compCode];
+      this.queryParams[QueryParams.competitor.lastName] = value[QueryParams.competitor.lastName];
+      this.queryParams[QueryParams.competitor.fistName] = value[QueryParams.competitor.fistName];
     });
 
     this.data.subscribe((value) => {
       if (value.dancerName.firstName === '' || value.dancerName.lastName === '') {
         return;
       }
+      const queryParams = this.queryParams;
+      queryParams[QueryParams.name.fistName] = value.dancerName.firstName;
+      queryParams[QueryParams.name.lastName] = value.dancerName.lastName;
       this.router.navigate([], {
-        queryParams: {firstName: value.dancerName.firstName, lastName: value.dancerName.lastName}
+        queryParams: queryParams
       });
     });
     // this.loadData();
@@ -77,7 +85,7 @@ export class DataService {
     const comp = new Competition(new CompetitionCore('BU comp'));
     comp.date = Date.now();
     comp.dancedEvents = [
-      new DanceEvent('A dance', DivisionTypes.Amateur, AgeTypes.Adult, {
+      new DanceEvent('A dance', 'na', DivisionTypes.Amateur, AgeTypes.Adult, {
         type: EventSkillTypes.Bronze,
         str: ''
       }, StyleTypes.Smooth, [DanceTypes.Waltz])
@@ -119,34 +127,7 @@ export class DataService {
           ]
 
         }
-      }, competitions: [
-        {
-          competition: comp,
-          dances: [
-            {
-              pointSkill: PointSkillTypes.Bronze,
-              eventSkill: EventSkillTypes.Bronze,
-              dances: [DanceTypes.Waltz],
-              style: StyleTypes.Smooth,
-              placement: 2,
-              coupleCount: 20,
-              isFinal: true,
-              point: {value: 2, warning: null},
-              partner: {firstName: 'Test', lastName: 'John'}
-            },
-            {
-              pointSkill: PointSkillTypes.Bronze,
-              eventSkill: EventSkillTypes.Bronze,
-              dances: [DanceTypes.Tango],
-              style: StyleTypes.Smooth,
-              placement: 12,
-              coupleCount: 20,
-              isFinal: false,
-              point: {value: 2, warning: null},
-              partner: {firstName: 'Test', lastName: 'John'}
-            }
-          ]
-        }
+      }, competitions: [comp
       ]
     });
 
@@ -173,7 +154,7 @@ export class DataService {
             this.loading.next(loading);
           }
         },
-        cache.competitions.map(c => c.competition));
+        cache.competitions);
       const partialData = this.dataParser.parseDancer(person);
       this.data.next(this.dataParser.mergeDate(cache, partialData));
       this.cacheService.put(this.data.getValue());

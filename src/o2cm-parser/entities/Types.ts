@@ -72,6 +72,11 @@ export module DanceTypes {
     // S: DanceTypes.Samba TODO:fix it
   };
 
+  const tmp = (<string[]>JSON.parse(JSON.stringify(LetterType)));
+  export const toLetter = {};
+  Object.keys(tmp).forEach(v => toLetter[tmp[v]] = v);
+  toLetter[DanceTypes.Samba] = 'S';
+
 
   export function getStyleForOne(dance: DanceTypes) {
     if (dance === DanceTypes.Jive || dance === DanceTypes.ChaCha ||

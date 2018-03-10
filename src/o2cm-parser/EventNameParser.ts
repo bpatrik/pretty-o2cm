@@ -103,13 +103,13 @@ export class EventNameParser {
     return null;
   }
 
-  public static parse(name: string): DanceEvent {
+  public static parse(name: string, heatid: string): DanceEvent {
     const division = this.parseDivision(name) || DivisionTypes.Amateur;
     const age = this.parseAge(name);
     const skill = this.parseSkill(name);
     let dances = this.guessDances(name);
     const style = this.parseStyle(name, dances);
     dances = this.adjustDances(dances, style);
-    return new DanceEvent(name, division, age, skill, style, dances);
+    return new DanceEvent(name, heatid, division, age, skill, style, dances);
   }
 }

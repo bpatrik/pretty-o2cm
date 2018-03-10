@@ -14,6 +14,8 @@ export interface IDanceList {
   isFinal: boolean;
   point: { value: number, warning: PointWarning };
   partner: DancerName;
+  compCode: string;
+  heatid: string;
 }
 
 export interface ICompetitionList {
@@ -29,7 +31,7 @@ export interface DancerName {
 export interface IData {
   dancerName: DancerName;
   summary: ISummary;
-  competitions: ICompetitionList[];
+  competitions: ICompetition[];
 }
 
 

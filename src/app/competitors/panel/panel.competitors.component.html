@@ -1,0 +1,109 @@
+<div class="card">
+  <div class="card-header  text-center">
+    {{panelName}}
+    <div class="float-right" *ngIf="showRanking() == true">
+      <button
+        [ngClass]="{'btn-primary':expand ,'btn-secondary':!expand}" class="btn  btn-sm"
+        (click)="toggleExpand()">
+        <span *ngIf="!expand" class="oi oi-chevron-right"></span>
+        <span *ngIf="expand" class="oi oi-chevron-bottom"></span>
+      </button>
+    </div>
+  </div>
+  <div class="card-body" *ngIf="showRanking() == true">
+    <div>
+      <ng-template #leaderPop>
+        Leader
+      </ng-template>
+      <ng-template #followerPop>
+        Follower
+      </ng-template>
+      <ng-template #mixedPop>
+        Follower and Leader
+      </ng-template>
+
+      <div class="row" *ngIf="renderSections.openTop" (click)="toggleExpand()">
+        <div class="col-12 text-center">
+          <span [ngClass]="expand ? 'oi-ellipses': 'oi-chevron-top'" class="oi expand-icon"></span>
+        </div>
+      </div>
+      <ng-container *ngFor="let rank of rankings; let i = index">
+
+        <div class="row entry" *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
+
+          <div class="col-1 offset-lg-3">
+            <span class="oi oi-chevron-top" [style.color]="color(rank.score)"
+                  *ngIf="isBetter(rank.score)"></span>
+            <span class="oi oi-minus" [style.color]="color(rank.score)"
+                  *ngIf="isTheSame(rank.score)"></span>
+            <span class="oi oi-chevron-bottom" [style.color]="color(rank.score)"
+                  *ngIf="isWorst(rank.score)"></span>
+          </div>
+          <div class="col-7 col-lg-5">
+            <a
+              [ngClass]="{'me':i == myRank}"
+              [href]="url(rank.dancer)"
+              class="dancer"
+              style="white-space: nowrap">
+              <img [tooltip]="leaderPop" container="body" class="role" src="assets/leader.svg"
+                   *ngIf="rank.role == RoleType.Lead"/>
+              <img [tooltip]="followerPop" container="body" class="role" src="assets/follower.svg"
+                   *ngIf="rank.role == RoleType.Follow"/>
+              <img [tooltip]="mixedPop" container="body" class="role" src="assets/couple.svg"
+                   *ngIf="rank.role == RoleType.Mixed"/>
+              {{rank.dancer.firstName}} {{rank.dancer.lastName}}
+
+
+              <ng-container *ngIf="rank.details">
+                <ng-template #detailsPop>
+                  Scores:
+                  <div *ngFor="let a of rank.details.score" style="white-space: nowrap">{{a.score| number}}:
+                    {{a.from}}
+                  </div>
+                  Accuracy:
+                  <div *ngFor="let a of rank.details.accuracy" style="white-space: nowrap">{{a.accuracy | number}}:
+                    {{a.from}}
+                  </div>
+                </ng-template>
+                <span [tooltip]="detailsPop"
+                      container="body">
+               S:{{rank.score | number}} A:{{rank.accuracy | number}}</span>
+              </ng-container>
+            </a>
+          </div>
+          <div class="col-3  text-right">
+            <span class="placement-section" *ngIf="i == myRank">{{placementDescription()}}</span>
+            <a title="compare"
+               *ngIf="i != myRank"
+               href="#"
+               class="compare-link"
+               [routerLink]="['/compare']"
+               [queryParams]="{firstName:dataService.data.value.dancerName.firstName,
+                                      lastName:dataService.data.value.dancerName.lastName,
+                                      cfirstName:rank.dancer.firstName,
+                                      clastName:rank.dancer.lastName}">
+              <span class="oi oi-chevron-right"></span></a>
+          </div>
+        </div>
+
+        <div class="row"
+             *ngIf="i==rankings.length-1">
+          <div class="col-12 text-center">
+            <span [ngClass]="expand ? 'oi-ellipses': 'oi-chevron-bottom'" class="oi expand-icon"
+                  (click)="toggleExpand()"></span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="card-footer" *ngIf="gotBetterCount > 0 && showRanking() == true">
+    On your last competition, you outperformed <span
+    class="badge badge-success"><strong>{{gotBetterCount}}</strong></span> of your competitors,
+    who usually perform better than you.
+  </div>
+
+  <div class="card-body text-center" *ngIf="showRanking() == false">
+    Not enough data to show :(
+  </div>
+</div>
