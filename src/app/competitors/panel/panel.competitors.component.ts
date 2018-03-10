@@ -302,5 +302,16 @@ export class CompetitorsPanelComponent implements OnChanges {
       this.myRank <= this.rankings.length - this.maxRender.expanded / 6;
   }
 
+  roleImg(role: RoleType): string {
+    switch (role) {
+      case RoleType.Mixed:
+        return 'couple.svg';
+      case RoleType.Lead:
+        return 'leader.svg';
+      case RoleType.Follow:
+        return 'follower.svg';
+    }
+  }
+
 }
 

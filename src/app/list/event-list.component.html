@@ -15,7 +15,7 @@
             </select>
           </div>
           <div class="col-md-3">
-            <select  [ngClass]="{'bg-primary text-white' : styleFilter!==-1}"
+            <select [ngClass]="{'bg-primary text-white' : styleFilter!==-1}"
                     class="form-control" id="styleFilter" [(ngModel)]="styleFilter" (change)="updateFiltered()">
               <option *ngFor="let v of StyleTypesArray" [value]="v.key">{{v.value}}</option>
             </select>
@@ -28,7 +28,7 @@
           </div>
           <div class="col-md-3">
             <select [ngClass]="{'bg-primary text-white' : isFinalsFilter!==-1}"
-              class="form-control" id="isFinalsFilter" [(ngModel)]="isFinalsFilter" (change)="updateFiltered()">
+                    class="form-control" id="isFinalsFilter" [(ngModel)]="isFinalsFilter" (change)="updateFiltered()">
               <option value="-1">Finals filter</option>
               <option value="0">In finals</option>
               <option value="1">Not in finals</option>
@@ -38,12 +38,11 @@
       </div>
     </div>
 
-    <div class="competition-event-container" *ngFor="let comp of filteredComps">
-      <app-competition-event-list
-        [showPercentage]="showPercentage"
-        [dancer]="dataService.data.value.dancerName"
-        (pointPresentation)="onPointPresentatoinChange()"
-        [competition]="comp"></app-competition-event-list>
-    </div>
+    <app-competition-event-list
+      *ngFor="let comp of filteredComps"
+      [showPercentage]="showPercentage"
+      [dancer]="dataService.data.value.dancerName"
+      (pointPresentation)="onPointPresentatoinChange()"
+      [competition]="comp"></app-competition-event-list>
   </div>
 </app-frame>

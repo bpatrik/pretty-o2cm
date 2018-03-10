@@ -45,12 +45,8 @@
               [href]="url(rank.dancer)"
               class="dancer"
               style="white-space: nowrap">
-              <img [tooltip]="leaderPop" container="body" class="role" src="assets/leader.svg"
-                   *ngIf="rank.role == RoleType.Lead"/>
-              <img [tooltip]="followerPop" container="body" class="role" src="assets/follower.svg"
-                   *ngIf="rank.role == RoleType.Follow"/>
-              <img [tooltip]="mixedPop" container="body" class="role" src="assets/couple.svg"
-                   *ngIf="rank.role == RoleType.Mixed"/>
+              <img [tooltip]="leaderPop" container="body" class="role" [src]="'assets/'+roleImg(rank.role)"/>
+
               {{rank.dancer.firstName}} {{rank.dancer.lastName}}
 
 
