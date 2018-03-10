@@ -31,7 +31,7 @@
 
         <div class="row entry" *ngIf="(i>=renderSections.first.start && i<renderSections.first.end) ">
 
-          <div class="col-1 offset-lg-3">
+          <div class="col-2 col-lg-1 offset-lg-3">
             <span class="oi oi-chevron-top" [style.color]="color(rank.score)"
                   *ngIf="isBetter(rank.score)"></span>
             <span class="oi oi-minus" [style.color]="color(rank.score)"

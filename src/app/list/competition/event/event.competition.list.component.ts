@@ -7,6 +7,7 @@ import {DataService} from '../../../services/data.service';
 import {IPlacement, Placement} from '../../../../o2cm-parser/entities/Placement';
 import {ICompetition} from '../../../../o2cm-parser/entities/Competition';
 import {IPointSummary} from '../../../services/ISummary';
+import {RoleType} from '../../../competitors/RoleType';
 
 
 @Component({
@@ -117,6 +118,16 @@ export class CompetitionEventComponent {
       }
     }
     return txt;
+  }
+
+
+  partnerRoleImg(): string {
+    if (this.myPartner === this.myPlacement.leader) {
+      return 'leader.svg';
+    } else if (this.myPartner === this.myPlacement.follower) {
+      return 'follower.svg';
+    }
+    return 'couple.svg';
   }
 
 
