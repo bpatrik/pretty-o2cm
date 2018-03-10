@@ -1,9 +1,10 @@
 .card-header{
   font-weight: bold;
 }
-.competition-event-container {
+app-competition-event {
   margin-top: 3px;
   margin-bottom: 3px;
+  display: inherit;
 }
 
 a{

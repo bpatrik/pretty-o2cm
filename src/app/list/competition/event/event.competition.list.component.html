@@ -1,72 +1,78 @@
 <div [ngClass]="{'finalist' : myPlacement.isFinal}"
-     class="row border-{{color()}}">
-  <div [ngClass]="{' col-lg-12':compactLayout}" class="col-12 col-lg-5">
-    <div class="row">
-      <ng-template #placementPop>
-        Placement: <strong>{{myPlacement.placement}}</strong> out of <strong>{{Dance.placements.length}}</strong>
-        couples. <br/>
-        This is better then <strong>{{percent()}}%</strong> of the couples.
+     class="row border-{{color}}">
+  <div [ngClass]="{' col-lg-12':compactLayout}" class="col-12 col-lg-5 row">
+    <ng-template #placementPop>
+      Placement: <strong>{{myPlacement.placement}}</strong> out of <strong>{{Dance.placements.length}}</strong>
+      couples. <br/>
+      This is better then <strong>{{percent()}}%</strong> of the couples.
+    </ng-template>
+    <div [ngClass]="compactLayout?('border-bottom-'+color):''" class="col col-sm-4 col-md-4 text-center clickable"
+         (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
+      <mwl-gauge
+        class="mwl-gauge-{{color}} {{color}}"
+        [max]="100"
+        [dialStartAngle]="-90"
+        [dialEndAngle]="-90.001"
+
+        [showValue]="false"
+        [value]="percent()"
+        [animated]="false">
+      </mwl-gauge>
+      <ng-container *ngIf="showPercentage; else placementBLock">
+        {{percent()}}%
+      </ng-container>
+      <ng-template #placementBLock>
+        <strong>{{myPlacement.placement}}</strong>/{{Dance.placements.length}}
       </ng-template>
-      <div [ngClass]="compactLayout?('border-bottom-'+color()):''" class="col col-sm-4 col-md-4 text-center clickable"
-           (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
-        <mwl-gauge
-          class="mwl-gauge-{{color()}} {{color()}}"
-          [max]="100"
-          [dialStartAngle]="-90"
-          [dialEndAngle]="-90.001"
-
-          [showValue]="false"
-          [value]="percent()"
-          [animated]="false">
-        </mwl-gauge>
-        <ng-container *ngIf="showPercentage">
-          {{percent()}}%
-        </ng-container>
-        <ng-container *ngIf="!showPercentage">
-          <strong>{{myPlacement.placement}}</strong>/{{Dance.placements.length}}
-        </ng-container>
-      </div>
-
-      <div
-        [ngClass]="[myPlacement.isFinal? 'bg-'+color():'border-side-'+color(), compactLayout?('border-bottom-'+color()):'']"
-        class="col col-sm-4 col-md-4 text-center">
-        {{EventSkillTypes[Dance.eventSkill.type]}}
-      </div>
-      <div
-        [ngClass]="compactLayout?('border-bottom-'+color()):''"
-        class="col col-sm-4 col-md-4 text-center">
-        {{StyleTypes[Dance.style]}}
-      </div>
     </div>
+
+    <div
+      [ngClass]="[myPlacement.isFinal? 'bg-'+color:'border-side-'+color, compactLayout?('border-bottom-'+color):'']"
+      class="col col-sm-4 col-md-4 text-center">
+      {{EventSkillTypes[Dance.eventSkill.type]}}
+    </div>
+    <div
+      [ngClass]="compactLayout?('border-bottom-'+color):''"
+      class="col col-sm-4 col-md-4 text-center">
+      {{StyleTypes[Dance.style]}}
+    </div>
+
   </div>
   <div [ngClass]="{'col-12 col-sm-4':compactLayout}"
        class="col col-sm-12 col-lg-4 text-center" style="white-space: nowrap">
     {{renderDances()}}
   </div>
 
-  <div [ngClass]="{'col-6 col-sm-4 col-lg-4':compactLayout}" class="col col-lg-2 text-center " style="white-space: nowrap">
-    <a class="partner" [href]="url()"> <span class="oi oi-person"></span> {{myPartner.firstName}}</a>
+  <div [ngClass]="{'col-6 col-sm-4 col-lg-4':compactLayout}" class="col col-lg-2 text-center "
+       style="white-space: nowrap">
+    <a class="partner" [href]="url()">
+      <img class="role" [src]="'assets/'+partnerRoleImg()"/> {{myPartner.firstName}}</a>
   </div>
   <div [ngClass]="{'col-6 col-sm-4 col-lg-4':compactLayout}" class="col col-lg-1 text-right last-col"
        style="white-space: nowrap">
     <ng-container *ngIf="myPoint.value>0">
-      <span class="badge bg-{{color()}}" *ngIf="!noPointReason" title="points">+{{myPoint.value}}</span>
+      <span class="badge bg-{{color}}" *ngIf="!noPointReason" title="points">+{{myPoint.value}}</span>
 
-      <ng-template #noPoint>
-        This competition doesn't give points because: <br/>
-        <strong>{{noPointReason}}</strong>
-      </ng-template>
-      <span class="oi oi-warning text-{{color()}}" *ngIf="noPointReason" [tooltip]="noPoint" container="body"></span>
+      <ng-container *ngIf="noPointReason">
+        <ng-template #noPoint>
+          This competition doesn't give points because: <br/>
+          <strong>{{noPointReason}}</strong>
+        </ng-template>
+        <span class="oi oi-warning text-{{color}}" [tooltip]="noPoint" container="body"></span>
+      </ng-container>
 
     </ng-container>
-    <ng-template #pointWarning>
-      Point calculations might incorrect, because: <br/>
-      <strong>{{pointWarningStr()}}</strong>
-    </ng-template>
-    <span class="oi oi-warning text-{{color()}}" *ngIf="myPoint.warning" [tooltip]="pointWarning"
-          container="body"></span>
 
-    <span *ngIf="myPlacement.isFinal" title="being in finals" class="oi oi-badge  text-{{color()}}"></span>
+    <ng-container *ngIf="myPoint.warning">
+      <ng-template #pointWarning>
+        Point calculations might incorrect, because: <br/>
+        <strong>{{pointWarningStr()}}</strong>
+      </ng-template>
+      <span class="oi oi-warning text-{{color}}" [tooltip]="pointWarning"
+            container="body"></span>
+    </ng-container>
+
+    <span *ngIf="myPlacement.isFinal" title="being in finals" class="oi oi-badge  text-{{color}}"></span>
 
     <button *ngIf="!compactLayout" class="btn btn-light btn-sm"
             [routerLink]="['/event']"

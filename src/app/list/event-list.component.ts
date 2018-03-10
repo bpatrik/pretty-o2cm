@@ -64,7 +64,7 @@ export class EventListComponent {
     this.styleFilter = parseInt(this.styleFilter + '', 10);
     this.skillFilter = parseInt(this.skillFilter + '', 10);
     this.isFinalsFilter = parseInt(this.isFinalsFilter + '', 10);
-    this.filteredComps = this.dataService.data.value.competitions.map((c) => {
+    const filteredComps = this.dataService.data.value.competitions.map((c) => {
       const cClone: ICompetition = Competition.shallowCopy(c);
       cClone.dancedEvents = c.dancedEvents.filter((d) => {
         if (this.danceFilter !== -1 && d.dances.indexOf(this.danceFilter) === -1) {
@@ -86,6 +86,15 @@ export class EventListComponent {
       }).sort((a, b) => a.style - b.style);
       return cClone;
     }).filter((cl) => cl.dancedEvents.length > 0).sort((a, b) => b.date - a.date);
+    if (filteredComps.length > 5) {
+      this.filteredComps = filteredComps.slice(0, 5);
+      setTimeout(() => {
+        this.filteredComps = filteredComps;
+      }, 0);
+    } else {
+      this.filteredComps = filteredComps;
+    }
+
   }
 }
 

@@ -9,15 +9,14 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="competition-event-container" *ngFor="let event of competition.dancedEvents">
-      <app-competition-event
-        [showPercentage]="showPercentage"
-        (pointPresentation)="pointPresentation.emit()"
-        [noPointReason]="noPointReason()"
-        [competition]="competition"
-        [Dance]="event"
-        [compactLayout]="compactLayout"
-        [Dancer]="dancer"></app-competition-event>
-    </div>
+    <app-competition-event
+      *ngFor="let event of competition.dancedEvents"
+      [showPercentage]="showPercentage"
+      (pointPresentation)="pointPresentation.emit()"
+      [noPointReason]="noPointReason()"
+      [competition]="competition"
+      [Dance]="event"
+      [compactLayout]="compactLayout"
+      [Dancer]="dancer"></app-competition-event>
   </div>
 </div>
