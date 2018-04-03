@@ -41,6 +41,9 @@ export class EventComponent {
   }
 
   getDanceEvent() {
+    if (!this.eventFilter.compCode || this.eventFilter.heatid) {
+      return;
+    }
     this.competition = null;
     for (let i = 0; i < this.dataService.data.getValue().competitions.length; i++) {
       if (this.dataService.data.getValue().competitions[i].linkCode === this.eventFilter.compCode) {
@@ -59,6 +62,10 @@ export class EventComponent {
       }
     }
 
+    if (this.dance === null) {
+      console.error('can\'t find heat id: ' + this.eventFilter.heatid);
+      return;
+    }
     this.dance.placements.sort((a, b) => {
       if (a.placement === b.placement) {
         return Dancer.compare(a.leader, b.leader);

@@ -203,6 +203,9 @@ export class CompetitorsPanelComponent implements OnChanges {
     if (this.rankings[Math.floor(this.rankings.length / 3)].accuracy === this.rankings[this.rankings.length - 1].accuracy) {
       endIndex = this.rankings.length - 1;
     }
+    if (window['fullRanking'] === true) {
+      endIndex = this.rankings.length;
+    }
 
     this.rankings = this.rankings.slice(0, endIndex)
       .filter((r) => r.role === this.roleFilter ||

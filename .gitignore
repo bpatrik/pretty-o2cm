@@ -44,3 +44,5 @@ Thumbs.db
 
 /src/**/*.js
 /src/**/*.js.map
+/backend/**/*.js
+/backend/**/*.js.map

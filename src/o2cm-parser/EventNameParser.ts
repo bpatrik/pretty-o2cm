@@ -17,6 +17,7 @@ export class EventNameParser {
 
   private static parseSkill(name: string): ISkill {
     const list = Utils.enumToArray(EventSkillTypes);
+    list.push({key: EventSkillTypes.Newcomer, value: 'Pre-Bronze'});
     list.push({key: EventSkillTypes.PreChamp, value: 'Pre-Champ'});
     list.push({key: EventSkillTypes.Champ, value: 'Championship'});
     list.sort(); // order to long to short
