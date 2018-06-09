@@ -1,0 +1,71 @@
+<app-frame>
+  <div class="col-12">
+    <ng-container *ngIf="events">
+      <div class="card" style="width: 100%" *ngFor="let dance of events">
+        <div class="card-header">
+          <strong>{{dance.raw}}</strong>
+        </div>
+        <div class="card-body">
+          <ng-container *ngFor="let plm of dance.placements; let i = index">
+            <div class="row placement" *ngIf="hasError(plm,dance)">
+              <div class="col-sm-5 row" style="white-space: nowrap">
+                <ng-container *ngIf="plm.leader">
+                  <div class="col-6">
+                    <a class="dancer" [href]="url(plm.leader)">
+                      <img class="role" src="assets/leader.svg"/>{{plm.leader.firstName}} {{plm.leader.lastName}}
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <div *ngIf="regService.summaries.getValue()[key(plm.leader)]">
+                    <span [ngClass]="{'badge-danger': pointsPlacedOut(plm.leader,dance) == true}"
+                          class="badge badge-secondary"
+                          title="points">
+                      {{points(plm.leader,dance)}}
+                    </span>
+                      <span [ngClass]="{'badge badge-warning': timeout(plm.leader,dance) == true}"
+                            *ngIf="hasTimeout(dance) && left(plm.leader,dance)!=null">
+                      {{left(plm.leader,dance)}} days left
+                    </span>
+
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="col-sm-5 row" style="white-space: nowrap">
+                <ng-container *ngIf="plm.follower">
+                  <div class="col-6">
+                    <a class="dancer" [href]="url(plm.follower)">
+                      <img class="role" src="assets/follower.svg"/>{{plm.follower.firstName}} {{plm.follower.lastName}}
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <div *ngIf="regService.summaries.getValue()[key(plm.follower)]">
+                  <span [ngClass]="{'badge-danger': pointsPlacedOut(plm.follower,dance) == true}"
+                        class="badge  badge-secondary"
+                        title="points">
+                    {{points(plm.follower,dance)}}
+                  </span>
+                      <span [ngClass]="{'badge badge-warning': timeout(plm.follower,dance) == true}"
+                            *ngIf="hasTimeout(dance) && left(plm.follower,dance)!=null">
+                        {{left(plm.follower,dance)}} days left
+                      </span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="col-sm-2 row" style="white-space: nowrap">
+                {{studio(plm)}}
+              </div>
+
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!events">
+      No event to show :(
+    </ng-container>
+  </div>
+</app-frame>

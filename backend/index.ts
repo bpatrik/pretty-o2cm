@@ -4,6 +4,8 @@ import * as _path from 'path';
 import * as _bodyParser from 'body-parser';
 import {NextFunction, Request, Response} from 'express';
 import * as request from 'request';
+import {getSummary, getUrl} from './model';
+import {QueryParams} from '../frontend/app/QueryParams';
 
 
 const app = _express();
@@ -55,66 +57,29 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-const FiFoCache: { key: string, body: string }[] = [];
-const MAX_CACHE_SIZE = 120;
-const shapeBody = (body: string) => {
-  // remove dancers list
-  const index = body.indexOf('id=selEnt');
-  if (index !== -1) {
-    const a = body.lastIndexOf('<SELECT', index);
-    const b = body.lastIndexOf('<select', index);
-    const selIndex = Math.max(a, b);
-    if (selIndex !== -1) {
-      const ae1 = body.indexOf('</SELECT>', selIndex);
-      const ae2 = body.indexOf('</select>', selIndex);
-      if (ae1 !== -1 && ae1 > ae2) {
-        body = body.substring(0, selIndex) + body.substring(ae1 + 9);
-      } else if (ae2 !== -1) {
-        body = body.substring(0, selIndex) + body.substring(ae2 + 9);
-      }
-    }
-  }
-  return body;
-};
 
-app.get('/proxy/:url', (req: Request, res: Response, next: NextFunction) => {
+app.get('/proxy/:url', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const key = req.params.url + '?body' + req.query.body;
-    for (let i = 0; i < FiFoCache.length; i++) {
-      if (FiFoCache[i].key === key) {
-        return res.send(FiFoCache[i].body);
-      }
-    }
-    const options = {
-      url: req.params.url,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: req.query.body
-    };
+    res.send(await getUrl(req.params.url, req.query.body));
+  } catch (err) {
+    return next(err);
+  }
+});
 
-    request.post(options, (error, response, body) => {
-      if (error) {
-        return next(error);
-      }
-      if (response.statusCode === 200) {
-        body = shapeBody(body);
-        FiFoCache.push({key: key, body: body});
-        if (FiFoCache.length > MAX_CACHE_SIZE) {
-          FiFoCache.shift();
-        }
-        res.send(body);
-      } else {
-        next('bad statusCode: ' + response.statusCode);
-      }
-    });
+app.get('/api/summary', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    return res.send(await getSummary({
+      firstName: req.query[QueryParams.name.firstName],
+      lastName: req.query[QueryParams.name.lastName]
+    }));
   } catch (err) {
     return next(err);
   }
 });
 
 app.use(['/'], _express.static(_path.join(__dirname, '../dist')));
-app.use(['/list*', '/summary*', '/competitors*', '/event*', '/compare*'], (req: Request, res: Response, next: NextFunction) => {
+app.use(['/list*', '/summary*', '/competitors*', '/event*', '/compare*', '/registration*'],
+  (req: Request, res: Response, next: NextFunction) => {
   res.sendFile(_path.join(__dirname, '../dist', 'index.html'), {maxAge: 31536000});
 
 });
