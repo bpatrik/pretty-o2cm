@@ -9,7 +9,7 @@ import {ICompetitionList, IDanceList, IData} from './IData';
 @Injectable()
 export class DataParserService {
 
-  public static VERSION = '1.7';
+  public static VERSION = '1.8';
 
 
   constructor() {
