@@ -4,14 +4,12 @@ import {IndividualParser} from '../common/o2cm-parser/IndividualParser';
 import {Summary} from '../common/Summary';
 import {ISummary} from '../frontend/app/services/ISummary';
 import {LRUMemCache} from './cache/LRUMemCache';
-import {FileCache} from './cache/FileCache';
-import {LayeredCache} from './cache/LayeredCache';
 import {DummyCache} from './cache/DummyCache';
 
-const pageCache = new DummyCache<string>();
-// new LayeredCache([new LRUMemCache(200),  new FileCache('/tmp/pages')]);
-const summariesCache = new DummyCache<string>();// new FileCache('/tmp/summaries');
-
+const pageCache = new LRUMemCache<string>(200);
+// new LayeredCache([new LRUMemCache<string>(200),  new FileCache('/tmp/pages')]);
+const summariesCache = new DummyCache<string>();
+// new FileCache('/tmp/summaries');
 
 const shapeBody = (body: string) => {
   // remove dancers list
