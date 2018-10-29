@@ -4,7 +4,7 @@
     <ng-template #placementPop>
       Placement: <strong>{{myPlacement.placement}}</strong> out of <strong>{{Dance.placements.length}}</strong>
       couples. <br/>
-      This is better then <strong>{{percent()}}%</strong> of the couples.
+      This is better than <strong>{{percent()}}%</strong> of the couples.
     </ng-template>
     <div [ngClass]="compactLayout?('border-bottom-'+color):''" class="col col-sm-4 col-md-4 text-center clickable"
          (click)="pointPresentation.emit()" [tooltip]="placementPop" container="body" style="white-space: nowrap">
